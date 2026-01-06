@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Оформление заказа</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f6f6f6;
+}
+.container {
+  max-width: 480px;
+  margin: auto;
+  background: #ffffff;
+  min-height: 100vh;
+  padding: 20px;
+}
+h1 {
+  text-align: center;
+  color: #c40000;
+}
+p {
+  font-size: 15px;
+  color: #333;
+}
+label {
+  font-weight: bold;
+  margin-top: 15px;
+  display: block;
+}
+input, textarea {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-top: 6px;
+  box-sizing: border-box;
+}
+textarea {
+  resize: none;
+}
+.help {
+  font-size: 13px;
+  color: #666;
+  margin-top: 6px;
+}
+button {
+  width: 100%;
+  padding: 16px;
+  font-size: 17px;
+  border-radius: 10px;
+  border: none;
+  margin-top: 20px;
+  cursor: pointer;
+}
+.btn-main {
+  background: #c40000;
+  color: white;
+}
+.btn-secondary {
+  background: #eee;
+}
+.hidden {
+  display: none;
+}
+.confirm-box {
+  background: #fafafa;
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 20px;
+}
+.success {
+  text-align: center;
+  color: green;
+  font-weight: bold;
+  font-size: 16px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div id="form">
+<h1>Здравствуйте!</h1>
+<p>
+Спасибо что вы нас выбрали и доверяете нам!<br><br>
+Пожалуйста заполните все данные правильно, чтобы ваш заказ был доставлен так как вы хотите.
+</p>
+
+<label for="order">Введи ваш номер заказа</label>
+<input id="order" name="order" placeholder="9 цифр">
+<div class="help">
+Номер заказа находится в приложении Kaspi.kz и состоит из 9 цифр.
+</div>
+
+<label for="wish">Введите ваше пожелание</label>
+<textarea id="wish" name="wish" maxlength="150" rows="3"></textarea>
+
+<label for="extra">ДОПОЛНИТЕЛЬНОЕ</label>
+<textarea id="extra" name="extra" rows="3" placeholder="Имена, телефоны, дополнительные данные"></textarea>
+
+<button class="btn-main" onclick="checkData()">Продолжить</button>
+</div>
+
+<div id="confirm" class="hidden">
+<h1>Проверьте данные</h1>
+<p>Для точности советуем проверить ещё раз все номера и данные.</p>
+
+<div class="confirm-box">
+<p><b>Номер заказа:</b> <span id="c_order"></span></p>
+<p><b>Пожелание:</b> <span id="c_wish"></span></p>
+<p><b>Дополнительно:</b> <span id="c_extra"></span></p>
+</div>
+
+<button class="btn-main" onclick="sendToTelegram()">Да, всё верно</button>
+<button class="btn-secondary" onclick="back()">Назад, проверить</button>
+</div>
+
+<div id="success" class="hidden">
+<p class="success">
+Все данные заполненные вами отправлены в группу магазина.<br>
+Спасибо большое за обращение!
+</p>
+</div>
+
+</div>
+
+<script>
+// УДАЛИТЕ ИЛИ ЗАМЕНИТЕ ЭТИ КЛЮЧИ ПЕРЕД РАЗВЕРТЫВАНИЕМ!
+// Получите свои токены у @BotFather в Telegram
+const BOT_TOKEN = "8264155388:AAF9YKdvbobW3b4_qa5qTBhZRWCUV7OctVo";
+const CHAT_ID = "-1002973925647";
+
+// Получаем элементы после загрузки DOM
+let orderInput, wishInput, extraInput, formDiv, confirmDiv, successDiv;
+let cOrderSpan, cWishSpan, cExtraSpan;
+
+document.addEventListener('DOMContentLoaded', function() {
+  orderInput = document.getElementById("order");
+  wishInput = document.getElementById("wish");
+  extraInput = document.getElementById("extra");
+  formDiv = document.getElementById("form");
+  confirmDiv = document.getElementById("confirm");
+  successDiv = document.getElementById("success");
+  cOrderSpan = document.getElementById("c_order");
+  cWishSpan = document.getElementById("c_wish");
+  cExtraSpan = document.getElementById("c_extra");
+ 
+  // Назначаем обработчики событий
+  if (orderInput) {
+    orderInput.addEventListener("input", function() {
+      orderInput.value = orderInput.value.replace(/\D/g, "").slice(0,9);
+    });
+  }
+ 
+  if (extraInput) {
+    extraInput.addEventListener("input", function() {
+      extraInput.value = extraInput.value.replace(/[^+\d\s]/g, "");
+    });
+  }
+});
+
+function checkData() {
+  if (!orderInput || orderInput.value.length !== 9) {
+    alert("Номер заказа должен состоять из 9 цифр");
+    return;
+  }
+  if (!wishInput || !wishInput.value.trim()) {
+    alert("Введите пожелание");
+    return;
+  }
+
+  cOrderSpan.textContent = orderInput.value;
+  cWishSpan.textContent = wishInput.value;
+  cExtraSpan.textContent = extraInput.value || "—";
+
+  formDiv.classList.add("hidden");
+  confirmDiv.classList.remove("hidden");
+}
+
+function back() {
+  confirmDiv.classList.add("hidden");
+  formDiv.classList.remove("hidden");
+}
+
+function sendToTelegram() {
+  if (!BOT_TOKEN || !CHAT_ID) {
+    alert("Ошибка конфигурации. Пожалуйста, свяжитесь с администратором.");
+    return;
+  }
+ 
+  const text =
+`Н/З: ${orderInput.value}
+Т: ${wishInput.value}
+Д/И: ${extraInput.value || "—"}`;
+
+  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      chat_id: CHAT_ID,
+      text: text
+    })
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Ошибка сети');
+    }
+    return response.json();
+  })
+  .then(() => {
+    confirmDiv.classList.add("hidden");
+    successDiv.classList.remove("hidden");
+  })
+  .catch(error => {
+    console.error("Ошибка отправки:", error);
+    alert("Произошла ошибка при отправке данных. Пожалуйста, попробуйте еще раз.");
+  });
+}
+</script>
+
+</body>
+</html>
