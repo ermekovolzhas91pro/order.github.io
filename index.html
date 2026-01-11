@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Оформление заказа</title>
+<title>Mishki.kz</title>
 
 <style>
 body {
@@ -87,11 +87,9 @@ button {
 
 <div id="form">
 <h1>Добрый день!</h1>
-<p>
-Спасибо что вы нас выбрали и доверяете нам!<br><br>
-Пожалуйста заполните все данные правильно, чтобы ваш заказ был доставлен так как вы хотите.
-</p>
 
+
+<div id="form">
 <label for="order">Введите ваш номер заказа</label>
 <input id="order" name="order" placeholder="9 цифр">
 <div class="help">
@@ -100,9 +98,16 @@ button {
 
 <label for="wish">Введите ваше пожелание</label>
 <textarea id="wish" name="wish" maxlength="150" rows="3"></textarea>
+<div class="help">
+Напишите только текст для открытки, без вспомогательных слов.
+</div>
 
-<label for="extra">Дополнительна77я информация</label>
-<textarea id="extra" name="extra" rows="3" placeholder="Имена, телефоны, дополнительные данные"></textarea>
+<label for="wish">Комментарии к заказу</label>
+
+<textarea id="wish" name="wish" maxlength="90" rows="3"></textarea>
+<div class="help">
+Например: Позвоните мне по What's App, у меня нет сети. +7 (701) 01-01-999
+</div>
 
 <button class="btn-main" onclick="checkData()">Продолжить</button>
 </div>
@@ -195,9 +200,9 @@ function sendToTelegram() {
   }
  
   const text =
-`Н/З: ${orderInput.value}
-Т: ${wishInput.value}
-Д/И: ${extraInput.value || "—"}`;
+`#️⃣: ${orderInput.value}
+💬: ${wishInput.value}
+🪪: ${extraInput.value || "—"}`;
 
   fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
     method: "POST",
