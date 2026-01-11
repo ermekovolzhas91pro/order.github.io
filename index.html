@@ -1,232 +1,465 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Mishki.kz</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f6f6f6;
-}
-.container {
-  max-width: 480px;
-  margin: auto;
-  background: #ffffff;
-  min-height: 100vh;
-  padding: 20px;
-}
-h1 {
-  text-align: center;
-  color: #c40000;
-}
-p {
-  font-size: 15px;
-  color: #333;
-}
-label {
-  font-weight: bold;
-  margin-top: 15px;
-  display: block;
-}
-input, textarea {
-  width: 100%;
-  padding: 14px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  margin-top: 6px;
-  box-sizing: border-box;
-}
-textarea {
-  resize: none;
-}
-.help {
-  font-size: 13px;
-  color: #666;
-  margin-top: 6px;
-}
-button {
-  width: 100%;
-  padding: 16px;
-  font-size: 17px;
-  border-radius: 10px;
-  border: none;
-  margin-top: 20px;
-  cursor: pointer;
-}
-.btn-main {
-  background: #c40000;
-  color: white;
-}
-.btn-secondary {
-  background: #eee;
-}
-.hidden {
-  display: none;
-}
-.confirm-box {
-  background: #fafafa;
-  border-radius: 10px;
-  padding: 15px;
-  margin-top: 20px;
-}
-.success {
-  text-align: center;
-  color: green;
-  font-weight: bold;
-  font-size: 16px;
-}
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f6f6f6;
+  }
+  .container {
+    max-width: 480px;
+    margin: auto;
+    background: #ffffff;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    color: #c40000;
+  }
+  p {
+    font-size: 15px;
+    color: #333;
+  }
+  label {
+    font-weight: bold;
+    margin-top: 15px;
+    display: block;
+  }
+  input, textarea {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-top: 6px;
+    box-sizing: border-box;
+  }
+  textarea { resize: none; }
+  .help {
+    font-size: 13px;
+    color: #666;
+    margin-top: 6px;
+  }
+  button {
+    width: 100%;
+    padding: 16px;
+    font-size: 17px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+  .btn-main { background: #c40000; color: white; }
+  .btn-secondary { background: #eee; }
+  .hidden { display: none; }
+  .confirm-box {
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+  }
+  .success {
+    text-align: center;
+    color: green;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .two-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .btn-choice {
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 16px;
+  }
+  .btn-choice.active {
+    border-color: #c40000;
+    outline: 2px solid rgba(196,0,0,0.15);
+  }
+
+  /* ДОБАВЛЕНО: картинка самовывоза */
+  .pickup-image {
+    margin-top: 14px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    background: #fafafa;
+  }
+  .pickup-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .pickup-image .caption {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #666;
+  }
+
+  /* ДОБАВЛЕНО: быстрые кнопки времени */
+  .quick-time {
+    margin-top: 10px;
+  }
+  .quick-time-label {
+    font-weight: bold;
+    margin-top: 14px;
+    display: block;
+  }
+  .quick-time-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .btn-chip {
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .btn-chip.active {
+    border-color: #c40000;
+    outline: 2px solid rgba(196,0,0,0.12);
+  }
 </style>
 </head>
 
 <body>
 <div class="container">
 
-<div id="form">
-<h1>Добрый день!</h1>
+  <!-- ШАГ 1: ФОРМА -->
+  <div id="step_form">
+    <h1>Добрый день!</h1>
 
+    <label for="order">Введите ваш номер заказа</label>
+    <input id="order" name="order" placeholder="9 цифр" inputmode="numeric" />
+    <div class="help">
+      Номер заказа находится в приложении Kaspi.kz и состоит из 9 цифр.
+    </div>
 
-<div id="form">
-<label for="order">Введите ваш номер заказа</label>
-<input id="order" name="order" placeholder="9 цифр">
-<div class="help">
-Номер заказа находится в приложении Kaspi.kz и состоит из 9 цифр.
-</div>
+    <label for="wish">Введите ваше пожелание</label>
+    <textarea id="wish" name="wish" maxlength="150" rows="3"></textarea>
+    <div class="help">
+      Напишите только текст для открытки, без вспомогательных слов.
+    </div>
 
-<label for="wish">Введите ваше пожелание</label>
-<textarea id="wish" name="wish" maxlength="150" rows="3"></textarea>
-<div class="help">
-Напишите только текст для открытки, без вспомогательных слов.
-</div>
+    <label for="extra">Комментарии к заказу</label>
+    <textarea id="extra" name="extra" maxlength="90" rows="3" placeholder="Например: Позвоните мне по WhatsApp..."></textarea>
+    <div class="help">
+      Например: Позвоните мне по What's App, у меня нет сети. +7 (701) 01-01-999
+    </div>
 
-<label for="wish">Комментарии к заказу</label>
+    <button class="btn-main" id="btnContinue">Продолжить</button>
+  </div>
 
-<textarea id="wish" name="wish" maxlength="90" rows="3"></textarea>
-<div class="help">
-Например: Позвоните мне по What's App, у меня нет сети. +7 (701) 01-01-999
-</div>
+  <!-- ШАГ 2: ТИП ЗАКАЗА -->
+  <div id="step_type" class="hidden">
+    <h1>Тип вашего заказа:</h1>
 
-<button class="btn-main" onclick="checkData()">Продолжить</button>
-</div>
+    <div class="two-btns">
+      <button class="btn-choice" id="btnPickup" type="button">Самовывоз</button>
+      <button class="btn-choice" id="btnDelivery" type="button">Доставка</button>
+    </div>
 
-<div id="confirm" class="hidden">
-<h1>Проверьте данные</h1>
-<p>Для точности советуем проверить ещё раз все номера и данные.</p>
+    <div id="pickupWrap" class="hidden">
 
-<div class="confirm-box">
-<p><b>Номер заказа:</b> <span id="c_order"></span></p>
-<p><b>Пожелание:</b> <span id="c_wish"></span></p>
-<p><b>Дополнительно:</b> <span id="c_extra"></span></p>
-</div>
+      <!-- ДОБАВЛЕНО: изображение -->
+      <div class="pickup-image">
+        <!-- Поменяй ссылку на любую картинку -->
+        <img
+          id="pickupImage"
+          src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=70"
+          alt="Самовывоз"
+        />
+        <div class="caption">Самовывоз: выберите, через сколько вы будете.</div>
+      </div>
 
-<button class="btn-main" onclick="sendToTelegram()">Да, всё верно</button>
-<button class="btn-secondary" onclick="back()">Назад, проверить</button>
-</div>
+      <!-- ИЗМЕНЕНО: "Приеду через" + 3 кнопки -->
+      <span class="quick-time-label">Приеду через:</span>
+      <div class="quick-time-grid" id="quickTimeGrid">
+        <button class="btn-chip" type="button" data-time="30 минут">30 минут</button>
+        <button class="btn-chip" type="button" data-time="1 час">1 час</button>
+        <button class="btn-chip" type="button" data-time="2 часа">2 часа</button>
+      </div>
 
-<div id="success" class="hidden">
-<p class="success">
-Все данные заполненные вами отправлены в группу магазина.<br>
-Спасибо большое за обращение!
-</p>
-</div>
+      <!-- Поле остаётся снизу и авто-заполняется -->
+      <label for="pickupTime">Приеду к:</label>
+      <input id="pickupTime" maxlength="20" placeholder="Например: к 17:00 буду" />
+      <div class="help">Поле обязательно для самовывоза (до 20 символов).</div>
+    </div>
+
+    <button class="btn-main" id="btnToConfirm">Далее</button>
+    <button class="btn-secondary" id="btnBackToForm">Назад</button>
+  </div>
+
+  <!-- ШАГ 3: ПОДТВЕРЖДЕНИЕ -->
+  <div id="confirm" class="hidden">
+    <h1>Проверьте данные</h1>
+    <p>Для точности советуем проверить ещё раз все номера и данные.</p>
+
+    <div class="confirm-box">
+      <p><b>Тип:</b> <span id="c_type"></span></p>
+      <p id="c_pickup_row" class="hidden"><b>Приеду к:</b> <span id="c_pickup"></span></p>
+      <p><b>Номер заказа:</b> <span id="c_order"></span></p>
+      <p><b>Пожелание:</b> <span id="c_wish"></span></p>
+      <p><b>Дополнительно:</b> <span id="c_extra"></span></p>
+    </div>
+
+    <button class="btn-main" id="btnSend">Да, всё верно</button>
+    <button class="btn-secondary" id="btnBackToType">Назад, проверить</button>
+  </div>
+
+  <!-- УСПЕХ -->
+  <div id="success" class="hidden">
+    <p class="success">
+      Все данные заполненные вами отправлены в группу магазина.<br />
+      Спасибо большое за обращение!
+    </p>
+  </div>
 
 </div>
 
 <script>
-// УДАЛИТЕ ИЛИ ЗАМЕНИТЕ ЭТИ КЛЮЧИ ПЕРЕД РАЗВЕРТЫВАНИЕМ!
-// Получите свои токены у @BotFather в Telegram
-const BOT_TOKEN = "8264155388:AAF9YKdvbobW3b4_qa5qTBhZRWCUV7OctVo";
-const CHAT_ID = "-1002973925647";
+  const BOT_TOKEN = "8264155388:AAF9YKdvbobW3b4_qa5qTBhZRWCUV7OctVo";
+  const CHAT_ID = "-1002973925647";
 
-// Получаем элементы после загрузки DOM
-let orderInput, wishInput, extraInput, formDiv, confirmDiv, successDiv;
-let cOrderSpan, cWishSpan, cExtraSpan;
+  const stepForm = document.getElementById("step_form");
+  const stepType = document.getElementById("step_type");
+  const confirmDiv = document.getElementById("confirm");
+  const successDiv = document.getElementById("success");
 
-document.addEventListener('DOMContentLoaded', function() {
-  orderInput = document.getElementById("order");
-  wishInput = document.getElementById("wish");
-  extraInput = document.getElementById("extra");
-  formDiv = document.getElementById("form");
-  confirmDiv = document.getElementById("confirm");
-  successDiv = document.getElementById("success");
-  cOrderSpan = document.getElementById("c_order");
-  cWishSpan = document.getElementById("c_wish");
-  cExtraSpan = document.getElementById("c_extra");
- 
-  // Назначаем обработчики событий
-  if (orderInput) {
-    orderInput.addEventListener("input", function() {
-      orderInput.value = orderInput.value.replace(/\D/g, "").slice(0,9);
-    });
-  }
- 
-  if (extraInput) {
-    extraInput.addEventListener("input", function() {
-      extraInput.value = extraInput.value.replace(/[^+\d\s]/g, "");
-    });
-  }
-});
+  const orderInput = document.getElementById("order");
+  const wishInput = document.getElementById("wish");
+  const extraInput = document.getElementById("extra");
 
-function checkData() {
-  if (!orderInput || orderInput.value.length !== 9) {
-    alert("Номер заказа должен состоять из 9 цифр");
-    return;
-  }
-  if (!wishInput || !wishInput.value.trim()) {
-    alert("Введите пожелание");
-    return;
-  }
+  const btnContinue = document.getElementById("btnContinue");
+  const btnPickup = document.getElementById("btnPickup");
+  const btnDelivery = document.getElementById("btnDelivery");
+  const pickupWrap = document.getElementById("pickupWrap");
+  const pickupTimeInput = document.getElementById("pickupTime");
 
-  cOrderSpan.textContent = orderInput.value;
-  cWishSpan.textContent = wishInput.value;
-  cExtraSpan.textContent = extraInput.value || "—";
+  const quickTimeGrid = document.getElementById("quickTimeGrid");
 
-  formDiv.classList.add("hidden");
-  confirmDiv.classList.remove("hidden");
-}
+  const btnToConfirm = document.getElementById("btnToConfirm");
+  const btnBackToForm = document.getElementById("btnBackToForm");
 
-function back() {
-  confirmDiv.classList.add("hidden");
-  formDiv.classList.remove("hidden");
-}
+  const cType = document.getElementById("c_type");
+  const cPickupRow = document.getElementById("c_pickup_row");
+  const cPickup = document.getElementById("c_pickup");
+  const cOrder = document.getElementById("c_order");
+  const cWish = document.getElementById("c_wish");
+  const cExtra = document.getElementById("c_extra");
 
-function sendToTelegram() {
-  if (!BOT_TOKEN || !CHAT_ID) {
-    alert("Ошибка конфигурации. Пожалуйста, свяжитесь с администратором.");
-    return;
-  }
- 
-  const text =
-`#️⃣: ${orderInput.value}
-💬: ${wishInput.value}
-🪪: ${extraInput.value || "—"}`;
+  const btnSend = document.getElementById("btnSend");
+  const btnBackToType = document.getElementById("btnBackToType");
 
-  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      chat_id: CHAT_ID,
-      text: text
-    })
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Ошибка сети');
-    }
-    return response.json();
-  })
-  .then(() => {
-    confirmDiv.classList.add("hidden");
-    successDiv.classList.remove("hidden");
-  })
-  .catch(error => {
-    console.error("Ошибка отправки:", error);
-    alert("Произошла ошибка при отправке данных. Пожалуйста, попробуйте еще раз.");
+  let orderType = ""; // "pickup" | "delivery"
+
+  orderInput.addEventListener("input", () => {
+    orderInput.value = orderInput.value.replace(/\D/g, "").slice(0, 9);
   });
-}
+
+  btnContinue.addEventListener("click", () => {
+    if (orderInput.value.length !== 9) {
+      alert("Номер заказа должен состоять из 9 цифр");
+      return;
+    }
+    if (!wishInput.value.trim()) {
+      alert("Введите пожелание");
+      return;
+    }
+
+    stepForm.classList.add("hidden");
+    stepType.classList.remove("hidden");
+  });
+
+  function setType(type) {
+    orderType = type;
+    btnPickup.classList.toggle("active", type === "pickup");
+    btnDelivery.classList.toggle("active", type === "delivery");
+
+    if (type === "pickup") {
+      pickupWrap.classList.remove("hidden");
+    } else {
+      pickupWrap.classList.add("hidden");
+      pickupTimeInput.value = "";
+      // снять выделение с быстрых кнопок
+      if (quickTimeGrid) {
+        quickTimeGrid.querySelectorAll(".btn-chip").forEach(b => b.classList.remove("active"));
+      }
+    }
+  }
+
+  btnPickup.addEventListener("click", () => setType("pickup"));
+  btnDelivery.addEventListener("click", () => setType("delivery"));
+
+  // ДОБАВЛЕНО: быстрые кнопки времени -> вставка в поле ввода
+  if (quickTimeGrid) {
+    quickTimeGrid.addEventListener("click", (e) => {
+      const btn = e.target.closest(".btn-chip");
+      if (!btn) return;
+
+      const value = btn.getAttribute("data-time") || btn.textContent.trim();
+
+      // выделение активной кнопки
+      quickTimeGrid.querySelectorAll(".btn-chip").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      // автозаполнение поля (как ты просил)
+      pickupTimeInput.value = value;
+
+      // чтобы курсор встал в конец (удобно дописать "буду")
+      pickupTimeInput.focus();
+      pickupTimeInput.setSelectionRange(pickupTimeInput.value.length, pickupTimeInput.value.length);
+    });
+  }
+
+  btnBackToForm.addEventListener("click", () => {
+    stepType.classList.add("hidden");
+    stepForm.classList.remove("hidden");
+  });
+
+  btnToConfirm.addEventListener("click", () => {
+    if (!orderType) {
+      alert("Выберите тип заказа: Самовывоз или Доставка");
+      return;
+    }
+
+    if (orderType === "pickup") {
+      const t = pickupTimeInput.value.trim();
+      if (!t) {
+        alert("Для самовывоза укажите время: «Приеду к…»");
+        return;
+      }
+      if (t.length > 20) {
+        alert("Поле «Приеду к» должно быть до 20 символов");
+        return;
+      }
+    }
+
+    cType.textContent = (orderType === "pickup") ? "Самовывоз" : "Доставка";
+
+    if (orderType === "pickup") {
+      cPickupRow.classList.remove("hidden");
+      cPickup.textContent = pickupTimeInput.value.trim();
+    } else {
+      cPickupRow.classList.add("hidden");
+      cPickup.textContent = "";
+    }
+
+    cOrder.textContent = orderInput.value;
+    cWish.textContent = wishInput.value.trim();
+    cExtra.textContent = extraInput.value.trim() ? extraInput.value.trim() : "—";
+
+    stepType.classList.add("hidden");
+    confirmDiv.classList.remove("hidden");
+  });
+
+  btnBackToType.addEventListener("click", () => {
+    confirmDiv.classList.add("hidden");
+    stepType.classList.remove("hidden");
+  });
+
+  function buildTelegramText() {
+    const order = orderInput.value.trim();
+    const wish = wishInput.value.trim();
+    const extra = extraInput.value.trim();
+    const pickupTime = pickupTimeInput.value.trim();
+
+    let lines = [];
+
+    if (orderType === "pickup") {
+      lines.push("📍 Самовывоз");
+      lines.push("");
+      lines.push(`#️⃣${order}`);
+      lines.push("");
+      lines.push(`🗣️ Буду к ${pickupTime}`);
+      lines.push("");
+      lines.push(`💬 ${wish}`);
+      if (extra) {
+        lines.push("");
+        lines.push(`🪪 ${extra}`);
+      }
+    } else {
+      lines.push("📍 Доставка");
+      lines.push("");
+      lines.push(`#️⃣${order}`);
+      lines.push("");
+      lines.push(`💬 ${wish}`);
+      if (extra) {
+        lines.push("");
+        lines.push(`🪪 ${extra}`);
+      }
+    }
+
+    return lines.join("\n");
+  }
+
+  async function sendToTelegram() {
+    if (!BOT_TOKEN || !CHAT_ID) {
+      alert("Ошибка конфигурации. Пожалуйста, свяжитесь с администратором.");
+      return;
+    }
+
+    const text = buildTelegramText();
+    const apiUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+    try {
+      const res = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: text
+        })
+      });
+
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data || data.ok !== true) {
+        throw new Error("Telegram API error");
+      }
+
+      confirmDiv.classList.add("hidden");
+      successDiv.classList.remove("hidden");
+      return;
+    } catch (e) {
+      return new Promise((resolve, reject) => {
+        const url =
+          `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage` +
+          `?chat_id=${encodeURIComponent(CHAT_ID)}` +
+          `&text=${encodeURIComponent(text)}`;
+
+        const img = new Image();
+        img.onload = () => {
+          confirmDiv.classList.add("hidden");
+          successDiv.classList.remove("hidden");
+          resolve();
+        };
+        img.onerror = () => {
+          t FFC(new Error("Не удалось отправить запрос (возможен CORS/сеть/неверный chat_id)."));
+        };
+        img.src = url;
+      }).catch(err => {
+        console.error("Ошибка отправки:", err);
+        alert("Произошла ошибка при отправке данных. Проверь интернет и права бота в группе.");
+      });
+    }
+  }
+
+  btnSend.addEventListener("click", sendToTelegram);
 </script>
 
 </body>
