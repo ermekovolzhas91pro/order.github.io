@@ -6,400 +6,665 @@
 <title>Mishki.kz</title>
 
 <style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f6f6f6;
+  body{margin:0;font-family:Arial,sans-serif;background:#f6f6f6;}
+  .container{max-width:480px;margin:auto;background:#fff;min-height:100vh;padding:20px;}
+  h1{text-align:center;color:#c40000;margin:10px 0 12px;}
+  p{font-size:15px;color:#333;margin:10px 0;}
+
+  label{font-weight:bold;margin-top:15px;display:block;}
+  input,textarea{
+    width:100%;padding:14px;font-size:16px;border-radius:10px;border:1px solid #ccc;
+    margin-top:6px;box-sizing:border-box;
   }
-  .container {
-    max-width: 480px;
-    margin: auto;
-    background: #ffffff;
-    min-height: 100vh;
-    padding: 20px;
+  textarea{resize:none;}
+  .help{font-size:13px;color:#666;margin-top:6px;line-height:1.35;}
+
+  /* мягкая ошибка */
+  .error{
+    font-size:13px;color:#c40000;line-height:1.35;
+    margin-top:8px;
+    max-height:0; opacity:0; overflow:hidden;
+    transform:translateY(-4px);
+    transition:max-height .25s ease, opacity .25s ease, transform .25s ease;
   }
-  h1 {
-    text-align: center;
-    color: #c40000;
-  }
-  p {
-    font-size: 15px;
-    color: #333;
-  }
-  label {
-    font-weight: bold;
-    margin-top: 15px;
-    display: block;
-  }
-  input, textarea {
-    width: 100%;
-    padding: 14px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    margin-top: 6px;
-    box-sizing: border-box;
-  }
-  textarea { resize: none; }
-  .help {
-    font-size: 13px;
-    color: #666;
-    margin-top: 6px;
-  }
-  button {
-    width: 100%;
-    padding: 16px;
-    font-size: 17px;
-    border-radius: 10px;
-    border: none;
-    margin-top: 20px;
-    cursor: pointer;
-  }
-  .btn-main { background: #c40000; color: white; }
-  .btn-secondary { background: #eee; }
-  .hidden { display: none; }
-  .confirm-box {
-    background: #fafafa;
-    border-radius: 10px;
-    padding: 15px;
-    margin-top: 20px;
-  }
-  .success {
-    text-align: center;
-    color: green;
-    font-weight: bold;
-    font-size: 16px;
-  }
-  .two-btns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 14px;
-  }
-  .btn-choice {
-    padding: 16px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    background: #fff;
-    font-size: 16px;
-  }
-  .btn-choice.active {
-    border-color: #c40000;
-    outline: 2px solid rgba(196,0,0,0.15);
+  .error.show{max-height:130px;opacity:1;transform:translateY(0);}
+  .invalid{
+    border-color:#c40000 !important;
+    outline:2px solid rgba(196,0,0,0.12);
+    background:#fff7f7;
+    transition:background .25s ease, border-color .25s ease, outline .25s ease;
   }
 
-  /* ДОБАВЛЕНО: картинка самовывоза */
-  .pickup-image {
-    margin-top: 14px;
-    border-radius: 14px;
-    overflow: hidden;
-    border: 1px solid #eee;
-    background: #fafafa;
+  button{
+    width:100%;
+    padding:16px;
+    font-size:17px;
+    border-radius:12px;
+    border:none;
+    margin-top:18px;
+    cursor:pointer;
   }
-  .pickup-image img {
-    display: block;
-    width: 100%;
-    height: auto;
+  .btn-main{background:#c40000;color:#fff;transition:transform .08s ease;}
+  .btn-main:active{transform:scale(0.99);}
+  .btn-secondary{background:#eee;}
+  .btn-disabled{
+    background:#e6e6e6 !important;
+    color:#9a9a9a !important;
+    cursor:not-allowed !important;
   }
-  .pickup-image .caption {
-    padding: 10px 12px;
-    font-size: 13px;
-    color: #666;
+  .hidden{display:none;}
+
+  /* первая страница — выбор типа */
+  .type-list{display:grid;gap:12px;margin-top:14px;}
+  .type-btn{
+    background:#fff;border:1px solid #ddd;border-radius:14px;padding:16px;
+    font-size:16px;cursor:pointer;text-align:left;
+  }
+  .type-btn strong{display:block;font-size:16px;color:#333;}
+  .type-btn span{display:block;font-size:13px;color:#666;margin-top:4px;}
+  .type-btn.active{border-color:#c40000;outline:2px solid rgba(196,0,0,.12);}
+
+  /* быстрые кнопки времени */
+  .quick-time-label{font-weight:bold;margin-top:14px;display:block;}
+  .quick-time-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px;}
+  .btn-chip{
+    padding:12px;border-radius:12px;border:1px solid #ddd;background:#fff;
+    font-size:14px;cursor:pointer;
+  }
+  .btn-chip.active{border-color:#c40000;outline:2px solid rgba(196,0,0,.10);}
+
+  /* чекбокс */
+  .check-row{
+    margin-top:14px;
+    display:flex;gap:10px;align-items:flex-start;
+    padding:12px;border:1px solid #eee;border-radius:12px;background:#fff;
+  }
+  .check-row input{width:18px;height:18px;margin-top:2px;}
+  .check-row .t{font-weight:bold;color:#333;}
+  .check-row .d{font-size:13px;color:#666;margin-top:4px;line-height:1.3;}
+
+  /* доп инфо (+) */
+  .more-btn{
+    margin-top:14px;
+    display:flex;align-items:center;justify-content:space-between;
+    width:100%;
+    padding:14px 14px;
+    border-radius:12px;
+    border:1px solid #eee;
+    background:#fff;
+    cursor:pointer;
+  }
+  .more-btn .txt{font-weight:bold;color:#333;font-size:15px;}
+  .plus{
+    width:34px;height:34px;border-radius:10px;border:1px solid #eee;
+    display:flex;align-items:center;justify-content:center;
+    color:#c40000;font-size:20px;line-height:1;
+    transition:transform .15s ease;
+  }
+  .more-open .plus{transform:rotate(45deg);}
+
+  /* подтверждение */
+  .confirm-box{
+    background:#fafafa;border-radius:12px;padding:15px;margin-top:16px;border:1px solid #eee;
+  }
+  .row{display:flex;align-items:flex-start;gap:10px;justify-content:space-between;}
+  .row p{margin:10px 0;flex:1;}
+  .edit-icon{
+    width:36px;height:36px;min-width:36px;border-radius:10px;border:1px solid #eee;background:#fff;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;
+  }
+  .edit-icon:active{transform:scale(0.98);}
+
+  /* успех */
+  .success-wrap{
+    margin-top:10px;border-radius:16px;border:1px solid #eee;
+    background:linear-gradient(180deg,#fff,#fff6f6);
+    padding:18px;box-shadow:0 8px 22px rgba(0,0,0,.06);
+  }
+  .success-title{font-size:18px;font-weight:bold;color:#1b7a2a;text-align:center;margin:0 0 10px;}
+  .success-text{text-align:center;color:#333;margin:0;line-height:1.5;}
+
+  .btn-whatsapp{
+    background:#c40000;color:#fff;
+    white-space:nowrap;
+    font-size:15px;
+    padding:16px;
+    margin-top:18px;
   }
 
-  /* ДОБАВЛЕНО: быстрые кнопки времени */
-  .quick-time {
-    margin-top: 10px;
+  /* Наш адрес (кнопка) */
+  .address-toggle{
+    margin-top:14px;width:100%;
+    padding:16px;border-radius:12px;border:none;
+    background:#c40000;color:#fff;font-weight:bold;font-size:15px;text-align:center;
   }
-  .quick-time-label {
-    font-weight: bold;
-    margin-top: 14px;
-    display: block;
+  .address-panel{
+    margin-top:12px;border-radius:14px;border:1px solid #eee;background:#fff;
+    padding:14px;text-align:center;
   }
-  .quick-time-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
-    margin-top: 10px;
+  .btn-2gis{
+    display:inline-block;margin:6px auto 0;
+    padding:12px 18px;border-radius:10px;border:1px solid #c40000;
+    color:#c40000;background:#fff;font-weight:bold;text-decoration:none;
   }
-  .btn-chip {
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px solid #ddd;
-    background: #fff;
-    font-size: 14px;
-    cursor: pointer;
+  .address-text{
+    margin-top:10px;font-size:14px;color:#333;line-height:1.45;
+    white-space:pre-line;text-align:left;
   }
-  .btn-chip.active {
-    border-color: #c40000;
-    outline: 2px solid rgba(196,0,0,0.12);
+
+  /* блок курьера после отправки */
+  .courier-box{
+    margin-top:14px;
+    border:1px solid #eee;border-radius:14px;background:#fff;padding:14px;
   }
+  .courier-box h3{margin:0 0 10px;font-size:16px;color:#333;}
+  .note{
+    font-size:13px;color:#666;line-height:1.35;margin-top:6px;
+  }
+
 </style>
 </head>
 
 <body>
 <div class="container">
 
-  <!-- ШАГ 1: ФОРМА -->
-  <div id="step_form">
+  <!-- ШАГ 0: ВЫБОР ТИПА -->
+  <div id="step_type0">
     <h1>Добрый день!</h1>
+    <p>Выберите тип вашего заказа:</p>
 
-    <label for="order">Введите ваш номер заказа</label>
-    <input id="order" name="order" placeholder="9 цифр" inputmode="numeric" />
-    <div class="help">
-      Номер заказа находится в приложении Kaspi.kz и состоит из 9 цифр.
+    <div class="type-list">
+      <button class="type-btn" id="typeDelivery" type="button">
+        <h3>Доставка</h3>
+    <span>Если ваш заказ оформлен как "Express"</span>
+      </button>
+
+      <button class="type-btn" id="typePickup" type="button">
+        <h3>Самовывоз</h3></strong>
+        <span>Если Вы приедете либо ""Курьер"</span>
+      </button>
     </div>
-
-    <label for="wish">Введите ваше пожелание</label>
-    <textarea id="wish" name="wish" maxlength="150" rows="3"></textarea>
-    <div class="help">
-      Напишите только текст для открытки, без вспомогательных слов.
-    </div>
-
-    <label for="extra">Комментарии к заказу</label>
-    <textarea id="extra" name="extra" maxlength="90" rows="3" placeholder="Например: Позвоните мне по WhatsApp..."></textarea>
-    <div class="help">
-      Например: Позвоните мне по What's App, у меня нет сети. +7 (701) 01-01-999
-    </div>
-
-    <button class="btn-main" id="btnContinue">Продолжить</button>
   </div>
 
-  <!-- ШАГ 2: ТИП ЗАКАЗА -->
-  <div id="step_type" class="hidden">
-    <h1>Тип вашего заказа:</h1>
+  <!-- ШАГ 1: ФОРМА (общая, но наполнение зависит от типа) -->
+  <div id="step_form" class="hidden">
+    <h1 id="formTitle">Заполните данные</h1>
 
-    <div class="two-btns">
-      <button class="btn-choice" id="btnPickup" type="button">Самовывоз</button>
-      <button class="btn-choice" id="btnDelivery" type="button">Доставка</button>
+    <!-- Номер заказа -->
+    <label for="order">Номер заказа</label>
+    <input id="order" name="order" placeholder="783 656 764" inputmode="numeric" />
+    <div class="help">Номер заказа состоит из 9 цифр и обычно начинается с 780 и выше (пример: 782342521).</div>
+    <div class="error" id="orderError"></div>
+
+    <!-- Блок ДОСТАВКА: текст открытки видим сразу -->
+    <div id="deliveryBlock" class="hidden">
+      <label for="wishDelivery">Текст для открытки</label>
+      <textarea id="wishDelivery" maxlength="150" rows="3"></textarea>
+      <div class="help">Напишите только то, что нужно написать на открытке (до 150 символов).</div>
+
+      <button class="more-btn" id="toggleExtraDelivery" type="button">
+        <span class="txt">Дополнительная информация</span>
+        <span class="plus">+</span>
+      </button>
+
+      <div id="extraDeliveryWrap" class="hidden">
+        <label for="extraDelivery">Комментарии к заказу</label>
+        <textarea id="extraDelivery" maxlength="90" rows="3"
+          placeholder="Например: Позвоните мне по WhatsApp..."></textarea>
+        <div class="help">Например: Позвоните мне по What's App, у меня нет сети. +7 (701) 01-01-999</div>
+      </div>
     </div>
 
-    <div id="pickupWrap" class="hidden">
-
-      <!-- ДОБАВЛЕНО: изображение -->
-      <div class="pickup-image">
-        <!-- Поменяй ссылку на любую картинку -->
-        <img
-          id="pickupImage"
-          src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=70"
-          alt="Самовывоз"
-        />
-        <div class="caption">Самовывоз: выберите, через сколько вы будете.</div>
-      </div>
-
-      <!-- ИЗМЕНЕНО: "Приеду через" + 3 кнопки -->
-      <span class="quick-time-label">Приеду через:</span>
+    <!-- Блок САМОВЫВОЗ: время + чекбокс курьера + доп. инфо содержит текст открытки -->
+    <div id="pickupBlockForm" class="hidden">
+      <span class="quick-time-label">Приеду / Отправлю курьера через:</span>
       <div class="quick-time-grid" id="quickTimeGrid">
         <button class="btn-chip" type="button" data-time="30 минут">30 минут</button>
         <button class="btn-chip" type="button" data-time="1 час">1 час</button>
         <button class="btn-chip" type="button" data-time="2 часа">2 часа</button>
       </div>
 
-      <!-- Поле остаётся снизу и авто-заполняется -->
-      <label for="pickupTime">Приеду к:</label>
-      <input id="pickupTime" maxlength="20" placeholder="Например: к 17:00 буду" />
-      <div class="help">Поле обязательно для самовывоза (до 20 символов).</div>
+      <label for="pickupVariant">Ваш вариант если вы сами приедете:</label>
+      <input id="pickupVariant" maxlength="20" placeholder="Например: к 17:00 буду" />
+      <div class="help">Наш график работы с 09:30 до 20:00 .</div>
+
+      <div class="check-row">
+        <input type="checkbox" id="sendCourierCheck" />
+        <div>
+          <div class="t">Отправлю курьера</div>
+          <div class="d">Если отметите, магазин получит уведомление, что вы отправляете курьера на самовывоз.</div>
+        </div>
+      </div>
+
+      <button class="more-btn" id="toggleExtraPickup" type="button">
+        <span class="txt">Дополнительная информация</span>
+        <span class="plus">+</span>
+      </button>
+
+      <div id="extraPickupWrap" class="hidden">
+        <label for="wishPickup">Текст для открытки</label>
+        <textarea id="wishPickup" maxlength="150" rows="3"></textarea>
+        <div class="help">Напишите только то, что нужно написать на открытке (до 150 символов).</div>
+
+        <label for="extraPickup">Комментарии к заказу</label>
+        <class=""textarea id="extraPickup" maxlength="90" rows="3"
+          placeholder="Например: Позвоните мне по WhatsApp..."></textarea>
+        <div class="help">Например: Позвоните мне по What's App, у меня нет сети. +7 (701) 01-01-999</div>
+      </div>
     </div>
 
-    <button class="btn-main" id="btnToConfirm">Далее</button>
-    <button class="btn-secondary" id="btnBackToForm">Назад</button>
+    <button class="btn-main btn-disabled" id="btnContinue" type="button" disabled>Продолжить</button>
+    <button class="btn-secondary" id="btnBackToType0" type="button">Назад</button>
   </div>
 
-  <!-- ШАГ 3: ПОДТВЕРЖДЕНИЕ -->
+  <!-- ШАГ 2: ПОДТВЕРЖДЕНИЕ -->
   <div id="confirm" class="hidden">
     <h1>Проверьте данные</h1>
-    <p>Для точности советуем проверить ещё раз все номера и данные.</p>
+    <p>Пожалуйста, проверьте — всё ли указано верно.</p>
 
     <div class="confirm-box">
-      <p><b>Тип:</b> <span id="c_type"></span></p>
-      <p id="c_pickup_row" class="hidden"><b>Приеду к:</b> <span id="c_pickup"></span></p>
-      <p><b>Номер заказа:</b> <span id="c_order"></span></p>
-      <p><b>Пожелание:</b> <span id="c_wish"></span></p>
-      <p><b>Дополнительно:</b> <span id="c_extra"></span></p>
+      <div class="row">
+        <p><b>Тип:</b> <span id="c_type"></span></p>
+        <div class="edit-icon" id="editType" title="Изменить">✏️</div>
+      </div>
+
+      <div class="row">
+        <p><b>Номер заказа:</b> <span id="c_order"></span></p>
+        <div class="edit-icon" id="editOrder" title="Изменить">✏️</div>
+      </div>
+
+      <div class="row hidden" id="c_time_wrap">
+        <p><b>Время:</b> <span id="c_time"></span></p>
+        <div class="edit-icon" id="editTime" title="Изменить">✏️</div>
+      </div>
+
+      <div class="row hidden" id="c_courier_wrap">
+        <p><b>Курьер:</b> <span id="c_courier"></span></p>
+        <div class="edit-icon" id="editCourier" title="Изменить">✏️</div>
+      </div>
+
+      <div class="row">
+        <p><b>Текст для открытки:</b> <span id="c_wish"></span></p>
+        <div class="edit-icon" id="editWish" title="Изменить">✏️</div>
+      </div>
+
+      <div class="row hidden" id="c_extra_wrap">
+        <p><b>Комментарий:</b> <span id="c_extra"></span></p>
+        <div class="edit-icon" id="editExtra" title="Изменить">✏️</div>
+      </div>
     </div>
 
-    <button class="btn-main" id="btnSend">Да, всё верно</button>
-    <button class="btn-secondary" id="btnBackToType">Назад, проверить</button>
+    <button class="btn-main" id="btnSend" type="button">Отправить в магазин</button>
+    <button class="btn-secondary" id="btnBackToForm" type="button">Назад</button>
   </div>
 
   <!-- УСПЕХ -->
   <div id="success" class="hidden">
-    <p class="success">
-      Все данные заполненные вами отправлены в группу магазина.<br />
-      Спасибо большое за обращение в Mishki.kz
-    </p>
+    <h1>Готово!</h1>
+
+    <div class="success-wrap">
+      <p class="success-title">✅ Заказ отправлен</p>
+      <p class="success-text">
+        Данные успешно отправлены в группу магазина.<br>
+        Спасибо большое за обращение в <b>Mishki.kz</b>!
+      </p>
+
+      <button class="btn-whatsapp" id="btnWhatsAppCopy" type="button">
+        Продублировать в What's App
+      </button>
+
+      <!-- Блок адреса только если самовывоз -->
+      <div id="pickupAfterSend" class="hidden">
+        <button class="address-toggle" id="toggleAddress" type="button">Наш адрес</button>
+        <div class="address-panel hidden" id="addressPanel">
+          <a class="btn-2gis" id="btn2gis" target="_blank" rel="noopener">Открыть в 2GIS</a>
+          <div class="address-text" id="pickupText"></div>
+        </div>
+
+        <!-- Блок курьера (только если выбрали самовывоз + галочка курьера) -->
+        <div class="courier-box hidden" id="courierBox">
+          <h3 id="courierTitle">Ссылка на курьера</h3>
+          <label for="courierLink" id="courierLabel">Вставьте ссылку на курьера:</label>
+          <input id="courierLink" placeholder="Ссылка из Яндекс / InDriver" />
+          <div class="note" id="courierHelp"></div>
+
+          <button class="btn-main" id="btnNotifyShop" type="button">Уведомить магазин</button>
+          <div class="error" id="notifyError"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
 </div>
 
 <script>
+  // ====== НАСТРОЙКИ ======
   const BOT_TOKEN = "8264155388:AAF9YKdvbobW3b4_qa5qTBhZRWCUV7OctVo";
-  const CHAT_ID = "-1002973925647";
+  const CHAT_ID   = "-1002973925647";
+  const SHOP_WA_NUMBER = "77002022289";
 
-  const stepForm = document.getElementById("step_form");
-  const stepType = document.getElementById("step_type");
+  const PICKUP_2GIS_URL = "https://2gis.kz/almaty/geo/9430047374967886/76.958960,43.266119";
+  const PICKUP_ADDRESS_TEXT =
+`Наш адрес: Баишева 12
+(чёрные решётки со стороны улицы, офис,
+без наружной рекламы)
+
+Улица Баишева, 12`;
+
+  const LS_DRAFT_KEY = "mishki_project_v2_draft";
+  const LS_USED_ORDERS_KEY = "mishki_used_orders_v1";
+
+  // ====== ЭЛЕМЕНТЫ ======
+  const stepType0 = document.getElementById("step_type0");
+  const stepForm  = document.getElementById("step_form");
   const confirmDiv = document.getElementById("confirm");
   const successDiv = document.getElementById("success");
 
+  const typeDelivery = document.getElementById("typeDelivery");
+  const typePickup   = document.getElementById("typePickup");
+
+  const formTitle = document.getElementById("formTitle");
   const orderInput = document.getElementById("order");
-  const wishInput = document.getElementById("wish");
-  const extraInput = document.getElementById("extra");
+  const orderError = document.getElementById("orderError");
+
+  const deliveryBlock = document.getElementById("deliveryBlock");
+  const wishDelivery = document.getElementById("wishDelivery");
+  const toggleExtraDelivery = document.getElementById("toggleExtraDelivery");
+  const extraDeliveryWrap = document.getElementById("extraDeliveryWrap");
+  const extraDelivery = document.getElementById("extraDelivery");
+
+  const pickupBlockForm = document.getElementById("pickupBlockForm");
+  const quickTimeGrid = document.getElementById("quickTimeGrid");
+  const pickupVariant = document.getElementById("pickupVariant");
+  const sendCourierCheck = document.getElementById("sendCourierCheck");
+  const toggleExtraPickup = document.getElementById("toggleExtraPickup");
+  const extraPickupWrap = document.getElementById("extraPickupWrap");
+  const wishPickup = document.getElementById("wishPickup");
+  const extraPickup = document.getElementById("extraPickup");
 
   const btnContinue = document.getElementById("btnContinue");
-  const btnPickup = document.getElementById("btnPickup");
-  const btnDelivery = document.getElementById("btnDelivery");
-  const pickupWrap = document.getElementById("pickupWrap");
-  const pickupTimeInput = document.getElementById("pickupTime");
+  const btnBackToType0 = document.getElementById("btnBackToType0");
 
-  const quickTimeGrid = document.getElementById("quickTimeGrid");
+  const c_type = document.getElementById("c_type");
+  const c_order = document.getElementById("c_order");
+  const c_time_wrap = document.getElementById("c_time_wrap");
+  const c_time = document.getElementById("c_time");
+  const c_courier_wrap = document.getElementById("c_courier_wrap");
+  const c_courier = document.getElementById("c_courier");
+  const c_wish = document.getElementById("c_wish");
+  const c_extra_wrap = document.getElementById("c_extra_wrap");
+  const c_extra = document.getElementById("c_extra");
 
-  const btnToConfirm = document.getElementById("btnToConfirm");
-  const btnBackToForm = document.getElementById("btnBackToForm");
-
-  const cType = document.getElementById("c_type");
-  const cPickupRow = document.getElementById("c_pickup_row");
-  const cPickup = document.getElementById("c_pickup");
-  const cOrder = document.getElementById("c_order");
-  const cWish = document.getElementById("c_wish");
-  const cExtra = document.getElementById("c_extra");
+  const editType = document.getElementById("editType");
+  const editOrder = document.getElementById("editOrder");
+  const editTime = document.getElementById("editTime");
+  const editCourier = document.getElementById("editCourier");
+  const editWish = document.getElementById("editWish");
+  const editExtra = document.getElementById("editExtra");
 
   const btnSend = document.getElementById("btnSend");
-  const btnBackToType = document.getElementById("btnBackToType");
+  const btnBackToForm = document.getElementById("btnBackToForm");
 
-  let orderType = ""; // "pickup" | "delivery"
+  const btnWhatsAppCopy = document.getElementById("btnWhatsAppCopy");
 
-  orderInput.addEventListener("input", () => {
-    orderInput.value = orderInput.value.replace(/\D/g, "").slice(0, 9);
-  });
+  const pickupAfterSend = document.getElementById("pickupAfterSend");
+  const toggleAddress = document.getElementById("toggleAddress");
+  const addressPanel = document.getElementById("addressPanel");
+  const btn2gis = document.getElementById("btn2gis");
+  const pickupText = document.getElementById("pickupText");
 
-  btnContinue.addEventListener("click", () => {
-    if (orderInput.value.length !== 9) {
-      alert("Номер заказа должен состоять из 9 цифр");
-      return;
-    }
-    if (!wishInput.value.trim()) {
-      alert("Введите пожелание");
-      return;
-    }
+  const courierBox = document.getElementById("courierBox");
+  const courierTitle = document.getElementById("courierTitle");
+  const courierLabel = document.getElementById("courierLabel");
+  const courierHelp  = document.getElementById("courierHelp");
+  const courierLink  = document.getElementById("courierLink");
+  const btnNotifyShop = document.getElementById("btnNotifyShop");
+  const notifyError = document.getElementById("notifyError");
 
+  // ====== СОСТОЯНИЕ ======
+  let orderType = "";          // "delivery" | "pickup"
+  let selectedQuick = "";      // "30 минут" | "1 час" | "2 часа" | ""
+  let courierChecked = false;
+  let extraDeliveryOpen = false;
+  let extraPickupOpen = false;
+
+  // ====== ВСПОМОГАТЕЛЬНОЕ ======
+  function showStep(step){
+    stepType0.classList.add("hidden");
     stepForm.classList.add("hidden");
-    stepType.classList.remove("hidden");
-  });
-
-  function setType(type) {
-    orderType = type;
-    btnPickup.classList.toggle("active", type === "pickup");
-    btnDelivery.classList.toggle("active", type === "delivery");
-
-    if (type === "pickup") {
-      pickupWrap.classList.remove("hidden");
-    } else {
-      pickupWrap.classList.add("hidden");
-      pickupTimeInput.value = "";
-      // снять выделение с быстрых кнопок
-      if (quickTimeGrid) {
-        quickTimeGrid.querySelectorAll(".btn-chip").forEach(b => b.classList.remove("active"));
-      }
-    }
-  }
-
-  btnPickup.addEventListener("click", () => setType("pickup"));
-  btnDelivery.addEventListener("click", () => setType("delivery"));
-
-  // ДОБАВЛЕНО: быстрые кнопки времени -> вставка в поле ввода
-  if (quickTimeGrid) {
-    quickTimeGrid.addEventListener("click", (e) => {
-      const btn = e.target.closest(".btn-chip");
-      if (!btn) return;
-
-      const value = btn.getAttribute("data-time") || btn.textContent.trim();
-
-      // выделение активной кнопки
-      quickTimeGrid.querySelectorAll(".btn-chip").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      // автозаполнение поля (как ты просил)
-      pickupTimeInput.value = value;
-
-      // чтобы курсор встал в конец (удобно дописать "буду")
-      pickupTimeInput.focus();
-      pickupTimeInput.setSelectionRange(pickupTimeInput.value.length, pickupTimeInput.value.length);
-    });
-  }
-
-  btnBackToForm.addEventListener("click", () => {
-    stepType.classList.add("hidden");
-    stepForm.classList.remove("hidden");
-  });
-
-  btnToConfirm.addEventListener("click", () => {
-    if (!orderType) {
-      alert("Выберите тип заказа: Самовывоз или Доставка");
-      return;
-    }
-
-    if (orderType === "pickup") {
-      const t = pickupTimeInput.value.trim();
-      if (!t) {
-        alert("Для самовывоза укажите время: «Приеду к…»");
-        return;
-      }
-      if (t.length > 20) {
-        alert("Поле «Приеду к» должно быть до 20 символов");
-        return;
-      }
-    }
-
-    cType.textContent = (orderType === "pickup") ? "Самовывоз" : "Доставка";
-
-    if (orderType === "pickup") {
-      cPickupRow.classList.remove("hidden");
-      cPickup.textContent = pickupTimeInput.value.trim();
-    } else {
-      cPickupRow.classList.add("hidden");
-      cPickup.textContent = "";
-    }
-
-    cOrder.textContent = orderInput.value;
-    cWish.textContent = wishInput.value.trim();
-    cExtra.textContent = extraInput.value.trim() ? extraInput.value.trim() : "—";
-
-    stepType.classList.add("hidden");
-    confirmDiv.classList.remove("hidden");
-  });
-
-  btnBackToType.addEventListener("click", () => {
     confirmDiv.classList.add("hidden");
-    stepType.classList.remove("hidden");
-  });
+    successDiv.classList.add("hidden");
+    step.classList.remove("hidden");
+  }
 
-  function buildTelegramText() {
-    const order = orderInput.value.trim();
-    const wish = wishInput.value.trim();
-    const extra = extraInput.value.trim();
-    const pickupTime = pickupTimeInput.value.trim();
-
-    let lines = [];
-
-    if (orderType === "pickup") {
-      lines.push("📍 Самовывоз");
-      lines.push("");
-      lines.push(`#️⃣${order}`);
-      lines.push("");
-      lines.push(`🗣️ Буду к ${pickupTime}`);
-      lines.push("");
-      lines.push(`💬 ${wish}`);
-      if (extra) {
-        lines.push("");
-        lines.push(`🪪 ${extra}`);
-      }
+  function setOrderError(msg){
+    if(msg){
+      orderError.textContent = msg;
+      orderError.classList.add("show");
+      orderInput.classList.add("invalid");
     } else {
+      orderError.textContent = "";
+      orderError.classList.remove("show");
+      orderInput.classList.remove("invalid");
+    }
+  }
+
+  function setNotifyError(msg){
+    if(msg){
+      notifyError.textContent = msg;
+      notifyError.classList.add("show");
+    } else {
+      notifyError.textContent = "";
+      notifyError.classList.remove("show");
+    }
+  }
+
+  function isOrderFormatValid(orderStr){
+    if(!/^\d{9}$/.test(orderStr)) return false;
+    const first3 = parseInt(orderStr.slice(0,3), 10);
+    return first3 >= 780;
+  }
+
+  function getUsedOrders(){
+    try{
+      const raw = localStorage.getItem(LS_USED_ORDERS_KEY);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    } catch { return []; }
+  }
+  function isOrderUsed(order){ return getUsedOrders().includes(order); }
+  function addUsedOrder(order){
+    const used = getUsedOrders();
+    if(!used.includes(order)){
+      used.push(order);
+      localStorage.setItem(LS_USED_ORDERS_KEY, JSON.stringify(used));
+    }
+  }
+
+  function setExtraDeliveryOpen(open, silent=false){
+    extraDeliveryOpen = open;
+    if(open){
+      extraDeliveryWrap.classList.remove("hidden");
+      toggleExtraDelivery.classList.add("more-open");
+    } else {
+      extraDeliveryWrap.classList.add("hidden");
+      toggleExtraDelivery.classList.remove("more-open");
+    }
+    if(!silent) saveDraft();
+  }
+
+  function setExtraPickupOpen(open, silent=false){
+    extraPickupOpen = open;
+    if(open){
+      extraPickupWrap.classList.remove("hidden");
+      toggleExtraPickup.classList.add("more-open");
+    } else {
+      extraPickupWrap.classList.add("hidden");
+      toggleExtraPickup.classList.remove("more-open");
+    }
+    if(!silent) saveDraft();
+  }
+
+  function selectType(type){
+    orderType = type;
+    typeDelivery.classList.toggle("active", type === "delivery");
+    typePickup.classList.toggle("active", type === "pickup");
+
+    // подготовка формы
+    orderInput.value = "";
+    setOrderError("");
+
+    // сброс локальных выборов
+    selectedQuick = "";
+    courierChecked = false;
+    sendCourierCheck.checked = false;
+    quickTimeGrid.querySelectorAll(".btn-chip").forEach(b=>b.classList.remove("active"));
+    pickupVariant.value = "";
+
+    // очистка полей текста
+    wishDelivery.value = "";
+    extraDelivery.value = "";
+    wishPickup.value = "";
+    extraPickup.value = "";
+
+    setExtraDeliveryOpen(false, true);
+    setExtraPickupOpen(false, true);
+
+    // показать нужные блоки
+    if(type === "delivery"){
+      formTitle.textContent = "Доставка";
+      deliveryBlock.classList.remove("hidden");
+      pickupBlockForm.classList.add("hidden");
+    } else {
+      formTitle.textContent = "Самовывоз";
+      deliveryBlock.classList.add("hidden");
+      pickupBlockForm.classList.remove("hidden");
+    }
+
+    updateContinueState();
+    saveDraft();
+    showStep(stepForm);
+  }
+
+  function updateContinueState(){
+    const order = orderInput.value.trim();
+
+    // валидность заказа
+    let orderOk = false;
+    if(order.length < 9){
+      setOrderError("");
+      orderOk = false;
+    } else {
+      if(!isOrderFormatValid(order)){
+        setOrderError("Похоже это не номер заказа Kaspi.kz. Номер должен начинаться с 780+ (пример: 782342521).");
+        orderOk = false;
+      } else if(isOrderUsed(order)){
+        setOrderError("Этот номер заказа уже был отправлен ранее. Проверьте номер в Kaspi.kz.");
+        orderOk = false;
+      } else {
+        setOrderError("");
+        orderOk = true;
+      }
+    }
+
+    // обязательные поля зависят от типа
+    let requiredOk = false;
+
+    if(orderType === "delivery"){
+      const wishOk = wishDelivery.value.trim().length > 0;
+      requiredOk = orderOk && wishOk;
+    } else if(orderType === "pickup"){
+      const timeOk = pickupVariant.value.trim().length > 0;
+      // текст открытки не обязателен (он в доп. инфо), но если человек откроет — пусть пишет по желанию.
+      requiredOk = orderOk && timeOk;
+
+      // если курьер отмечен — требуем, чтобы время было выбрано кнопкой (чтобы формировать "через 30/1ч/2ч")
+      if(sendCourierCheck.checked){
+        if(!selectedQuick){
+          requiredOk = false;
+        }
+      }
+    }
+
+    btnContinue.disabled = !requiredOk;
+    btnContinue.classList.toggle("btn-disabled", !requiredOk);
+
+    return requiredOk;
+  }
+
+  function prettyTimeForConfirmAndTelegram(){
+    const t = pickupVariant.value.trim();
+
+    // если выбрано из кнопок — формируем "Приеду через ..."
+    if(selectedQuick && t === selectedQuick){
+      return `Приеду через ${selectedQuick}`;
+    }
+    // если свой вариант — просто текст целиком, без "Приеду через"
+    return t;
+  }
+
+  function courierLineForTelegram(){
+    // только если отмечен курьер
+    if(!sendCourierCheck.checked) return "";
+    // только если выбран быстрый вариант
+    if(selectedQuick === "30 минут") return "Отправит курьера через 30 минут";
+    if(selectedQuick === "1 час") return "Отправит курьера через 1 час";
+    if(selectedQuick === "2 часа") return "Отправит курьера через 2 часа";
+    // fallback (не ругаемся)
+    return "Клиент отправит курьера (время уточнит)";
+  }
+
+  function buildWishText(){
+    // доставка: основной wishDelivery
+    // самовывоз: wishPickup (в доп инфо)
+    if(orderType === "delivery") return wishDelivery.value.trim();
+    return wishPickup.value.trim();
+  }
+
+  function buildExtraText(){
+    if(orderType === "delivery") return extraDelivery.value.trim();
+    return extraPickup.value.trim();
+  }
+
+  // ====== СООБЩЕНИЕ В TELEGRAM/WHATSAPP (основное) ======
+  function buildMainMessage(){
+    const order = orderInput.value.trim();
+    const wish = buildWishText();
+    const extra = buildExtraText();
+
+    const lines = [];
+
+    if(orderType === "delivery"){
       lines.push("📍 Доставка");
       lines.push("");
       lines.push(`#️⃣${order}`);
       lines.push("");
-      lines.push(`💬 ${wish}`);
-      if (extra) {
+      if(wish) lines.push(`💬 ${wish}`);
+      if(extra){
+        lines.push("");
+        lines.push(`🪪 ${extra}`);
+      }
+    } else {
+      lines.push("📍 Самовывоз");
+      lines.push("");
+      lines.push(`#️⃣${order}`);
+      lines.push("");
+
+      // время
+      lines.push(`🗣️ ${prettyTimeForConfirmAndTelegram()}`);
+
+      // курьер (если отмечен)
+      const courierLine = courierLineForTelegram();
+      if(courierLine){
+        lines.push("");
+        lines.push(`🚕 ${courierLine}`);
+      }
+
+      if(wish){
+        lines.push("");
+        lines.push(`💬 ${wish}`);
+      }
+      if(extra){
         lines.push("");
         lines.push(`🪪 ${extra}`);
       }
@@ -408,58 +673,432 @@
     return lines.join("\n");
   }
 
-  async function sendToTelegram() {
-    if (!BOT_TOKEN || !CHAT_ID) {
-      alert("Ошибка конфигурации. Пожалуйста, свяжитесь с администратором.");
-      return;
+  function buildWhatsAppText(){
+    return `Я отправил(а) эти данные на сайте:\n\n${buildMainMessage()}`;
+  }
+
+  // ====== TELEGRAM SEND (основное) ======
+  async function sendTelegramText(text){
+    const apiUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+    // POST
+    const res = await fetch(apiUrl, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ chat_id: CHAT_ID, text })
+    });
+    const data = await res.json().catch(()=>null);
+    if(!res.ok || !data || data.ok !== true) throw new Error("Telegram API error");
+    return true;
+  }
+
+  async function sendTelegramTextFallback(text){
+    // GET fallback через Image (иногда помогает при проблемах)
+    await new Promise((resolve, reject)=>{
+      const url =
+        `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage` +
+        `?chat_id=${encodeURIComponent(CHAT_ID)}` +
+        `&text=${encodeURIComponent(text)}`;
+      const img = new Image();
+      img.onload = ()=>resolve();
+      img.onerror = ()=>reject(new Error("fallback failed"));
+      img.src = url;
+    });
+  }
+
+  async function sendToTelegramMain(){
+    const order = orderInput.value.trim();
+
+    if(!isOrderFormatValid(order)){
+      alert("Похоже номер заказа указан неверно. Пожалуйста, проверьте номер в Kaspi.kz.");
+      showStep(stepForm);
+      return false;
+    }
+    if(isOrderUsed(order)){
+      alert("Кажется этот номер уже отправляли ранее. Пожалуйста, проверьте номер и попробуйте другой.");
+      showStep(stepForm);
+      return false;
     }
 
-    const text = buildTelegramText();
-    const apiUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+    const text = buildMainMessage();
 
-    try {
-      const res = await fetch(apiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: CHAT_ID,
-          text: text
-        })
-      });
+    btnSend.disabled = true;
+    btnSend.textContent = "Отправляем...";
 
-      const data = await res.json().catch(() => null);
-      if (!res.ok || !data || data.ok !== true) {
-        throw new Error("Telegram API error");
+    try{
+      await sendTelegramText(text);
+      addUsedOrder(order);
+      clearDraft();
+      return true;
+    } catch(e){
+      try{
+        await sendTelegramTextFallback(text);
+        addUsedOrder(order);
+        clearDraft();
+        return true;
+      } catch {
+        alert("Не получилось отправить сообщение. Проверьте интернет и попробуйте ещё раз.");
+        return false;
       }
-
-      confirmDiv.classList.add("hidden");
-      successDiv.classList.remove("hidden");
-      return;
-    } catch (e) {
-      return new Promise((resolve, reject) => {
-        const url =
-          `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage` +
-          `?chat_id=${encodeURIComponent(CHAT_ID)}` +
-          `&text=${encodeURIComponent(text)}`;
-
-        const img = new Image();
-        img.onload = () => {
-          confirmDiv.classList.add("hidden");
-          successDiv.classList.remove("hidden");
-          resolve();
-        };
-        img.onerror = () => {
-          reject(new Error("Не удалось отправить запрос (возможен CORS/сеть/неверный chat_id)."));
-        };
-        img.src = url;
-      }).catch(err => {
-        console.error("Ошибка отправки:", err);
-        alert("Произошла ошибка при отправке данных. Проверь интернет и права бота в группе.");
-      });
+    } finally {
+      btnSend.disabled = false;
+      btnSend.textContent = "Отправить в магазин";
     }
   }
 
-  btnSend.addEventListener("click", sendToTelegram);
+  // ====== КУРЬЕР: расчёт минут и уведомление ======
+  function computeCourierMinutes(){
+    // возвращает {waitMin, totalMin} где totalMin = waitMin + 10
+    if(selectedQuick === "30 минут") return { waitMin: 30, totalMin: 40 };
+    if(selectedQuick === "1 час") return { waitMin: 60, totalMin: 70 };
+    if(selectedQuick === "2 часа") return { waitMin: 120, totalMin: 130 };
+    return { waitMin: 0, totalMin: 0 };
+  }
+
+  function setupCourierBoxAfterSend(){
+    // показываем только если самовывоз + чекбокс курьера
+    if(orderType !== "pickup" || !sendCourierCheck.checked){
+      courierBox.classList.add("hidden");
+      return;
+    }
+
+    const { waitMin, totalMin } = computeCourierMinutes();
+
+    courierBox.classList.remove("hidden");
+    setNotifyError("");
+
+    courierTitle.textContent = "Ссылка на курьера";
+    courierLabel.textContent = `Вставьте ссылку на курьера через ${totalMin} минут:`;
+    courierHelp.textContent =
+      `Через ${waitMin} минут + 10 минут на оформление вы можете вызвать курьера, указав наш номер телефона +77002022289, и вставить ссылку сюда.`;
+
+    courierLink.value = "";
+  }
+
+  async function notifyShopAboutCourier(){
+    setNotifyError("");
+
+    const link = courierLink.value.trim();
+    if(!link){
+      setNotifyError("Пожалуйста, вставьте ссылку на курьера — и затем нажмите «Уведомить магазин».");
+      return;
+    }
+
+    const order = orderInput.value.trim();
+    const text =
+`🚕 Клиент отправляет курьера на заказ #️⃣${order}
+
+🔗 Ссылка на курьера:
+${link}`;
+
+    btnNotifyShop.disabled = true;
+    btnNotifyShop.textContent = "Отправляем...";
+
+    try{
+      await sendTelegramText(text);
+      btnNotifyShop.textContent = "Уведомление отправлено ✅";
+      btnNotifyShop.classList.add("btn-disabled");
+      btnNotifyShop.disabled = true;
+    } catch(e){
+      try{
+        await sendTelegramTextFallback(text);
+        btnNotifyShop.textContent = "Уведомление отправлено ✅";
+        btnNotifyShop.classList.add("btn-disabled");
+        btnNotifyShop.disabled = true;
+      } catch {
+        setNotifyError("Не получилось отправить уведомление. Проверьте интернет и попробуйте ещё раз.");
+      }
+    } finally {
+      if(!btnNotifyShop.disabled || btnNotifyShop.textContent === "Отправляем..."){
+        btnNotifyShop.disabled = false;
+        btnNotifyShop.textContent = "Уведомить магазин";
+      }
+    }
+  }
+
+  // ====== SUCCESS UI ======
+  function finalizeSuccess(){
+    // WhatsApp всегда доступен
+    // Адрес + курьер блок — только для самовывоза
+    if(orderType === "pickup"){
+      pickupAfterSend.classList.remove("hidden");
+      addressPanel.classList.add("hidden");
+      toggleAddress.textContent = "Наш адрес";
+
+      setupCourierBoxAfterSend();
+    } else {
+      pickupAfterSend.classList.add("hidden");
+    }
+
+    showStep(successDiv);
+  }
+
+  // ====== Сохранение черновика ======
+  function saveDraft(){
+    const draft = {
+      orderType,
+      order: orderInput.value || "",
+      selectedQuick,
+      pickupVariant: pickupVariant.value || "",
+      courierChecked: !!sendCourierCheck.checked,
+
+      wishDelivery: wishDelivery.value || "",
+      extraDelivery: extraDelivery.value || "",
+      extraDeliveryOpen,
+
+      wishPickup: wishPickup.value || "",
+      extraPickup: extraPickup.value || "",
+      extraPickupOpen
+    };
+    localStorage.setItem(LS_DRAFT_KEY, JSON.stringify(draft));
+  }
+
+  function loadDraft(){
+    try{
+      const raw = localStorage.getItem(LS_DRAFT_KEY);
+      if(!raw) return;
+      const d = JSON.parse(raw);
+      if(!d || typeof d !== "object") return;
+
+      if(d.orderType === "delivery" || d.orderType === "pickup"){
+        orderType = d.orderType;
+        typeDelivery.classList.toggle("active", orderType === "delivery");
+        typePickup.classList.toggle("active", orderType === "pickup");
+
+        // show form and configure blocks
+        if(orderType === "delivery"){
+          formTitle.textContent = "Доставка";
+          deliveryBlock.classList.remove("hidden");
+          pickupBlockForm.classList.add("hidden");
+        } else {
+          formTitle.textContent = "Самовывоз";
+          deliveryBlock.classList.add("hidden");
+          pickupBlockForm.classList.remove("hidden");
+        }
+
+        orderInput.value = d.order || "";
+
+        // delivery draft
+        wishDelivery.value = d.wishDelivery || "";
+        extraDelivery.value = d.extraDelivery || "";
+        setExtraDeliveryOpen(!!d.extraDeliveryOpen, true);
+
+        // pickup draft
+        selectedQuick = d.selectedQuick || "";
+        pickupVariant.value = d.pickupVariant || "";
+        sendCourierCheck.checked = !!d.courierChecked;
+
+        wishPickup.value = d.wishPickup || "";
+        extraPickup.value = d.extraPickup || "";
+        setExtraPickupOpen(!!d.extraPickupOpen, true);
+
+        // mark quick buttons
+        quickTimeGrid.querySelectorAll(".btn-chip").forEach(b=>{
+          b.classList.toggle("active", b.getAttribute("data-time") === selectedQuick);
+        });
+
+        showStep(stepForm);
+        updateContinueState();
+      }
+    } catch {}
+  }
+
+  function clearDraft(){
+    localStorage.removeItem(LS_DRAFT_KEY);
+  }
+
+  // ====== События: выбор типа ======
+  typeDelivery.addEventListener("click", ()=> selectType("delivery"));
+  typePickup.addEventListener("click", ()=> selectType("pickup"));
+
+  // назад к выбору типа
+  btnBackToType0.addEventListener("click", ()=>{
+    saveDraft();
+    showStep(stepType0);
+  });
+
+  // ====== Ввод заказа и валидатор кнопки ======
+  orderInput.addEventListener("input", ()=>{
+    orderInput.value = orderInput.value.replace(/\D/g, "").slice(0,9);
+    updateContinueState();
+    saveDraft();
+  });
+
+  // доставка: wish обязательный
+  wishDelivery.addEventListener("input", ()=>{
+    updateContinueState();
+    saveDraft();
+  });
+  extraDelivery.addEventListener("input", saveDraft);
+
+  // самовывоз: время обязательное
+  pickupVariant.addEventListener("input", ()=>{
+    // если пользователь меняет вручную — снимаем выбор quick
+    if(pickupVariant.value.trim() !== selectedQuick){
+      selectedQuick = "";
+      quickTimeGrid.querySelectorAll(".btn-chip").forEach(b=>b.classList.remove("active"));
+    }
+    updateContinueState();
+    saveDraft();
+  });
+
+  quickTimeGrid.addEventListener("click", (e)=>{
+    const btn = e.target.closest(".btn-chip");
+    if(!btn) return;
+
+    const val = btn.getAttribute("data-time") || btn.textContent.trim();
+    selectedQuick = val;
+
+    quickTimeGrid.querySelectorAll(".btn-chip").forEach(b=>{
+      b.classList.toggle("active", b.getAttribute("data-time") === val);
+    });
+
+    pickupVariant.value = val; // вставили без фокуса
+    updateContinueState();
+    saveDraft();
+  });
+
+  // чекбокс курьера: для корректного текста в телеграме требуем selectedQuick
+  sendCourierCheck.addEventListener("change", ()=>{
+    courierChecked = !!sendCourierCheck.checked;
+    updateContinueState();
+    saveDraft();
+
+    // мягкая подсказка, если включили курьера без выбора кнопки времени
+    if(sendCourierCheck.checked && !selectedQuick){
+      alert("Небольшая подсказка: чтобы курьер был «через 30 минут / 1 час / 2 часа», пожалуйста выберите один из вариантов кнопкой выше.");
+    }
+  });
+
+  // самовывоз: текст открытки и комментарии в доп. инфо
+  wishPickup.addEventListener("input", saveDraft);
+  extraPickup.addEventListener("input", saveDraft);
+
+  // доп инфо кнопки
+  toggleExtraDelivery.addEventListener("click", ()=> setExtraDeliveryOpen(!extraDeliveryOpen));
+  toggleExtraPickup.addEventListener("click", ()=> setExtraPickupOpen(!extraPickupOpen));
+
+  // ====== Продолжить -> подтверждение ======
+  btnContinue.addEventListener("click", ()=>{
+    const can = updateContinueState();
+    if(!can) return;
+
+    // собрать данные для подтверждения
+    c_type.textContent = (orderType === "delivery") ? "Доставка" : "Самовывоз";
+    c_order.textContent = orderInput.value.trim();
+
+    if(orderType === "pickup"){
+      c_time_wrap.classList.remove("hidden");
+      c_time.textContent = prettyTimeForConfirmAndTelegram();
+
+      if(sendCourierCheck.checked){
+        c_courier_wrap.classList.remove("hidden");
+        c_courier.textContent = courierLineForTelegram();
+      } else {
+        c_courier_wrap.classList.add("hidden");
+        c_courier.textContent = "";
+      }
+    } else {
+      c_time_wrap.classList.add("hidden");
+      c_time.textContent = "";
+      c_courier_wrap.classList.add("hidden");
+      c_courier.textContent = "";
+    }
+
+    const wish = buildWishText();
+    c_wish.textContent = wish ? wish : "—";
+
+    const extra = buildExtraText();
+    if(extra){
+      c_extra_wrap.classList.remove("hidden");
+      c_extra.textContent = extra;
+    } else {
+      c_extra_wrap.classList.add("hidden");
+      c_extra.textContent = "";
+    }
+
+    showStep(confirmDiv);
+  });
+
+  btnBackToForm.addEventListener("click", ()=> showStep(stepForm));
+
+  // редактирование (иконки)
+  editType.addEventListener("click", ()=> showStep(stepType0));
+  editOrder.addEventListener("click", ()=>{ showStep(stepForm); orderInput.focus(); });
+
+  editTime.addEventListener("click", ()=>{
+    showStep(stepForm);
+    pickupVariant.focus();
+  });
+
+  editCourier.addEventListener("click", ()=>{
+    showStep(stepForm);
+    sendCourierCheck.focus();
+  });
+
+  editWish.addEventListener("click", ()=>{
+    showStep(stepForm);
+    if(orderType === "delivery"){
+      wishDelivery.focus();
+    } else {
+      setExtraPickupOpen(true);
+      wishPickup.focus();
+    }
+  });
+
+  editExtra.addEventListener("click", ()=>{
+    showStep(stepForm);
+    if(orderType === "delivery"){
+      setExtraDeliveryOpen(true);
+      extraDelivery.focus();
+    } else {
+      setExtraPickupOpen(true);
+      extraPickup.focus();
+    }
+  });
+
+  // ====== Отправка в Telegram ======
+  btnSend.addEventListener("click", async ()=>{
+    const ok = await sendToTelegramMain();
+    if(ok){
+      finalizeSuccess();
+    }
+  });
+
+  // ====== WhatsApp ======
+  btnWhatsAppCopy.addEventListener("click", ()=>{
+    const text = buildWhatsAppText();
+    const url = `https://wa.me/${SHOP_WA_NUMBER}?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank");
+  });
+
+  // ====== Адрес + переключатель “Наш адрес / Скрыть адрес” ======
+  btn2gis.href = PICKUP_2GIS_URL;
+  pickupText.textContent = PICKUP_ADDRESS_TEXT;
+
+  toggleAddress.addEventListener("click", ()=>{
+    const open = !addressPanel.classList.contains("hidden");
+    if(open){
+      addressPanel.classList.add("hidden");
+      toggleAddress.textContent = "Наш адрес";
+    } else {
+      addressPanel.classList.remove("hidden");
+      toggleAddress.textContent = "Скрыть адрес";
+    }
+  });
+
+  // ====== Уведомить магазин (ссылка курьера) ======
+  btnNotifyShop.addEventListener("click", notifyShopAboutCourier);
+
+  // ====== INIT ======
+  document.addEventListener("DOMContentLoaded", ()=>{
+    // если черновик есть — восстановим (мягко)
+    loadDraft();
+
+    // если нет черновика — остаёмся на выборе типа
+    if(!orderType){
+      showStep(stepType0);
+    }
+  });
 </script>
 
 </body>
