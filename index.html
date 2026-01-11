@@ -226,7 +226,7 @@
   <div id="success" class="hidden">
     <p class="success">
       Все данные заполненные вами отправлены в группу магазина.<br />
-      Спасибо большое за обращение!
+      Спасибо большое за обращение в Mishki.kz
     </p>
   </div>
 
@@ -449,7 +449,7 @@
           resolve();
         };
         img.onerror = () => {
-          t FFC(new Error("Не удалось отправить запрос (возможен CORS/сеть/неверный chat_id)."));
+          reject(new Error("Не удалось отправить запрос (возможен CORS/сеть/неверный chat_id)."));
         };
         img.src = url;
       }).catch(err => {
