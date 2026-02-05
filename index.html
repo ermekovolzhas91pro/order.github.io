@@ -17,7 +17,7 @@
   *{box-sizing:border-box}  
   body{  
     margin:0;  
-    font-family:arial, sans-serif;  
+    font-family:Arial, sans-serif;  
     background:var(--bg);  
     color:var(--text);  
     overflow-x:hidden;  
@@ -455,11 +455,18 @@
     font-weight:900;  
     color:#111;  
   }  
-  .modalBox p{  
-    margin:0 0 12px;  
-    color:#333;  
-    font-size:14px;  
-    line-height:1.45;  
+  .modalBox h3 {
+  text-align: center;
+}
+
+.modalBox p {
+  margin: 0 0 12px;
+  color: #333;
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: center;
+  white-space: pre-line;
+}  
   }  
   .modalActions{display:flex; gap:10px;}  
   .modalActions button{margin-top:0}  
@@ -670,7 +677,7 @@
 </div>  
 
 <div class="modalActions">  
-  <button id="modalOk" class="btnMain" type="button">Понятно</button>  
+  <button id="modalOk" class="btnMain" type="button">Mishki.kz</button>  
   <button id="modalCancel" class="btnSecond hidden" type="button">Отмена</button>  
 </div>
 
@@ -683,6 +690,8 @@ const CHAT_ID   = "-1002973925647";
   
 const SHOP_WA_NUMBER = "77002022289";  
 const PROMO_BOT = "mishki_kz_bot";  
+
+const LOCK_PAGE_WITH_MODAL = true; // 🔒 блокируем страницу
   
 const PICKUP_2GIS_URL = "https://2gis.kz/almaty/geo/9430047374967886/76.958960,43.266119";  
 const PICKUP_ADDRESS_TEXT =  
@@ -836,11 +845,13 @@ function openModal({title, text, showCheckbox=false, checkboxLabel="", checkboxV
   
   modal.classList.add("show");  
 }  
-function closeModal(){  
-  modal.classList.remove("show");  
-}  
-modalOk.addEventListener("click", ()=> closeModal());  
-modalCancel.addEventListener("click", ()=> closeModal());  
+function closeModal(){
+  if (LOCK_PAGE_WITH_MODAL) return; // ⛔ не закрываем
+  modal.classList.remove("show");
+}
+
+modalOk.addEventListener("click", ()=> closeModal());
+modalCancel.addEventListener("click", ()=> closeModal());
   
 /* ===================== ЯЗЫКИ ===================== */  
 btnKAZ.addEventListener("click", ()=>{  
@@ -1694,6 +1705,31 @@ function resetFormState(){
   // UI
   syncCourierUI();
   markValidity();
+}
+
+/* ===================== ВРЕМЕННОЕ УВЕДОМЛЕНИЕ 14 ФЕВРАЛЯ ===================== */
+
+
+const FEB14_NOTICE_ENABLED = true; // ← потом выключишь на false
+
+if (LOCK_PAGE_WITH_MODAL) {
+  window.addEventListener("load", () => {
+    openModal({
+      title: "🌹 Важная информация",
+      text:
+`Здравствуйте, уважаемый клиент!
+
+Приносим искренние извинения за возможные неудобства 🙏  
+В связи с большим количеством заказов в преддверии праздника 14 февраля, мы временно не пишем тексты на открытках вручную.
+
+Чтобы сохранить качество и скорость обработки заказов, каждый заказ будет доставлен с чистой открыткой, которую вы сможете подписать самостоятельно 💌
+
+Спасибо за понимание и поддержку ❤️  
+С наступающим праздником вас и ваших близких!
+
+С любовью, команда Mishki.kz`,
+    });
+  });
 }
 
 showScreen(sType);
