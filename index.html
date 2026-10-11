@@ -55,7 +55,7 @@
   }
   #weather-icon { font-size: 18px; line-height: 1; }
 
-  /* ===== Осадки: поверх контента, но не мешают вводу ===== */
+  /* ===== Осадки ===== */
   #animation-container {
     position: fixed; inset: 0;
     pointer-events: none;
@@ -236,9 +236,8 @@
 
   .success-icon { display: block; margin-bottom: 12px; text-align: center; font-size: 52px; }
 
-  /* ===== Строгий дизайн: меньше скруглений, плоские кнопки, без теней ===== */
+  /* Строгий дизайн */
   :root { --border: #c5cad1; }
-
   header { position: relative; padding-bottom: 16px; margin-bottom: 26px; }
   header::after {
     content: ""; position: absolute; left: 0; bottom: 0;
@@ -246,24 +245,17 @@
   }
   h1 { color: var(--text); font-size: 26px; letter-spacing: -0.3px; }
   .subtitle { font-size: 15px; font-weight: 500; }
-
   .field > label, .field > .label { font-size: 14px; font-weight: 700; color: var(--text); }
   .hint { font-weight: 500; }
-
   input[type="text"], input[type="tel"] { border-radius: 8px; padding: 15px 14px; }
   input:focus { box-shadow: 0 0 0 3px rgba(196, 0, 0, .12); }
   input.error { box-shadow: 0 0 0 3px rgba(220, 38, 38, .12); }
-
   .btn-remove, .btn-add-order, .photo-btn, .photo-retake { border-radius: 8px; border-style: solid; }
   .photo-preview img { border-radius: 8px; }
-
   .transport-btn { border-radius: 8px; padding: 16px 8px; }
   .transport-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
-
   .btn-submit { border-radius: 8px; box-shadow: none; padding: 17px; letter-spacing: .2px; }
-
   #weather-widget { border-radius: 8px; background: rgba(255, 255, 255, .92); }
-
   .overlay { background: rgba(0, 0, 0, .55); -webkit-backdrop-filter: none; backdrop-filter: none; }
   .modal { border-radius: 12px; box-shadow: 0 8px 30px rgba(0, 0, 0, .25); animation: modalIn .18s ease; }
   @keyframes modalIn { from { opacity: 0; transform: translateY(8px); } }
@@ -273,7 +265,7 @@
   .modal-actions button { border-radius: 8px; }
   .summary-item { padding: 11px 0; }
 
-  /* ===== Фото к заказу и камера ===== */
+  /* Фото */
   .field-note { margin: -2px 0 10px; color: var(--muted); font-size: 14px; line-height: 1.4; }
   .photo-slot { position: relative; flex: none; width: 54px; }
   .photo-add {
@@ -302,7 +294,6 @@
     margin-bottom: 12px; border-radius: 8px;
     background: #000; object-fit: cover;
   }
-  /* ===== Значок фото транспорта ===== */
   .label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
   .label-row .label { margin: 0; font-size: 14px; font-weight: 700; color: var(--text); }
   .label-row .photo-add { width: 44px; height: 44px; min-height: 0; }
@@ -429,7 +420,6 @@
 "use strict";
 
 /* ===================== НАСТРОЙКИ ===================== */
-// ВНИМАНИЕ: токен виден любому, кто откроет код страницы (см. рекомендацию по безопасности).
 const BOT_TOKEN   = "8264155388:AAH2q9-YlD5AJmm6GorKvivG7cGl2N4N7Wg";
 const CHAT_ID     = "-1002973925647";
 const CONSENT_KEY = "kezek_courier_consent";
@@ -437,7 +427,7 @@ const DATA_KEY    = "kezek_courier_data";
 const MAX_ORDERS  = 5;
 const WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=43.2389&longitude=76.8897&current_weather=true";
 
-/* ===================== ХРАНИЛИЩЕ (безопасно для приватного режима) ===================== */
+/* ===================== ХРАНИЛИЩЕ ===================== */
 const store = {
   get(k) { try { return localStorage.getItem(k); } catch { return null; } },
   set(k, v) { try { localStorage.setItem(k, v); } catch {} }
@@ -471,18 +461,16 @@ function closeModal(id) {
   if (!document.querySelector(".overlay.show")) document.body.classList.remove("modal-open");
 }
 
-/* ===================== ИМЯ: только буквы (в т.ч. қазақша), до 14 ===================== */
+/* ===================== ИМЯ ===================== */
 nameInput.addEventListener("input", () => {
   nameInput.value = nameInput.value.replace(/[^\p{L}]/gu, "").slice(0, 14);
   nameInput.classList.remove("error");
 });
 
-/* ===================== ТЕЛЕФОН: +7 XXX XXX XX XX ===================== */
+/* ===================== ТЕЛЕФОН ===================== */
 function formatPhone(raw) {
   let d = raw.replace(/\D/g, "");
-  // Если есть префикс "+7" — первая цифра это код страны
   if (raw.trim().startsWith("+7")) d = d.slice(1);
-  // Без плюса: 8XXXXXXXXXX или 7XXXXXXXXXX (вставка) — убираем код страны
   else if (d.length > 10 && (d[0] === "7" || d[0] === "8")) d = d.slice(1);
   else if (d.length >= 1 && d[0] === "8") d = d.slice(1);
   d = d.slice(0, 10);
@@ -496,17 +484,16 @@ function formatPhone(raw) {
 }
 phoneInput.addEventListener("input", () => {
   const raw = phoneInput.value;
-  // Пользователь стёр всё, кроме префикса — оставляем поле пустым
   phoneInput.value = raw.replace(/\D/g, "").length <= 1 && raw.trim().startsWith("+7") ? "+7 " : formatPhone(raw);
   phoneInput.classList.remove("error");
 });
 phoneInput.addEventListener("focus", () => { if (!phoneInput.value) phoneInput.value = "+7 "; });
 phoneInput.addEventListener("blur", () => { if (phoneInput.value.replace(/\D/g, "").length <= 1) phoneInput.value = ""; });
 
-function phoneDigits(v) { return v.replace(/\D/g, ""); } // "7XXXXXXXXXX"
+function phoneDigits(v) { return v.replace(/\D/g, ""); }
 
 /* ===================== ЗАКАЗЫ ===================== */
-const orderRows = [];   // [{ row, input }]
+const orderRows = [];
 
 function addOrderRow(removable) {
   const row = document.createElement("div");
@@ -576,7 +563,6 @@ function setTransport(value) {
 transportBtns.forEach((b) => b.addEventListener("click", () => setTransport(b.dataset.value)));
 
 /* ===================== СЖАТИЕ ФОТО ===================== */
-// Уменьшаем фото (JPEG), чтобы быстро уходило по мобильной сети
 function compressImage(file, maxSide = 1280, quality = 0.82) {
   return new Promise((resolve) => {
     const url = URL.createObjectURL(file);
@@ -596,7 +582,6 @@ function compressImage(file, maxSide = 1280, quality = 0.82) {
 }
 
 /* ===================== КАМЕРА ===================== */
-// Открываем камеру прямо на странице. Если браузер не разрешил — запасной вариант: системная камера.
 let camStream = null;
 let camOnShot = null;
 
@@ -639,26 +624,7 @@ $("btnShot").addEventListener("click", () => {
 });
 $("btnCamCancel").addEventListener("click", stopCamera);
 
-// Уменьшаем фото (JPEG), чтобы быстро уходило по мобильной сети
-function compressImage(file, maxSide = 1280, quality = 0.82) {
-  return new Promise((resolve) => {
-    const url = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = () => {
-      const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
-      const canvas = document.createElement("canvas");
-      canvas.width = Math.round(img.width * scale);
-      canvas.height = Math.round(img.height * scale);
-      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-      URL.revokeObjectURL(url);
-      canvas.toBlob((b) => resolve(b || file), "image/jpeg", quality);
-    };
-    img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
-    img.src = url;
-  });
-}
-
-/* ===================== ФОТО ТРАНСПОРТА (необязательно) ===================== */
+/* ===================== ФОТО ТРАНСПОРТА ===================== */
 const CAM_SVG = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg>';
 const photoInput = $("photo");
 const photoOpenBtn = $("btnPhotoOpen");
@@ -675,7 +641,6 @@ function showPhoto(blob) {
 }
 showPhoto(null);
 
-// Всплывающее окно: курьер сам решает, добавлять фото или нет
 function openPhotoModal() {
   const has = !!photoBlob;
   $("photo-img").hidden = !has;
@@ -700,7 +665,6 @@ photoInput.addEventListener("change", async () => {
 });
 
 /* ===================== ФОТО ПО УМОЛЧАНИЮ ===================== */
-// Если курьер не добавил своё фото, к заказу уходит эта картинка (файл лежит рядом с index.html).
 const DEFAULT_PHOTO_URL = "courier.jpg";
 let defaultPhotoPromise = null;
 function getDefaultPhoto() {
@@ -722,7 +686,6 @@ function collectData() {
   };
 }
 
-// Возвращает { msg, el } или null
 function validate(data) {
   if ([...data.name].length < 2)
     return { msg: "Введите имя: минимум 2 буквы.", el: nameInput };
@@ -780,11 +743,9 @@ $("btnSubmit").addEventListener("click", () => {
 $("btnEdit").addEventListener("click", () => closeModal("confirm-modal"));
 
 /* ===================== ПОРЯДКОВЫЙ НОМЕР ЗА ДЕНЬ ===================== */
-// Общий счётчик на все телефоны: каждая заявка получает следующий номер 1…300.
-// Каждый день (по времени Астаны, UTC+5) счёт начинается заново — ключ счётчика содержит дату.
 const SEQ_URL  = "https://abacus.jasoncameron.dev/hit/kezek.kz/d-";
 const SEQ_MAX  = 300;
-let pendingSeq = null;   // номер, уже выданный этой заявке (при повторной отправке не меняется)
+let pendingSeq = null;
 
 function almatyDay() {
   return new Date(Date.now() + 5 * 3600 * 1000).toISOString().slice(0, 10);
@@ -806,7 +767,7 @@ async function getSeq() {
   return Promise.race([ask, limit]);
 }
 
-/* ===================== ОТПРАВКА В TELEGRAM =====================
+/* ===================== ОТПРАВКА В TELEGRAM ===================== */
 let sending = false;
 const TG = `https://api.telegram.org/bot${BOT_TOKEN}`;
 
@@ -845,7 +806,6 @@ $("btnConfirmSend").addEventListener("click", async () => {
     const seq = await getSeq();
     const text = buildText(seq);
 
-    // Своё фото курьера, а если его нет — фото по умолчанию
     const photo = photoBlob || await Promise.race([getDefaultPhoto(), timeout]);
 
     let request;
@@ -857,7 +817,6 @@ $("btnConfirmSend").addEventListener("click", async () => {
       form.append("parse_mode", "HTML");
       request = fetch(`${TG}/sendPhoto`, { method: "POST", body: form });
     } else {
-      // Фото по умолчанию не загрузилось — отправляем просто текст
       request = fetch(`${TG}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -874,7 +833,7 @@ $("btnConfirmSend").addEventListener("click", async () => {
     const result = await res.json();
     if (!result.ok) throw new Error(result.description || "Telegram error");
 
-    pendingSeq = null;   // следующая заявка получит новый номер
+    pendingSeq = null;
     closeModal("confirm-modal");
     openModal("success-modal");
   } catch (e) {
