@@ -795,7 +795,7 @@ $("btnConfirmSend").addEventListener("click", async () => {
     `📱 <a href="${waLink}">${esc(data.phone)}</a>\n\n` +
     data.orders.map((o) => `🔢 <code>${esc(o)}</code>`).join("\n\n") + "\n\n" +
     esc(transportLabel[data.transport] || data.transport) + "\n\n" +
-    `<a href="https://t.me/+LIkMOza3r0Y0MjEy">Искать в группе »</a>`;
+    `<a href="https://t.me/+LIkMOza3r0Y0MjEy">Искать в группе</a>`;
 
   let timer;
   const timeout = new Promise((_, reject) => {
