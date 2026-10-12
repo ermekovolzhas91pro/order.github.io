@@ -125,7 +125,6 @@
   .fab:active { transform: scale(.94); }
   .fab svg { width: 24px; height: 24px; }
   .fab-history { background: #1f2937; }
-  .fab-shop { background: var(--primary); }
   .fab-games { background: var(--tg-blue); }
   .fab-call { background: var(--green); }
 
@@ -345,104 +344,6 @@
   }
   .btn-games-success:active { transform: scale(.98); }
   .btn-games-success svg { width: 20px; height: 20px; }
-
-  .modal.shop { max-width: 520px; padding: 20px 18px 18px; }
-  .shop-hero {
-    display: block; width: 100%; max-height: 220px;
-    object-fit: cover; border-radius: 8px; margin-bottom: 14px;
-    background: #f3f4f6;
-  }
-  .shop-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-  .shop-col h3 {
-    font-size: 12px; font-weight: 800; text-transform: uppercase;
-    color: var(--muted); margin: 0 0 8px; text-align: center;
-  }
-  .shop-price {
-    display: flex; justify-content: space-between; align-items: center;
-    width: 100%; padding: 8px 8px; margin-bottom: 6px;
-    border: 1.5px solid var(--border); border-radius: 8px;
-    background: #fff; color: var(--text); font: inherit;
-    font-size: 11.5px; font-weight: 700; cursor: pointer;
-    transition: all .15s;
-    gap: 4px;
-  }
-  .shop-price > span:first-child {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .shop-price:active { transform: scale(.98); }
-  .shop-price .plus {
-    display: flex; align-items: center; justify-content: center;
-    width: 20px; height: 20px; border-radius: 50%;
-    background: var(--primary); color: #fff;
-    font-size: 14px; font-weight: 800; line-height: 1;
-    flex: none;
-  }
-  .shop-h {
-    font-size: 12px; font-weight: 800; text-transform: uppercase;
-    color: var(--muted); margin: 14px 0 8px; text-align: center;
-  }
-
-  .shop-cart-wrap {
-    margin: 12px 0 4px;
-    padding: 12px;
-    border: 1.5px solid var(--primary);
-    border-radius: 10px;
-    background: rgba(196, 0, 0, 0.03);
-  }
-  .shop-cart-wrap.empty {
-    border-color: var(--border);
-    background: #fafafa;
-    text-align: center;
-    padding: 14px;
-  }
-  .shop-cart-title {
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 12px; font-weight: 800; text-transform: uppercase;
-    color: var(--primary); margin-bottom: 8px;
-    letter-spacing: 0.5px;
-  }
-  .shop-cart-title .count { color: var(--muted); font-weight: 700; }
-  .shop-cart-empty-msg { color: var(--muted); font-size: 12.5px; font-weight: 600; }
-  .shop-cart-list { list-style: none; margin: 0; padding: 0; }
-  .shop-cart-list li {
-    display: flex; justify-content: space-between; align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
-    background: #fff;
-    border-radius: 8px;
-    margin-bottom: 6px;
-    font-size: 13px;
-    font-weight: 700;
-  }
-  .shop-cart-list li .info { flex: 1; text-align: left; }
-  .shop-cart-list li .info small { display: block; font-weight: 600; color: var(--muted); font-size: 11.5px; margin-top: 2px; }
-  .shop-cart-list li .item-remove {
-    width: 26px; height: 26px; padding: 0;
-    border: none; background: #fee2e2; color: #dc2626;
-    border-radius: 50%; font-size: 15px; line-height: 1;
-    cursor: pointer; flex: none;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .shop-cart-total {
-    display: flex; justify-content: space-between; align-items: center;
-    padding-top: 10px; margin-top: 4px;
-    border-top: 1px solid rgba(196,0,0,0.2);
-    font-size: 15px; font-weight: 800;
-  }
-  .shop-cart-total b { color: var(--primary); font-size: 17px; }
-
-  .shop-chips {
-    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;
-    justify-content: center;
-  }
-  .shop-chip {
-    padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 20px;
-    background: #fff; color: var(--text); font: inherit;
-    font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all .15s;
-  }
-  .shop-chip.active { background: var(--tg-blue); border-color: var(--tg-blue); color: #fff; }
 </style>
 </head>
 <body>
@@ -472,13 +373,6 @@
       <line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/>
       <line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/>
       <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/>
-    </svg>
-  </button>
-  <button type="button" class="fab fab-shop" id="btnShopFab" aria-label="Shop">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-      <line x1="3" y1="6" x2="21" y2="6"/>
-      <path d="M16 10a4 4 0 0 1-8 0"/>
     </svg>
   </button>
   <button type="button" class="fab fab-history" id="btnHistory" aria-label="History">
@@ -744,92 +638,6 @@
   </div>
 </div>
 
-<div id="shop-modal" class="overlay" role="dialog" aria-modal="true">
-  <div class="modal shop">
-    <h2 data-i18n="shop_title">Магазин</h2>
-    <img src="shop-hero.jpg" class="shop-hero" alt="" id="shop-hero">
-    <div class="shop-columns">
-      <div class="shop-col">
-        <h3 data-i18n="shop_box">В коробке</h3>
-        <button type="button" class="shop-price" data-type="box" data-qty="12" data-price="3990"><span>12 шт — 3 990 ₸</span><span class="plus">+</span></button>
-        <button type="button" class="shop-price" data-type="box" data-qty="16" data-price="5390"><span>16 шт — 5 390 ₸</span><span class="plus">+</span></button>
-        <button type="button" class="shop-price" data-type="box" data-qty="20" data-price="6590"><span>20 шт — 6 590 ₸</span><span class="plus">+</span></button>
-        <button type="button" class="shop-price" data-type="box" data-qty="25" data-price="7990"><span>25 шт — 7 990 ₸</span><span class="plus">+</span></button>
-        <button type="button" class="shop-price" data-type="box" data-qty="30" data-price="9390"><span>30 шт — 9 390 ₸</span><span class="plus">+</span></button>
-        <button type="button" class="shop-price" data-type="box" data-qty="35" data-price="9990"><span>35 шт — 9 990 ₸</span><span class="plus">+</span></button>
-      </div>
-      <div class="shop-col">
-        <h3 data-i18n="shop_bouquet">В букете</h3>
-        <button type="button" class="shop-price" data-type="bouquet" data-qty="19" data-price="8990"><span>19 шт — 8 990 ₸</span><span class="plus">+</span></button>
-        <button type="button" class="shop-price" data-type="bouquet" data-qty="25" data-price="11990"><span>25 шт — 11 990 ₸</span><span class="plus">+</span></button>
-        <button type="button" class="shop-price" data-type="bouquet" data-qty="31" data-price="14990"><span>31 шт — 14 990 ₸</span><span class="plus">+</span></button>
-        <button type="button" class="shop-price" data-type="bouquet" data-qty="39" data-price="17990"><span>39 шт — 17 990 ₸</span><span class="plus">+</span></button>
-        <button type="button" class="shop-price" data-type="bouquet" data-qty="45" data-price="19990"><span>45 шт — 19 990 ₸</span><span class="plus">+</span></button>
-      </div>
-    </div>
-
-    <div class="shop-cart-wrap empty" id="shop-cart-wrap">
-      <div class="shop-cart-title">
-        <span data-i18n="shop_cart">Ваш заказ</span>
-        <span class="count"><span id="shop-count">0</span>/5</span>
-      </div>
-      <ul class="shop-cart-list" id="shop-cart-list"></ul>
-      <div class="shop-cart-empty-msg" id="shop-cart-empty-msg" data-i18n="shop_cart_empty">Нажмите «+» на позиции выше, чтобы добавить набор</div>
-      <div class="shop-cart-total hidden" id="shop-cart-total">
-        <span data-i18n="shop_total">Итого:</span>
-        <b id="shop-total-sum">0 ₸</b>
-      </div>
-    </div>
-
-    <h3 class="shop-h" data-i18n="shop_design">Дизайн и предпочтения</h3>
-    <div class="shop-chips" id="shop-chips">
-      <button type="button" class="shop-chip" data-val="Белый" data-i18n="chip_white">Белый</button>
-      <button type="button" class="shop-chip" data-val="Розовый" data-i18n="chip_pink">Розовый</button>
-      <button type="button" class="shop-chip" data-val="Молочный" data-i18n="chip_milk">Молочный</button>
-      <button type="button" class="shop-chip" data-val="Микс" data-i18n="chip_mix">Микс</button>
-      <button type="button" class="shop-chip" data-val="На ваше усмотрение" data-i18n="chip_choice">На ваше усмотрение</button>
-      <button type="button" class="shop-chip" data-val="Без ореха" data-i18n="chip_no_nuts">Без ореха</button>
-      <button type="button" class="shop-chip" data-val="Без посыпок" data-i18n="chip_no_sprinkle">Без посыпок</button>
-      <button type="button" class="shop-chip" data-val="Любой дизайн" data-i18n="chip_any">Любой дизайн</button>
-    </div>
-
-    <div class="field">
-      <label for="shop-name" data-i18n="shop_your_name">Ваше имя</label>
-      <input type="text" id="shop-name" maxlength="20" placeholder="" />
-    </div>
-    <div class="field">
-      <label for="shop-phone" data-i18n="shop_whatsapp">WhatsApp номер</label>
-      <input type="tel" id="shop-phone" placeholder="+7 700 123 45 67" inputmode="numeric" maxlength="16" />
-    </div>
-
-    <div class="modal-actions">
-      <button type="button" class="btn-cancel" id="btnShopCancel" data-i18n="cancel">Отмена</button>
-      <button type="button" class="btn-confirm" id="btnShopOrder" data-i18n="shop_order_btn">Заказать</button>
-    </div>
-  </div>
-</div>
-
-<div id="shop-confirm-modal" class="overlay" role="dialog" aria-modal="true">
-  <div class="modal">
-    <h2 data-i18n="confirm_title">Проверьте данные</h2>
-    <div class="summary" id="shop-summary"></div>
-    <div class="modal-actions">
-      <button type="button" class="btn-cancel" id="btnShopBack">Назад</button>
-      <button type="button" class="btn-confirm" id="btnShopSend" data-i18n="send">Отправить</button>
-    </div>
-  </div>
-</div>
-
-<div id="shop-success-modal" class="overlay" role="dialog" aria-modal="true">
-  <div class="modal success">
-    <h2 data-i18n="shop_success_title">Заказ принят</h2>
-    <p data-i18n="shop_success_text">Скоро с вами свяжется наш сотрудник. Если вы курьер — действует скидка 5%!</p>
-    <div class="modal-actions">
-      <button type="button" class="btn-confirm" id="btnShopSuccessOk" style="flex:1" data-i18n="got_it">Понятно</button>
-    </div>
-  </div>
-</div>
-
 <div id="learn-modal" class="overlay" role="dialog" aria-modal="true">
   <div class="modal learn">
     <h2 data-i18n="learn_title">Kezek.kz сіздің бизнесіңіз үшін</h2>
@@ -927,7 +735,6 @@ const HISTORY_KEY = "kezek_courier_history";
 const LAST_SENT_KEY = "kezek_last_sent_time";
 const BEST_KEY    = "kezek_runner_best";
 const MAX_ORDERS  = 5;
-const MAX_SHOP_ITEMS = 5;
 const COOLDOWN_MS = 12 * 60 * 1000;
 const WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=43.2389&longitude=76.8897&current_weather=true";
 
@@ -940,7 +747,6 @@ const I18N = {
     hide_options: "− Жасыру", transport_bike: "Велосипед", transport_kick: "Самокат", transport_walk: "Жаяу",
     send: "Жіберу", return_btn: "Қайтару",
     made_with: "@kezek.by компаниясының көмегімен жасалды", learn_more: "Толығырақ",
-    shop_nav: "Магазин",
     consent_text: "Курьер панелінің жұмысы үшін біз осы құрылғыда сіздің атыңызды, телефон нөміріңізді және көлік түрін сақтауымыз керек. Бұл деректерді қайта енгізбеу үшін қажет. Жалғастыру арқылы сіз осыған келісесіз.",
     agree: "Келісемін", confirm_title: "Деректерді тексеріңіз",
     sum_name: "Аты", sum_phone: "Телефон", sum_orders: "Тапсырыстар", sum_transport: "Көлік",
@@ -992,21 +798,6 @@ const I18N = {
     err_send: "Жіберу мүмкін болмады. Интернетті тексеріңіз.",
     err_timeout: "Күту уақыты асып кетті. Интернетті тексеріңіз.",
     err_return_order: "Тапсырыс нөмірін көрсетіңіз — дәл 4 сан.",
-    shop_title: "Магазин", shop_box: "Қорапта", shop_bouquet: "Букетте",
-    shop_design: "Дизайн және қалаулар",
-    shop_your_name: "Атыңыз", shop_whatsapp: "WhatsApp нөмірі",
-    shop_order_btn: "Тапсырыс беру",
-    shop_cart: "Сіздің тапсырысыңыз", shop_cart_empty: "Жоғарыдағы позицияда «+» басыңыз", shop_total: "Барлығы:",
-    shop_items_label: "Тапсырыс", shop_design_label: "Дизайн",
-    chip_white: "Ақ", chip_pink: "Қызғылт", chip_milk: "Сүтті", chip_mix: "Микс",
-    chip_choice: "Сіздің қалауыңызбен", chip_no_nuts: "Жаңғақсыз",
-    chip_no_sprinkle: "Себусіз", chip_any: "Кез келген дизайн",
-    shop_success_title: "Тапсырыс қабылданды",
-    shop_success_text: "Жақын арада біздің қызметкерлер сізбен хабарласады. Егер сіз курьер болсаңыз — 5% жеңілдік!",
-    shop_err_qty: "Кемінде бір позиция қосыңыз.",
-    shop_err_phone: "WhatsApp нөмірін толық енгізіңіз.",
-    shop_err_max: "Максимум 5 позиция қосуға болады.",
-    shop_type_box: "қорапта", shop_type_bouquet: "букетте",
     warn_title: "⚠️ Назар аударыңыз, курьер!",
     warn_1: "Сіздің жеке деректеріңіз бен құжаттарыңыздың деректемелері Яндекс жүйесінде сақталады және өңделеді. Деректер қауіпсіздігі — біздің басымдығымыз.",
     warn_2: "Тауарды алып, сіз оның сақталуына толық материалдық жауапкершілік аласыз. Тапсырыс жойылса немесе техникалық ақау болса — тауарды дүкенге қайтарыңыз.",
@@ -1029,7 +820,6 @@ const I18N = {
     hide_options: "− Скрыть", transport_bike: "Велосипед", transport_kick: "Самокат", transport_walk: "Пеший",
     send: "Отправить", return_btn: "Возврат",
     made_with: "Сделано с помощью компании @kezek.by", learn_more: "Узнать больше",
-    shop_nav: "Магазин",
     consent_text: "Для работы панели курьера нам необходимо сохранить ваше имя, номер телефона и вид транспорта на этом устройстве. Это нужно, чтобы вам не пришлось вводить данные повторно. Продолжая, вы соглашаетесь с этим.",
     agree: "Согласен", confirm_title: "Проверьте данные",
     sum_name: "Имя", sum_phone: "Телефон", sum_orders: "Заказы", sum_transport: "Транспорт",
@@ -1081,21 +871,6 @@ const I18N = {
     err_send: "Не удалось отправить. Проверьте интернет.",
     err_timeout: "Превышено время ожидания. Проверьте интернет.",
     err_return_order: "Укажите номер заказа — ровно 4 цифры.",
-    shop_title: "Магазин", shop_box: "В коробке", shop_bouquet: "В букете",
-    shop_design: "Дизайн и предпочтения",
-    shop_your_name: "Ваше имя", shop_whatsapp: "WhatsApp номер",
-    shop_order_btn: "Заказать",
-    shop_cart: "Ваш заказ", shop_cart_empty: "Нажмите «+» на позиции выше, чтобы добавить набор", shop_total: "Итого:",
-    shop_items_label: "Заказ", shop_design_label: "Дизайн",
-    chip_white: "Белый", chip_pink: "Розовый", chip_milk: "Молочный", chip_mix: "Микс",
-    chip_choice: "На ваше усмотрение", chip_no_nuts: "Без ореха",
-    chip_no_sprinkle: "Без посыпок", chip_any: "Любой дизайн",
-    shop_success_title: "Заказ принят",
-    shop_success_text: "Скоро с вами свяжется наш сотрудник. Если вы курьер — действует скидка 5%!",
-    shop_err_qty: "Добавьте хотя бы одну позицию.",
-    shop_err_phone: "Введите WhatsApp номер полностью.",
-    shop_err_max: "Можно добавить максимум 5 позиций.",
-    shop_type_box: "в коробке", shop_type_bouquet: "в букете",
     warn_title: "⚠️ Внимание, курьер!",
     warn_1: "Ваши персональные данные и реквизиты документов хранятся и обрабатываются в системе Яндекс. Безопасность данных — наш приоритет.",
     warn_2: "Забирая товар, вы несёте полную материальную ответственность за его сохранность. Если заказ отменён или произошёл технический сбой — просим вернуть товар в магазин.",
@@ -1118,7 +893,6 @@ const I18N = {
     hide_options: "− Hide", transport_bike: "Bicycle", transport_kick: "Kick scooter", transport_walk: "Walking",
     send: "Send", return_btn: "Return",
     made_with: "Made with the help of @kezek.by", learn_more: "Learn more",
-    shop_nav: "Shop",
     consent_text: "For the courier panel to work, we need to save your name, phone number and transport type on this device. This is needed so you don't have to enter data again. By continuing, you agree to this.",
     agree: "I agree", confirm_title: "Check your data",
     sum_name: "Name", sum_phone: "Phone", sum_orders: "Orders", sum_transport: "Transport",
@@ -1170,21 +944,6 @@ const I18N = {
     err_send: "Failed to send. Check your internet.",
     err_timeout: "Timeout. Check your internet.",
     err_return_order: "Enter order number — exactly 4 digits.",
-    shop_title: "Shop", shop_box: "In box", shop_bouquet: "In bouquet",
-    shop_design: "Design & preferences",
-    shop_your_name: "Your name", shop_whatsapp: "WhatsApp number",
-    shop_order_btn: "Order",
-    shop_cart: "Your cart", shop_cart_empty: "Tap «+» above to add a package", shop_total: "Total:",
-    shop_items_label: "Order", shop_design_label: "Design",
-    chip_white: "White", chip_pink: "Pink", chip_milk: "Milky", chip_mix: "Mix",
-    chip_choice: "Your choice", chip_no_nuts: "No nuts",
-    chip_no_sprinkle: "No sprinkles", chip_any: "Any design",
-    shop_success_title: "Order accepted",
-    shop_success_text: "Our staff will contact you soon. If you're a courier — 5% discount applies!",
-    shop_err_qty: "Add at least one item.",
-    shop_err_phone: "Enter full WhatsApp number.",
-    shop_err_max: "Maximum 5 items.",
-    shop_type_box: "in box", shop_type_bouquet: "in bouquet",
     warn_title: "⚠️ Attention, courier!",
     warn_1: "Your personal data and document details are stored and processed in the Yandex system. Data security is our priority.",
     warn_2: "By taking the goods, you bear full financial responsibility for their safety. If the order is cancelled or a technical failure occurs — please return the goods to the store.",
@@ -1247,7 +1006,6 @@ function applyLang(lang) {
   if (ttt && ttt.mode && !ttt.finished) {
     document.getElementById("ttt-status").textContent = `${t("ttt_move")}: ${ttt.current}`;
   }
-  if (typeof renderShopCart === "function") renderShopCart();
 }
 
 function setLang(lang) {
@@ -1366,7 +1124,6 @@ function bindPhoneInput(input) {
   input.addEventListener("blur", () => { if (input.value.replace(/\D/g, "").length <= 1) input.value = ""; });
 }
 bindPhoneInput(phoneInput);
-bindPhoneInput($("shop-phone"));
 bindPhoneInput($("call-phone"));
 
 function phoneDigits(v) { return v.replace(/\D/g, ""); }
@@ -1588,32 +1345,6 @@ function getDefaultPhoto() {
     });
   }
   return defaultPhotoPromise;
-}
-
-const SHOP_PHOTO_URL = "shop-hero.jpg";
-let shopPhotoPromise = null;
-function getShopPhoto() {
-  if (!shopPhotoPromise) {
-    shopPhotoPromise = new Promise((resolve) => {
-      const img = new Image();
-      img.src = SHOP_PHOTO_URL + "?v=" + Date.now();
-      const timer = setTimeout(() => resolve(null), 8000);
-      img.onload = () => {
-        clearTimeout(timer);
-        try {
-          const maxSide = 1280;
-          const scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
-          const canvas = document.createElement("canvas");
-          canvas.width = Math.round(img.naturalWidth * scale);
-          canvas.height = Math.round(img.naturalHeight * scale);
-          canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-          canvas.toBlob((blob) => resolve(blob || null), "image/jpeg", 0.85);
-        } catch { resolve(null); }
-      };
-      img.onerror = () => { clearTimeout(timer); resolve(null); };
-    });
-  }
-  return shopPhotoPromise;
 }
 
 function collectData() {
@@ -1893,188 +1624,7 @@ $("btnReturnSend").addEventListener("click", async () => {
   finally { btn.disabled = false; btn.textContent = prevText; }
 });
 
-/* ===== МАГАЗИН ===== */
-let shopCart = [];
-const shopDesigns = new Set();
-
-function renderShopCart() {
-  const wrap = $("shop-cart-wrap");
-  const list = $("shop-cart-list");
-  const emptyMsg = $("shop-cart-empty-msg");
-  const totalBox = $("shop-cart-total");
-  const totalSum = $("shop-total-sum");
-  const count = $("shop-count");
-
-  count.textContent = shopCart.length;
-  list.innerHTML = "";
-
-  if (shopCart.length === 0) {
-    wrap.classList.add("empty");
-    emptyMsg.classList.remove("hidden");
-    totalBox.classList.add("hidden");
-  } else {
-    wrap.classList.remove("empty");
-    emptyMsg.classList.add("hidden");
-    totalBox.classList.remove("hidden");
-
-    let total = 0;
-    shopCart.forEach((it, idx) => {
-      total += it.price;
-      const typeLabel = it.type === "box" ? t("shop_type_box") : t("shop_type_bouquet");
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <div class="info">
-          ${it.qty} шт — ${it.price.toLocaleString("ru-RU")} ₸
-          <small>${typeLabel}</small>
-        </div>
-        <button type="button" class="item-remove" aria-label="Remove">×</button>
-      `;
-      li.querySelector(".item-remove").addEventListener("click", () => {
-        shopCart.splice(idx, 1);
-        renderShopCart();
-      });
-      list.appendChild(li);
-    });
-    totalSum.textContent = total.toLocaleString("ru-RU") + " ₸";
-  }
-}
-
-function resetShop() {
-  shopCart = [];
-  shopDesigns.clear();
-  document.querySelectorAll(".shop-chip").forEach(b => b.classList.remove("active"));
-  $("shop-name").value = "";
-  $("shop-phone").value = "";
-  $("shop-name").classList.remove("error");
-  $("shop-phone").classList.remove("error");
-  renderShopCart();
-}
-
-$("btnShopFab").addEventListener("click", () => {
-  resetShop();
-  openModal("shop-modal");
-});
-$("btnShopCancel").addEventListener("click", () => closeModal("shop-modal"));
-
-document.querySelectorAll(".shop-price").forEach((b) => {
-  b.addEventListener("click", () => {
-    if (shopCart.length >= MAX_SHOP_ITEMS) {
-      alert(t("shop_err_max"));
-      return;
-    }
-    shopCart.push({
-      type: b.dataset.type,
-      qty: parseInt(b.dataset.qty, 10),
-      price: parseInt(b.dataset.price, 10)
-    });
-    renderShopCart();
-  });
-});
-
-document.querySelectorAll(".shop-chip").forEach((b) => {
-  b.addEventListener("click", () => {
-    const val = b.dataset.val;
-    if (shopDesigns.has(val)) { shopDesigns.delete(val); b.classList.remove("active"); }
-    else { shopDesigns.add(val); b.classList.add("active"); }
-  });
-});
-
-$("btnShopOrder").addEventListener("click", () => {
-  if (shopCart.length === 0) { alert(t("shop_err_qty")); return; }
-  const name = $("shop-name").value.trim();
-  const phone = $("shop-phone").value.trim();
-  const digits = phoneDigits(phone);
-  if (name.length < 2) { $("shop-name").classList.add("error"); alert(t("err_name")); return; }
-  $("shop-name").classList.remove("error");
-  if (digits.length !== 11 || !isValidKZMobile(digits)) { $("shop-phone").classList.add("error"); alert(t("shop_err_phone")); return; }
-  $("shop-phone").classList.remove("error");
-
-  const summary = $("shop-summary");
-  summary.innerHTML = "";
-
-  let total = 0;
-  shopCart.forEach((it) => {
-    total += it.price;
-    const typeLabel = it.type === "box" ? t("shop_type_box") : t("shop_type_bouquet");
-    const row = document.createElement("div");
-    row.className = "summary-item";
-    const a = document.createElement("span"); a.className = "k"; a.textContent = `${it.qty} шт`;
-    const b = document.createElement("span"); b.className = "v"; b.textContent = `${it.price.toLocaleString("ru-RU")} ₸ · ${typeLabel}`;
-    row.append(a, b); summary.appendChild(row);
-  });
-
-  const rowTotal = document.createElement("div");
-  rowTotal.className = "summary-item";
-  const aT = document.createElement("span"); aT.className = "k"; aT.textContent = t("shop_total");
-  const bT = document.createElement("span"); bT.className = "v"; bT.style.color = "var(--primary)"; bT.textContent = total.toLocaleString("ru-RU") + " ₸";
-  rowTotal.append(aT, bT); summary.appendChild(rowTotal);
-
-  const designs = [...shopDesigns].join(", ") || "—";
-  const rowD = document.createElement("div");
-  rowD.className = "summary-item";
-  const aD = document.createElement("span"); aD.className = "k"; aD.textContent = t("shop_design_label");
-  const bD = document.createElement("span"); bD.className = "v"; bD.textContent = designs;
-  rowD.append(aD, bD); summary.appendChild(rowD);
-
-  const rowN = document.createElement("div");
-  rowN.className = "summary-item";
-  const aN = document.createElement("span"); aN.className = "k"; aN.textContent = t("shop_your_name");
-  const bN = document.createElement("span"); bN.className = "v"; bN.textContent = name;
-  rowN.append(aN, bN); summary.appendChild(rowN);
-
-  const rowP = document.createElement("div");
-  rowP.className = "summary-item";
-  const aP = document.createElement("span"); aP.className = "k"; aP.textContent = t("shop_whatsapp");
-  const bP = document.createElement("span"); bP.className = "v"; bP.textContent = phone;
-  rowP.append(aP, bP); summary.appendChild(rowP);
-
-  closeModal("shop-modal");
-  openModal("shop-confirm-modal");
-});
-
-$("btnShopBack").addEventListener("click", () => {
-  closeModal("shop-confirm-modal");
-  openModal("shop-modal");
-});
-
-$("btnShopSend").addEventListener("click", async () => {
-  if (shopCart.length === 0) return;
-  const btn = $("btnShopSend");
-  btn.disabled = true; const prev = btn.textContent; btn.textContent = "...";
-  const name = $("shop-name").value.trim();
-  const phone = $("shop-phone").value.trim();
-  const digits = phoneDigits(phone);
-  const designs = [...shopDesigns].map(d => d.toLowerCase()).join(", ");
-  const waLink = `https://wa.me/${digits}`;
-
-  let total = 0;
-  shopCart.forEach((it) => total += it.price);
-
-  let text = `🛍️ <b>Новый заказ из магазина</b>\n\n`;
-  shopCart.forEach((it, i) => {
-    const typeLabel = it.type === "box" ? "в коробке" : "в букете";
-    text += `${i + 1}) <b>${it.qty} шт</b> — ${it.price.toLocaleString("ru-RU")} ₸ (${typeLabel})\n`;
-  });
-  text += `\n💰 <b>Итого: ${total.toLocaleString("ru-RU")} ₸</b>\n`;
-  if (designs) text += `\n🎨 Дизайн: ${esc(designs)}`;
-  text += `\n\n👤 Имя: <b>${esc(name)}</b>`;
-  text += `\n📱 Свяжитесь с ним по номеру: <a href="${waLink}">${esc(phone)}</a>`;
-
-  try {
-    const photo = await getShopPhoto();
-    const result = await tgSend({ photo, text });
-    if (!result.ok) throw new Error(result.description || "Telegram error");
-    closeModal("shop-confirm-modal");
-    openModal("shop-success-modal");
-  } catch (e) { console.error(e); alert(t("err_send")); }
-  finally { btn.disabled = false; btn.textContent = prev; }
-});
-
-$("btnShopSuccessOk").addEventListener("click", () => {
-  closeModal("shop-success-modal");
-  resetShop();
-});
-
+/* ===== Погода ===== */
 function weatherKind(code, temp) {
   const isSnowCode = (code >= 71 && code <= 77) || code === 85 || code === 86;
   const isRainCode = (code >= 51 && code <= 67) || (code >= 80 && code <= 82) || code >= 95;
@@ -2838,7 +2388,6 @@ $("btnConsentOk").addEventListener("click", () => {
   if (saved.phone) phoneInput.value = formatPhone(saved.phone);
   if (transportBtns.some((b) => b.dataset.value === saved.transport)) setTransport(saved.transport);
   resetOrders();
-  renderShopCart();
   applyLang(currentLang);
   if (store.get(CONSENT_KEY) !== "true") openModal("consent-modal");
   getDefaultPhoto();
