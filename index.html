@@ -102,7 +102,6 @@
   .btn-return { width: 100%; margin-top: 10px; padding: 15px; border: none; border-radius: 8px; background: var(--tg-blue); color: #fff; font: inherit; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
   .btn-return:active { transform: scale(.98); }
 
-  /* ===== Фиксированные круглые кнопки (FAB) ===== */
   .fab-stack {
     position: fixed;
     bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
@@ -266,17 +265,75 @@
     color: var(--muted); margin: 0 0 8px; text-align: center;
   }
   .shop-price {
-    display: block; width: 100%; padding: 10px 8px; margin-bottom: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    width: 100%; padding: 10px 12px; margin-bottom: 6px;
     border: 1.5px solid var(--border); border-radius: 8px;
     background: #fff; color: var(--text); font: inherit;
-    font-size: 13px; font-weight: 700; cursor: pointer;
-    text-align: center; transition: all .15s;
+    font-size: 10px; font-weight: 700; cursor: pointer;
+    transition: all .15s;
   }
-  .shop-price.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .shop-price:active { transform: scale(.98); }
+  .shop-price .plus {
+    display: flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    font-size: 16px; font-weight: 800; line-height: 1;
+    flex: none;
+  }
   .shop-h {
     font-size: 12px; font-weight: 800; text-transform: uppercase;
     color: var(--muted); margin: 14px 0 8px; text-align: center;
   }
+
+  .shop-cart-wrap {
+    margin: 12px 0 4px;
+    padding: 12px;
+    border: 1.5px solid var(--primary);
+    border-radius: 10px;
+    background: rgba(196, 0, 0, 0.03);
+  }
+  .shop-cart-wrap.empty {
+    border-color: var(--border);
+    background: #fafafa;
+    text-align: center;
+    padding: 14px;
+  }
+  .shop-cart-title {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; font-weight: 800; text-transform: uppercase;
+    color: var(--primary); margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .shop-cart-title .count { color: var(--muted); font-weight: 700; }
+  .shop-cart-empty-msg { color: var(--muted); font-size: 12.5px; font-weight: 600; }
+  .shop-cart-list { list-style: none; margin: 0; padding: 0; }
+  .shop-cart-list li {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: #fff;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .shop-cart-list li .info { flex: 1; text-align: left; }
+  .shop-cart-list li .info small { display: block; font-weight: 600; color: var(--muted); font-size: 11.5px; margin-top: 2px; }
+  .shop-cart-list li .item-remove {
+    width: 26px; height: 26px; padding: 0;
+    border: none; background: #fee2e2; color: #dc2626;
+    border-radius: 50%; font-size: 15px; line-height: 1;
+    cursor: pointer; flex: none;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .shop-cart-total {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 10px; margin-top: 4px;
+    border-top: 1px solid rgba(196,0,0,0.2);
+    font-size: 15px; font-weight: 800;
+  }
+  .shop-cart-total b { color: var(--primary); font-size: 17px; }
+
   .shop-chips {
     display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;
     justify-content: center;
@@ -305,7 +362,6 @@
 
 <div id="animation-container" aria-hidden="true"></div>
 
-<!-- ✅ Фиксированные круглые кнопки: История, Магазин, Игры -->
 <div class="fab-stack">
   <button type="button" class="fab fab-games" id="btnGamesFab" aria-label="Games">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -388,7 +444,6 @@
   </div>
 </main>
 
-<!-- Камера -->
 <div id="camera-modal" class="overlay" role="dialog" aria-modal="true">
   <div class="modal cam">
     <video id="cam-video" playsinline muted autoplay></video>
@@ -534,20 +589,55 @@
     <div class="shop-columns">
       <div class="shop-col">
         <h3 data-i18n="shop_box">В коробке</h3>
-        <button type="button" class="shop-price" data-type="box" data-qty="12" data-price="3990">12 шт — 3 990 ₸</button>
-        <button type="button" class="shop-price" data-type="box" data-qty="16" data-price="5390">16 шт — 5 390 ₸</button>
-        <button type="button" class="shop-price" data-type="box" data-qty="20" data-price="6590">20 шт — 6 590 ₸</button>
-        <button type="button" class="shop-price" data-type="box" data-qty="25" data-price="7990">25 шт — 7 990 ₸</button>
-        <button type="button" class="shop-price" data-type="box" data-qty="30" data-price="9390">30 шт — 9 390 ₸</button>
-        <button type="button" class="shop-price" data-type="box" data-qty="35" data-price="9990">35 шт — 9 990 ₸</button>
+        <button type="button" class="shop-price" data-type="box" data-qty="12" data-price="3990">
+          <span>12 шт — 3 990 ₸</span><span class="plus">+</span>
+        </button>
+        <button type="button" class="shop-price" data-type="box" data-qty="16" data-price="5390">
+          <span>16 шт — 5 390 ₸</span><span class="plus">+</span>
+        </button>
+        <button type="button" class="shop-price" data-type="box" data-qty="20" data-price="6590">
+          <span>20 шт — 6 590 ₸</span><span class="plus">+</span>
+        </button>
+        <button type="button" class="shop-price" data-type="box" data-qty="25" data-price="7990">
+          <span>25 шт — 7 990 ₸</span><span class="plus">+</span>
+        </button>
+        <button type="button" class="shop-price" data-type="box" data-qty="30" data-price="9390">
+          <span>30 шт — 9 390 ₸</span><span class="plus">+</span>
+        </button>
+        <button type="button" class="shop-price" data-type="box" data-qty="35" data-price="9990">
+          <span>35 шт — 9 990 ₸</span><span class="plus">+</span>
+        </button>
       </div>
       <div class="shop-col">
         <h3 data-i18n="shop_bouquet">В букете</h3>
-        <button type="button" class="shop-price" data-type="bouquet" data-qty="19" data-price="8990">19 шт — 8 990 ₸</button>
-        <button type="button" class="shop-price" data-type="bouquet" data-qty="25" data-price="11990">25 шт — 11 990 ₸</button>
-        <button type="button" class="shop-price" data-type="bouquet" data-qty="31" data-price="14990">31 шт — 14 990 ₸</button>
-        <button type="button" class="shop-price" data-type="bouquet" data-qty="39" data-price="17990">39 шт — 17 990 ₸</button>
-        <button type="button" class="shop-price" data-type="bouquet" data-qty="45" data-price="19990">45 шт — 19 990 ₸</button>
+        <button type="button" class="shop-price" data-type="bouquet" data-qty="19" data-price="8990">
+          <span>19 шт — 8 990 ₸</span><span class="plus">+</span>
+        </button>
+        <button type="button" class="shop-price" data-type="bouquet" data-qty="25" data-price="11990">
+          <span>25 шт — 11 990 ₸</span><span class="plus">+</span>
+        </button>
+        <button type="button" class="shop-price" data-type="bouquet" data-qty="31" data-price="14990">
+          <span>31 шт — 14 990 ₸</span><span class="plus">+</span>
+        </button>
+        <button type="button" class="shop-price" data-type="bouquet" data-qty="39" data-price="17990">
+          <span>39 шт — 17 990 ₸</span><span class="plus">+</span>
+        </button>
+        <button type="button" class="shop-price" data-type="bouquet" data-qty="45" data-price="19990">
+          <span>45 шт — 19 990 ₸</span><span class="plus">+</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="shop-cart-wrap empty" id="shop-cart-wrap">
+      <div class="shop-cart-title">
+        <span data-i18n="shop_cart">Ваш заказ</span>
+        <span class="count"><span id="shop-count">0</span>/5</span>
+      </div>
+      <ul class="shop-cart-list" id="shop-cart-list"></ul>
+      <div class="shop-cart-empty-msg" id="shop-cart-empty-msg" data-i18n="shop_cart_empty">Нажмите «+» на позиции выше, чтобы добавить набор</div>
+      <div class="shop-cart-total hidden" id="shop-cart-total">
+        <span data-i18n="shop_total">Итого:</span>
+        <b id="shop-total-sum">0 ₸</b>
       </div>
     </div>
 
@@ -604,7 +694,6 @@
   <div class="modal learn">
     <h2 data-i18n="learn_title">Kezek.kz сіздің бизнесіңіз үшін</h2>
     <p class="learn-intro" data-i18n="learn_intro">Егер сіздің ұйымыңызда тапсырыстар ағыны көп болса, курьерлер көп болса және курьерлік қызметтер бойынша егжей-тегжейлі есеп қажет болса — біз көмектесуге дайынбыз. Артық жұмысты алып тастап, уақытыңыз бен күшіңізді үнемдейміз.</p>
-
     <h3 data-i18n="learn_pros">Артықшылықтар</h3>
     <ul class="learn-list">
       <li data-i18n="learn_pro_1">Артық қоңыраулар мен хаттар жоқ.</li>
@@ -616,7 +705,6 @@
       <li data-i18n="learn_pro_7">Брендіңіздің танымалдылығы мен сенімінің өсуі.</li>
       <li data-i18n="learn_pro_8">70 000-нан астам жазылушысы бар 9 арнадағы топтарда тауарларыңыздың жарнамасы.</li>
     </ul>
-
     <h3 data-i18n="learn_pricing">Тарифтік жоспарлар</h3>
     <div class="price-list">
       <div class="price-item">
@@ -633,9 +721,7 @@
         <div class="price-note" data-i18n="learn_saving">Айлық тарифпен салыстырғанда жылына 89 390 ₸ үнемдеу</div>
       </div>
     </div>
-
     <p class="learn-cta"><span data-i18n="learn_cta">Қызықтырды ма? Бізге жазыңыз —</span> <a href="https://t.me/kezek_by" target="_blank" rel="noopener">@kezek_by</a></p>
-
     <div class="modal-actions">
       <button type="button" class="btn-cancel" id="btnLearnClose" style="flex:1" data-i18n="close">Жабу</button>
     </div>
@@ -701,6 +787,7 @@ const HISTORY_KEY = "kezek_courier_history";
 const LAST_SENT_KEY = "kezek_last_sent_time";
 const BEST_KEY    = "kezek_runner_best";
 const MAX_ORDERS  = 5;
+const MAX_SHOP_ITEMS = 5;
 const COOLDOWN_MS = 12 * 60 * 1000;
 const WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=43.2389&longitude=76.8897&current_weather=true";
 
@@ -768,13 +855,17 @@ const I18N = {
     shop_design: "Дизайн және қалаулар",
     shop_your_name: "Атыңыз", shop_whatsapp: "WhatsApp нөмірі",
     shop_order_btn: "Тапсырыс беру",
+    shop_cart: "Сіздің тапсырысыңыз", shop_cart_empty: "Жоғарыдағы позицияда «+» басыңыз", shop_total: "Барлығы:",
+    shop_items_label: "Тапсырыс", shop_design_label: "Дизайн",
     chip_white: "Ақ", chip_pink: "Қызғылт", chip_milk: "Сүтті", chip_mix: "Микс",
     chip_choice: "Сіздің қалауыңызбен", chip_no_nuts: "Жаңғақсыз",
     chip_no_sprinkle: "Себусіз", chip_any: "Кез келген дизайн",
     shop_success_title: "Тапсырыс қабылданды",
     shop_success_text: "Жақын арада біздің қызметкерлер сізбен хабарласады. Егер сіз курьер болсаңыз — 5% жеңілдік!",
-    shop_err_qty: "Тапсырыс мөлшерін таңдаңыз.",
-    shop_err_phone: "WhatsApp нөмірін толық енгізіңіз."
+    shop_err_qty: "Кемінде бір позиция қосыңыз.",
+    shop_err_phone: "WhatsApp нөмірін толық енгізіңіз.",
+    shop_err_max: "Максимум 5 позиция қосуға болады.",
+    shop_type_box: "қорапта", shop_type_bouquet: "букетте"
   },
   ru: {
     subtitle: "Панель курьера", name_label: "Ваше имя", name_ph: "Например, Алмас",
@@ -839,13 +930,17 @@ const I18N = {
     shop_design: "Дизайн и предпочтения",
     shop_your_name: "Ваше имя", shop_whatsapp: "WhatsApp номер",
     shop_order_btn: "Заказать",
+    shop_cart: "Ваш заказ", shop_cart_empty: "Нажмите «+» на позиции выше, чтобы добавить набор", shop_total: "Итого:",
+    shop_items_label: "Заказ", shop_design_label: "Дизайн",
     chip_white: "Белый", chip_pink: "Розовый", chip_milk: "Молочный", chip_mix: "Микс",
     chip_choice: "На ваше усмотрение", chip_no_nuts: "Без ореха",
     chip_no_sprinkle: "Без посыпок", chip_any: "Любой дизайн",
     shop_success_title: "Заказ принят",
     shop_success_text: "Скоро с вами свяжется наш сотрудник. Если вы курьер — действует скидка 5%!",
-    shop_err_qty: "Выберите количество.",
-    shop_err_phone: "Введите WhatsApp номер полностью."
+    shop_err_qty: "Добавьте хотя бы одну позицию.",
+    shop_err_phone: "Введите WhatsApp номер полностью.",
+    shop_err_max: "Можно добавить максимум 5 позиций.",
+    shop_type_box: "в коробке", shop_type_bouquet: "в букете"
   },
   en: {
     subtitle: "Courier panel", name_label: "Your name", name_ph: "For example, Almas",
@@ -910,13 +1005,17 @@ const I18N = {
     shop_design: "Design & preferences",
     shop_your_name: "Your name", shop_whatsapp: "WhatsApp number",
     shop_order_btn: "Order",
+    shop_cart: "Your cart", shop_cart_empty: "Tap «+» above to add a package", shop_total: "Total:",
+    shop_items_label: "Order", shop_design_label: "Design",
     chip_white: "White", chip_pink: "Pink", chip_milk: "Milky", chip_mix: "Mix",
     chip_choice: "Your choice", chip_no_nuts: "No nuts",
     chip_no_sprinkle: "No sprinkles", chip_any: "Any design",
     shop_success_title: "Order accepted",
     shop_success_text: "Our staff will contact you soon. If you're a courier — 5% discount applies!",
-    shop_err_qty: "Choose quantity.",
-    shop_err_phone: "Enter full WhatsApp number."
+    shop_err_qty: "Add at least one item.",
+    shop_err_phone: "Enter full WhatsApp number.",
+    shop_err_max: "Maximum 5 items.",
+    shop_type_box: "in box", shop_type_bouquet: "in bouquet"
   }
 };
 
@@ -962,6 +1061,8 @@ function applyLang(lang) {
   if (ttt && ttt.mode && !ttt.finished) {
     document.getElementById("ttt-status").textContent = `${t("ttt_move")}: ${ttt.current}`;
   }
+  // Обновляем корзину магазина
+  if (typeof renderShopCart === "function") renderShopCart();
 }
 
 function setLang(lang) {
@@ -1302,6 +1403,33 @@ function getDefaultPhoto() {
   return defaultPhotoPromise;
 }
 
+/* ===== ФОТО МАГАЗИНА ===== */
+const SHOP_PHOTO_URL = "shop-hero.jpg";
+let shopPhotoPromise = null;
+function getShopPhoto() {
+  if (!shopPhotoPromise) {
+    shopPhotoPromise = new Promise((resolve) => {
+      const img = new Image();
+      img.src = SHOP_PHOTO_URL + "?v=" + Date.now();
+      const timer = setTimeout(() => resolve(null), 8000);
+      img.onload = () => {
+        clearTimeout(timer);
+        try {
+          const maxSide = 1280;
+          const scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.round(img.naturalWidth * scale);
+          canvas.height = Math.round(img.naturalHeight * scale);
+          canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob((blob) => resolve(blob || null), "image/jpeg", 0.85);
+        } catch { resolve(null); }
+      };
+      img.onerror = () => { clearTimeout(timer); resolve(null); };
+    });
+  }
+  return shopPhotoPromise;
+}
+
 function collectData() {
   return {
     name: nameInput.value.trim(),
@@ -1454,7 +1582,6 @@ function startPromoCountdown() {
 $("btnPromoClose").addEventListener("click", () => { if (promoCountdownTimer) { clearInterval(promoCountdownTimer); promoCountdownTimer = null; } closeModal("promo-modal"); });
 $("btnPlayGame").addEventListener("click", () => { if (promoCountdownTimer) { clearInterval(promoCountdownTimer); promoCountdownTimer = null; } closeModal("promo-modal"); openModal("game-modal"); startGame(); });
 
-/* ===== ИГРЫ ===== */
 $("btnSuccessGames").addEventListener("click", () => {
   closeModal("success-modal");
   resetCourierFlow();
@@ -1526,19 +1653,63 @@ $("btnReturnSend").addEventListener("click", async () => {
   finally { btn.disabled = false; btn.textContent = prevText; }
 });
 
-/* ===== МАГАЗИН ===== */
-let shopSelected = null;
+/* ============================================================
+   МАГАЗИН — корзина до 5 позиций
+   ============================================================ */
+let shopCart = []; // [{ type, qty, price }]
 const shopDesigns = new Set();
 
+function renderShopCart() {
+  const wrap = $("shop-cart-wrap");
+  const list = $("shop-cart-list");
+  const emptyMsg = $("shop-cart-empty-msg");
+  const totalBox = $("shop-cart-total");
+  const totalSum = $("shop-total-sum");
+  const count = $("shop-count");
+
+  count.textContent = shopCart.length;
+  list.innerHTML = "";
+
+  if (shopCart.length === 0) {
+    wrap.classList.add("empty");
+    emptyMsg.classList.remove("hidden");
+    totalBox.classList.add("hidden");
+  } else {
+    wrap.classList.remove("empty");
+    emptyMsg.classList.add("hidden");
+    totalBox.classList.remove("hidden");
+
+    let total = 0;
+    shopCart.forEach((it, idx) => {
+      total += it.price;
+      const typeLabel = it.type === "box" ? t("shop_type_box") : t("shop_type_bouquet");
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <div class="info">
+          ${it.qty} шт — ${it.price.toLocaleString("ru-RU")} ₸
+          <small>${typeLabel}</small>
+        </div>
+        <button type="button" class="item-remove" aria-label="Remove">×</button>
+      `;
+      li.querySelector(".item-remove").addEventListener("click", () => {
+        shopCart.splice(idx, 1);
+        renderShopCart();
+      });
+      list.appendChild(li);
+    });
+    totalSum.textContent = total.toLocaleString("ru-RU") + " ₸";
+  }
+}
+
 function resetShop() {
-  shopSelected = null;
+  shopCart = [];
   shopDesigns.clear();
-  document.querySelectorAll(".shop-price").forEach(b => b.classList.remove("active"));
   document.querySelectorAll(".shop-chip").forEach(b => b.classList.remove("active"));
   $("shop-name").value = "";
   $("shop-phone").value = "";
   $("shop-name").classList.remove("error");
   $("shop-phone").classList.remove("error");
+  renderShopCart();
 }
 
 $("btnShopFab").addEventListener("click", () => {
@@ -1547,15 +1718,19 @@ $("btnShopFab").addEventListener("click", () => {
 });
 $("btnShopCancel").addEventListener("click", () => closeModal("shop-modal"));
 
+// Клик по цене — добавляем в корзину
 document.querySelectorAll(".shop-price").forEach((b) => {
   b.addEventListener("click", () => {
-    document.querySelectorAll(".shop-price").forEach(x => x.classList.remove("active"));
-    b.classList.add("active");
-    shopSelected = {
+    if (shopCart.length >= MAX_SHOP_ITEMS) {
+      alert(t("shop_err_max"));
+      return;
+    }
+    shopCart.push({
       type: b.dataset.type,
       qty: parseInt(b.dataset.qty, 10),
       price: parseInt(b.dataset.price, 10)
-    };
+    });
+    renderShopCart();
   });
 });
 
@@ -1568,7 +1743,7 @@ document.querySelectorAll(".shop-chip").forEach((b) => {
 });
 
 $("btnShopOrder").addEventListener("click", () => {
-  if (!shopSelected) { alert(t("shop_err_qty")); return; }
+  if (shopCart.length === 0) { alert(t("shop_err_qty")); return; }
   const name = $("shop-name").value.trim();
   const phone = $("shop-phone").value.trim();
   const digits = phoneDigits(phone);
@@ -1579,18 +1754,48 @@ $("btnShopOrder").addEventListener("click", () => {
 
   const summary = $("shop-summary");
   summary.innerHTML = "";
-  const typeLabel = shopSelected.type === "box" ? t("shop_box") : t("shop_bouquet");
-  const designs = [...shopDesigns].join(", ") || "—";
-  [["shop_box", `${shopSelected.qty} шт × ${shopSelected.price.toLocaleString("ru-RU")} ₸`],
-   ["shop_design", `${typeLabel} · ${designs}`],
-   ["shop_your_name", name],
-   ["shop_whatsapp", phone]].forEach(([k, v]) => {
+
+  // Список позиций
+  let total = 0;
+  shopCart.forEach((it) => {
+    total += it.price;
+    const typeLabel = it.type === "box" ? t("shop_type_box") : t("shop_type_bouquet");
     const row = document.createElement("div");
     row.className = "summary-item";
-    const a = document.createElement("span"); a.className = "k"; a.textContent = t(k);
-    const b = document.createElement("span"); b.className = "v"; b.textContent = v;
+    const a = document.createElement("span"); a.className = "k"; a.textContent = `${it.qty} шт`;
+    const b = document.createElement("span"); b.className = "v"; b.textContent = `${it.price.toLocaleString("ru-RU")} ₸ · ${typeLabel}`;
     row.append(a, b); summary.appendChild(row);
   });
+
+  // Итого
+  const rowTotal = document.createElement("div");
+  rowTotal.className = "summary-item";
+  const aT = document.createElement("span"); aT.className = "k"; aT.textContent = t("shop_total");
+  const bT = document.createElement("span"); bT.className = "v"; bT.style.color = "var(--primary)"; bT.textContent = total.toLocaleString("ru-RU") + " ₸";
+  rowTotal.append(aT, bT); summary.appendChild(rowTotal);
+
+  // Дизайн
+  const designs = [...shopDesigns].join(", ") || "—";
+  const rowD = document.createElement("div");
+  rowD.className = "summary-item";
+  const aD = document.createElement("span"); aD.className = "k"; aD.textContent = t("shop_design_label");
+  const bD = document.createElement("span"); bD.className = "v"; bD.textContent = designs;
+  rowD.append(aD, bD); summary.appendChild(rowD);
+
+  // Имя
+  const rowN = document.createElement("div");
+  rowN.className = "summary-item";
+  const aN = document.createElement("span"); aN.className = "k"; aN.textContent = t("shop_your_name");
+  const bN = document.createElement("span"); bN.className = "v"; bN.textContent = name;
+  rowN.append(aN, bN); summary.appendChild(rowN);
+
+  // WhatsApp
+  const rowP = document.createElement("div");
+  rowP.className = "summary-item";
+  const aP = document.createElement("span"); aP.className = "k"; aP.textContent = t("shop_whatsapp");
+  const bP = document.createElement("span"); bP.className = "v"; bP.textContent = phone;
+  rowP.append(aP, bP); summary.appendChild(rowP);
+
   closeModal("shop-modal");
   openModal("shop-confirm-modal");
 });
@@ -1601,23 +1806,33 @@ $("btnShopBack").addEventListener("click", () => {
 });
 
 $("btnShopSend").addEventListener("click", async () => {
-  if (!shopSelected) return;
+  if (shopCart.length === 0) return;
   const btn = $("btnShopSend");
   btn.disabled = true; const prev = btn.textContent; btn.textContent = "...";
   const name = $("shop-name").value.trim();
   const phone = $("shop-phone").value.trim();
   const digits = phoneDigits(phone);
-  const typeLabel = shopSelected.type === "box" ? "в коробке" : "в букете";
   const designs = [...shopDesigns].map(d => d.toLowerCase()).join(", ");
   const waLink = `https://wa.me/${digits}`;
+
+  let total = 0;
+  shopCart.forEach((it) => total += it.price);
+
+  // Формируем текст заказа
   let text = `🛍️ <b>Новый заказ из магазина</b>\n\n`;
-  text += `Клиент хочет купить <b>${shopSelected.qty} шт</b>`;
-  if (designs) text += `, ${esc(designs)}`;
-  text += ` ${typeLabel}.\n\n`;
-  text += `👤 Имя: <b>${esc(name)}</b>\n`;
-  text += `📱 Свяжитесь с ним по номеру: <a href="${waLink}">${esc(phone)}</a>`;
+  shopCart.forEach((it, i) => {
+    const typeLabel = it.type === "box" ? "в коробке" : "в букете";
+    text += `${i + 1}) <b>${it.qty} шт</b> — ${it.price.toLocaleString("ru-RU")} ₸ (${typeLabel})\n`;
+  });
+  text += `\n💰 <b>Итого: ${total.toLocaleString("ru-RU")} ₸</b>\n`;
+  if (designs) text += `\n🎨 Дизайн: ${esc(designs)}`;
+  text += `\n\n👤 Имя: <b>${esc(name)}</b>`;
+  text += `\n📱 Свяжитесь с ним по номеру: <a href="${waLink}">${esc(phone)}</a>`;
+
   try {
-    const result = await tgSend({ text });
+    // Правка: прикрепляем shop-hero.jpg
+    const photo = await getShopPhoto();
+    const result = await tgSend({ photo, text });
     if (!result.ok) throw new Error(result.description || "Telegram error");
     closeModal("shop-confirm-modal");
     openModal("shop-success-modal");
@@ -1667,7 +1882,7 @@ async function initWeather() {
   } catch { $("weather-temp").textContent = "--"; }
 }
 
-/* ===== ИГРА ===== */
+/* ===== ИГРА Kezek Runner ===== */
 const game = {
   canvas: null, ctx: null,
   W: 0, H: 0, dpr: 1,
@@ -2393,6 +2608,7 @@ $("btnConsentOk").addEventListener("click", () => {
   if (saved.phone) phoneInput.value = formatPhone(saved.phone);
   if (transportBtns.some((b) => b.dataset.value === saved.transport)) setTransport(saved.transport);
   resetOrders();
+  renderShopCart();
   applyLang(currentLang);
   if (store.get(CONSENT_KEY) !== "true") openModal("consent-modal");
   getDefaultPhoto();
