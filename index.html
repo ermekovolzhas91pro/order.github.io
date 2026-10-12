@@ -9,6 +9,7 @@
   :root {
     --primary: #c40000;
     --primary-soft: rgba(196, 0, 0, 0.06);
+    --tg-blue: #0088cc;
     --bg: #ffffff;
     --text: #1a1a1a;
     --muted: #6b7280;
@@ -20,308 +21,121 @@
   .hidden { display: none !important; }
   body {
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
+    background: var(--bg); color: var(--text);
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
   }
   body.modal-open { overflow: hidden; }
-
   .container {
-    max-width: 480px;
-    margin: 0 auto;
-    min-height: 100vh;
-    min-height: 100dvh;
-    padding: calc(env(safe-area-inset-top, 0px) + 12px) 16px calc(env(safe-area-inset-bottom, 0px) + 16px);
+    max-width: 480px; margin: 0 auto;
+    min-height: 100vh; min-height: 100dvh;
+    padding: calc(env(safe-area-inset-top, 0px) + 12px) 16px calc(env(safe-area-inset-bottom, 0px) + 70px);
   }
-
   header { padding-right: 90px; margin-bottom: 14px; position: relative; padding-bottom: 10px; }
-  header::after {
-    content: ""; position: absolute; left: 0; bottom: 0;
-    width: 40px; height: 3px; background: var(--primary);
-  }
+  header::after { content: ""; position: absolute; left: 0; bottom: 0; width: 40px; height: 3px; background: var(--primary); }
   h1 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
   .subtitle { margin: 2px 0 0; color: var(--muted); font-size: 13px; font-weight: 500; }
-
   #weather-widget {
-    position: fixed;
-    top: calc(env(safe-area-inset-top, 0px) + 10px);
-    right: 12px;
-    z-index: 1000;
-    display: flex; align-items: center; gap: 6px;
-    padding: 6px 10px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.92);
-    font-size: 14px; font-weight: 700;
+    position: fixed; top: calc(env(safe-area-inset-top, 0px) + 10px); right: 12px;
+    z-index: 1000; display: flex; align-items: center; gap: 6px;
+    padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.92); font-size: 14px; font-weight: 700;
   }
   #weather-icon { font-size: 16px; line-height: 1; }
-
-  #animation-container {
-    position: fixed; inset: 0;
-    pointer-events: none;
-    z-index: 900;
-    overflow: hidden;
-  }
-  .drop {
-    position: absolute; top: -30px;
-    width: 2px; height: 16px;
-    background: #3b82f6;
-    border-radius: 2px;
-    animation: fall linear infinite;
-  }
-  .flake {
-    position: absolute; top: -30px;
-    color: #9ca3af;
-    animation: fall linear infinite, sway ease-in-out infinite alternate;
-  }
+  #animation-container { position: fixed; inset: 0; pointer-events: none; z-index: 900; overflow: hidden; }
+  .drop { position: absolute; top: -30px; width: 2px; height: 16px; background: #3b82f6; border-radius: 2px; animation: fall linear infinite; }
+  .flake { position: absolute; top: -30px; color: #9ca3af; animation: fall linear infinite, sway ease-in-out infinite alternate; }
   @keyframes fall { to { transform: translateY(115vh); } }
   @keyframes sway { from { margin-left: -12px; } to { margin-left: 12px; } }
   @media (prefers-reduced-motion: reduce) { #animation-container { display: none; } }
-
   .field { margin-bottom: 12px; }
-  .field > label, .field > .label {
-    display: block; margin-bottom: 6px;
-    font-size: 13px; font-weight: 700;
-  }
+  .field > label, .field > .label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; }
   .hint { font-weight: 500; color: var(--muted); font-size: 12px; }
-
   input[type="text"], input[type="tel"] {
-    width: 100%;
-    padding: 13px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    background: #fff;
-    font: inherit; font-size: 16px; font-weight: 600;
-    color: var(--text);
-    outline: none;
-    transition: border-color .15s, box-shadow .15s;
+    width: 100%; padding: 13px 14px; border: 1.5px solid var(--border);
+    border-radius: 8px; background: #fff; font: inherit; font-size: 16px; font-weight: 600;
+    color: var(--text); outline: none; transition: border-color .15s, box-shadow .15s;
   }
-  input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(196, 0, 0, .12);
-  }
-  input.error {
-    border-color: var(--danger);
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, .12);
-  }
+  input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+  input.error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(220, 38, 38, .12); }
   input::placeholder { color: #b6bbc4; font-weight: 500; }
-
   .order-row { display: flex; gap: 8px; margin-bottom: 8px; }
   .order-row input { flex: 1; letter-spacing: 3px; }
-  .btn-remove {
-    width: 46px; flex: none;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    background: #fff; color: var(--muted);
-    font-size: 20px; line-height: 1; cursor: pointer;
-  }
-  .btn-remove:active { background: #f3f4f6; }
-
-  .btn-add-order {
-    width: 100%; padding: 10px;
-    border: 1.5px dashed var(--border);
-    border-radius: 8px;
-    background: #fff; color: var(--muted);
-    font: inherit; font-size: 13px; font-weight: 700;
-    cursor: pointer;
-  }
-  .btn-add-order:active { border-color: var(--primary); color: var(--primary); }
-
+  .btn-remove { width: 46px; flex: none; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; color: var(--muted); font-size: 20px; line-height: 1; cursor: pointer; }
+  .btn-add-order { width: 100%; padding: 10px; border: 1.5px dashed var(--border); border-radius: 8px; background: #fff; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
   .transport-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .transport-grid.extra { grid-template-columns: 1fr 1fr 1fr; margin-top: 8px; }
-  .transport-btn {
-    padding: 12px 6px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    background: #fff; color: var(--text);
-    font: inherit; font-size: 14px; font-weight: 700;
-    cursor: pointer;
-    transition: border-color .15s, background .15s, color .15s;
-  }
+  .transport-btn { padding: 12px 6px; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; color: var(--text); font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
   .transport-grid.extra .transport-btn { font-size: 12.5px; padding: 10px 4px; }
-  .transport-btn:active { transform: scale(.97); }
-  .transport-btn.active {
-    background: var(--primary); border-color: var(--primary); color: #fff;
-  }
-  .transport-grid.error .transport-btn { border-color: var(--danger); }
-
-  .btn-more {
-    width: 100%; margin-top: 8px; padding: 8px;
-    border: none; background: transparent; color: var(--muted);
-    font: inherit; font-size: 12.5px; font-weight: 700;
-    cursor: pointer;
-    text-decoration: underline;
-  }
-  .btn-more:active { color: var(--primary); }
-
-  .photo-add {
-    width: 48px; height: 48px; padding: 0;
-    display: flex; align-items: center; justify-content: center;
-    border: 1.5px solid var(--border); border-radius: 8px;
-    background: #fff center / cover no-repeat; color: var(--muted);
-    cursor: pointer;
-  }
-  .photo-add:active { border-color: var(--primary); color: var(--primary); }
+  .transport-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .btn-more { width: 100%; margin-top: 8px; padding: 8px; border: none; background: transparent; color: var(--muted); font: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer; text-decoration: underline; }
+  .photo-add { width: 48px; height: 48px; padding: 0; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--border); border-radius: 8px; background: #fff center / cover no-repeat; color: var(--muted); cursor: pointer; }
   .photo-add.has-photo { border-color: var(--primary); }
-
-  .btn-submit {
-    width: 100%; margin-top: 4px; padding: 15px;
-    border: none; border-radius: 8px;
-    background: var(--primary); color: #fff;
-    font: inherit; font-size: 17px; font-weight: 800;
-    cursor: pointer;
-    letter-spacing: .2px;
-  }
-  .btn-submit:active { transform: scale(.98); }
+  .btn-submit { width: 100%; margin-top: 4px; padding: 15px; border: none; border-radius: 8px; background: var(--primary); color: #fff; font: inherit; font-size: 17px; font-weight: 800; cursor: pointer; }
   .btn-submit:disabled { opacity: .7; cursor: default; }
-
-  button:focus-visible { outline: 3px solid rgba(196, 0, 0, .35); outline-offset: 2px; }
-
-  .overlay {
-    position: fixed; inset: 0; z-index: 2000;
-    display: none; align-items: center; justify-content: center;
-    padding: 20px;
-    background: rgba(0, 0, 0, .55);
-  }
+  .btn-return { width: 100%; margin-top: 10px; padding: 15px; border: none; border-radius: 8px; background: var(--tg-blue); color: #fff; font: inherit; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn-return:active { transform: scale(.98); }
+  .history-btn { position: fixed; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); right: 16px; width: 52px; height: 52px; border-radius: 50%; border: none; background: #1f2937; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 950; box-shadow: 0 4px 16px rgba(0,0,0,0.25); }
+  .history-btn svg { width: 24px; height: 24px; }
+  .overlay { position: fixed; inset: 0; z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(0, 0, 0, .55); }
   .overlay.show { display: flex; }
-  .modal {
-    width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto;
-    padding: 24px 20px 20px;
-    border-radius: 12px;
-    background: #fff;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, .25);
-    animation: modalIn .18s ease;
-  }
+  /* ✅ Камера всегда поверх всех окон */
+  #camera-modal { z-index: 3000; }
+  .modal { width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto; padding: 24px 20px 20px; border-radius: 12px; background: #fff; box-shadow: 0 8px 30px rgba(0, 0, 0, .25); animation: modalIn .18s ease; }
   @keyframes modalIn { from { opacity: 0; transform: translateY(8px); } }
   .modal h2 { margin: 0 0 12px; font-size: 19px; font-weight: 800; text-align: center; }
   .modal p { margin: 0 0 18px; color: #374151; font-size: 15px; line-height: 1.55; text-align: center; }
   .modal-actions { display: flex; gap: 10px; }
-  .modal-actions button {
-    flex: 1; padding: 14px; border: none; border-radius: 8px;
-    font: inherit; font-size: 15px; font-weight: 700; cursor: pointer;
-  }
+  .modal-actions button { flex: 1; padding: 14px; border: none; border-radius: 8px; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
   .modal-actions button:disabled { opacity: .6; cursor: default; }
   .btn-confirm { background: var(--primary); color: #fff; }
   .btn-cancel { background: #f3f4f6; color: var(--muted); }
-
+  .btn-blue { background: var(--tg-blue); color: #fff; }
   .summary { margin-bottom: 20px; }
-  .summary-item {
-    display: flex; justify-content: space-between; gap: 16px;
-    padding: 10px 0; border-bottom: 1px solid #eceef1; font-size: 15px;
-  }
+  .summary-item { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #eceef1; font-size: 15px; }
   .summary-item:last-child { border-bottom: none; }
   .summary-item .k { color: var(--muted); font-weight: 600; }
   .summary-item .v { font-weight: 700; text-align: right; word-break: break-word; }
-
   .modal.success { border-top: 4px solid var(--primary); text-align: left; }
   .modal.success h2 { text-align: left; }
   .modal.success p { text-align: left; color: #374151; }
-
-  .photo-big {
-    display: block; width: 100%; max-height: 40vh; object-fit: cover;
-    margin-bottom: 14px; border-radius: 8px;
-  }
-  .photo-big[hidden] { display: none; }
   .modal.cam { padding: 12px; max-width: 440px; }
-  .modal.cam video {
-    display: block; width: 100%; max-height: 62vh;
-    margin-bottom: 12px; border-radius: 8px;
-    background: #000; object-fit: cover;
-  }
-
-  .countdown-wrap {
-    text-align: center;
-    padding: 20px 0 8px;
-  }
-  .countdown-number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 96px;
-    height: 96px;
-    border-radius: 50%;
-    background: var(--primary);
-    color: #fff;
-    font-size: 44px;
-    font-weight: 800;
-    box-shadow: 0 8px 24px rgba(196, 0, 0, .35);
-    animation: countPulse .8s ease-in-out infinite;
-  }
-  @keyframes countPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.08); }
-  }
-
-  .promo-photo {
-    display: block;
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin: 0 auto 16px;
-    border: 4px solid var(--primary);
-    box-shadow: 0 8px 24px rgba(196, 0, 0, .2);
-    background: #f3f4f6;
-  }
-  .promo-photo-fallback {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    margin: 0 auto 16px;
-    border: 4px solid var(--primary);
-    box-shadow: 0 8px 24px rgba(196, 0, 0, .2);
-    background: #f3f4f6;
-    font-size: 64px;
-  }
-
-  .promo-title {
-    font-size: 17px !important;
-    white-space: nowrap;
-    letter-spacing: -0.3px;
-    margin: 0 0 14px !important;
-  }
-
-  .promo-text {
-    margin: 0 0 12px !important;
-    font-size: 14px !important;
-    line-height: 1.55 !important;
-    color: #4b5563 !important;
-    text-align: center !important;
-    padding: 0 4px;
-  }
+  .modal.cam video { display: block; width: 100%; max-height: 62vh; margin-bottom: 12px; border-radius: 8px; background: #000; object-fit: cover; }
+  .countdown-wrap { text-align: center; padding: 20px 0 8px; }
+  .countdown-number { display: inline-flex; align-items: center; justify-content: center; width: 96px; height: 96px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 44px; font-weight: 800; box-shadow: 0 8px 24px rgba(196, 0, 0, .35); animation: countPulse .8s ease-in-out infinite; }
+  @keyframes countPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
+  .promo-photo { display: block; width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin: 0 auto 16px; border: 4px solid var(--primary); background: #f3f4f6; }
+  .promo-photo-fallback { display: flex; align-items: center; justify-content: center; width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 16px; border: 4px solid var(--primary); background: #f3f4f6; font-size: 64px; }
+  .promo-title { font-size: 17px !important; white-space: nowrap; letter-spacing: -0.3px; margin: 0 0 14px !important; }
+  .promo-text { margin: 0 0 12px !important; font-size: 14px !important; line-height: 1.55 !important; color: #4b5563 !important; text-align: center !important; padding: 0 4px; }
   .promo-text:last-of-type { margin-bottom: 18px !important; }
-
-  .promo-btn {
-    display: block;
-    width: 100%;
-    padding: 16px;
-    border-radius: 8px;
-    background: var(--primary);
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
-    text-align: center;
-    text-decoration: none;
-    margin-top: 8px;
-    box-shadow: 0 8px 20px rgba(196, 0, 0, .22);
-  }
-  .promo-btn:active { transform: scale(.98); }
-  .promo-footer {
-    margin: 18px 0 0 !important;
-    font-size: 12px !important;
-    color: #c40000 !important;
-    text-align: center !important;
-    line-height: 1.4 !important;
-  }
-  .promo-footer a {
-    color: #c40000 !important;
-    font-weight: 700;
-    text-decoration: underline;
-  }
+  .promo-btn { display: block; width: 100%; padding: 16px; border-radius: 8px; background: var(--primary); color: #fff; font-size: 16px; font-weight: 700; text-align: center; text-decoration: none; margin-top: 8px; }
+  .promo-footer { margin: 18px 0 0 !important; font-size: 12px !important; color: #c40000 !important; text-align: center !important; line-height: 1.4 !important; }
+  .promo-footer a { color: #c40000 !important; font-weight: 700; text-decoration: underline; }
+  .history-list { list-style: none; margin: 0 0 20px; padding: 0; }
+  .history-item { padding: 12px 14px; border: 1px solid #eceef1; border-radius: 8px; margin-bottom: 8px; font-size: 14px; }
+  .history-item .h-top { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px; color: var(--muted); }
+  .history-item .h-orders { font-weight: 700; font-size: 15px; letter-spacing: 1px; }
+  .history-item .h-type { font-size: 11px; font-weight: 700; text-transform: uppercase; }
+  .history-item .h-type.order { color: var(--primary); }
+  .history-item .h-type.return { color: var(--tg-blue); }
+  .history-empty { text-align: center; color: var(--muted); padding: 20px 0; }
+  .return-photo-area { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .return-photo-btn { width: 100%; padding: 18px; border: 1.5px dashed var(--border); border-radius: 8px; background: #fff; color: var(--muted); font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .return-photo-btn.has-photo { border-style: solid; border-color: var(--tg-blue); color: var(--tg-blue); }
+  .return-photo-preview { width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; display: none; }
+  .return-photo-preview.show { display: block; }
+  .modal.game { padding: 0; max-width: 100%; width: 100%; height: 100%; max-height: 100%; border-radius: 0; overflow: hidden; background: #0f172a; }
+  .game-wrap { position: relative; width: 100%; height: 100%; }
+  .game-topbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; color: #fff; font-size: 14px; font-weight: 700; background: rgba(0,0,0,0.3); position: absolute; top: 0; left: 0; right: 0; z-index: 5; padding-top: calc(env(safe-area-inset-top, 0px) + 10px); }
+  .game-topbar button { background: rgba(255,255,255,0.15); color: #fff; border: none; border-radius: 8px; padding: 6px 12px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .game-hud { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 55px); left: 14px; right: 14px; z-index: 5; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 15px; font-weight: 800; text-shadow: 0 1px 3px rgba(0,0,0,0.6); pointer-events: none; gap: 10px; }
+  .game-hud .lives { letter-spacing: 2px; }
+  .game-hud .best { font-size: 12px; opacity: 0.85; }
+  #game-canvas { display: block; width: 100%; height: 100%; touch-action: manipulation; }
+  .game-message { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-align: center; z-index: 6; pointer-events: none; padding: 20px; }
+  .game-message .big { font-size: 28px; font-weight: 900; margin-bottom: 8px; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+  .game-message .small { font-size: 15px; opacity: .85; max-width: 80%; }
+  .game-message .btn-play { margin-top: 20px; pointer-events: auto; padding: 14px 32px; border: none; border-radius: 10px; background: var(--primary); color: #fff; font: inherit; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 24px rgba(196,0,0,0.4); }
 </style>
 </head>
 <body>
@@ -333,6 +147,14 @@
 
 <div id="animation-container" aria-hidden="true"></div>
 
+<button type="button" class="history-btn" id="btnHistory" aria-label="История заказов">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
+    <polyline points="3 3 3 8 8 8"/>
+    <polyline points="12 7 12 12 15 15"/>
+  </svg>
+</button>
+
 <main class="container">
   <header>
     <h1>Kezek.kz</h1>
@@ -341,14 +163,12 @@
 
   <div class="field">
     <label for="name">Ваше имя</label>
-    <input type="text" id="name" placeholder="Например, Алмас" maxlength="14"
-           autocomplete="given-name" autocapitalize="words" enterkeyhint="next" />
+    <input type="text" id="name" placeholder="Например, Алмас" maxlength="14" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" />
   </div>
 
   <div class="field">
     <label for="phone">Номер телефона</label>
-    <input type="tel" id="phone" placeholder="+7 700 123 45 67" inputmode="numeric"
-           autocomplete="tel" maxlength="16" enterkeyhint="next" />
+    <input type="tel" id="phone" placeholder="+7 700 123 45 67" inputmode="numeric" autocomplete="tel" maxlength="16" enterkeyhint="next" />
   </div>
 
   <div class="field">
@@ -377,6 +197,13 @@
   </div>
 
   <button type="button" class="btn-submit" id="btnSubmit">Отправить</button>
+  <button type="button" class="btn-return" id="btnReturn">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="9 14 4 9 9 4"/>
+      <path d="M4 9h11a5 5 0 0 1 0 10h-3"/>
+    </svg>
+    Возврат
+  </button>
 </main>
 
 <div id="camera-modal" class="overlay" role="dialog" aria-modal="true" aria-label="Камера">
@@ -392,7 +219,7 @@
 <div id="photo-modal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="photo-title">
   <div class="modal">
     <h2 id="photo-title">Фото транспорта</h2>
-    <img id="photo-img" class="photo-big" alt="Фото транспорта" hidden />
+    <img id="photo-img" class="return-photo-preview" alt="Фото транспорта" hidden />
     <p>Так наши сотрудники сразу найдут вас или направятся в вашу сторону. Фото добавлять необязательно.</p>
     <div class="modal-actions">
       <button type="button" class="btn-cancel" id="btnPhotoNo">Не нужно</button>
@@ -445,12 +272,75 @@
       <h2 id="promo-title" class="promo-title">Курьерлер қауымдастығы</h2>
       <p class="promo-text">Барлық курьер қызметкерлерін бір жерге жинаймыз, ұйымшыл және кең ауқымды достықты қолдайық.</p>
       <p class="promo-text">Собираем всех курьеров в одном месте, поддерживаем сплочённость и широкое дружелюбие.</p>
-      <a href="https://t.me/almatybirgemiz" target="_blank" rel="noopener" class="promo-btn" id="btnJoinGroup">Вступить в группу</a>
+      <a href="https://t.me/almatybirgemiz" target="_blank" rel="noopener" class="promo-btn">Вступить в группу</a>
       <p class="promo-footer">Ваша реклама могла быть здесь: <a href="https://t.me/kezek_by" target="_blank" rel="noopener">@kezek_by</a></p>
-      <button type="button" class="btn-cancel" id="btnPromoClose" style="width:100%;margin-top:16px;padding:14px;border-radius:8px;border:none;font:inherit;font-size:15px;font-weight:700;cursor:pointer;">Закрыть</button>
+      <div class="modal-actions" style="margin-top:16px">
+        <button type="button" class="btn-cancel" id="btnPromoClose">Закрыть</button>
+        <button type="button" class="btn-confirm" id="btnPlayGame">Играем?</button>
+      </div>
     </div>
   </div>
 </div>
+
+<div id="history-modal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="history-title">
+  <div class="modal">
+    <h2 id="history-title">История отправок</h2>
+    <ul class="history-list" id="history-list"></ul>
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" id="btnHistoryClose" style="flex:1">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<div id="return-modal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="return-title">
+  <div class="modal">
+    <h2 id="return-title">Возврат заказа</h2>
+    <p>Сфотографируйте товар и укажите номер заказа. Наш сотрудник выйдет и примет возврат.</p>
+    <div class="return-photo-area">
+      <button type="button" class="return-photo-btn" id="btnReturnPhoto">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
+          <circle cx="12" cy="13" r="3.5"/>
+        </svg>
+        <span id="return-photo-text">Сделать фото товара</span>
+      </button>
+      <img id="return-photo-preview" class="return-photo-preview" alt="Фото товара">
+    </div>
+    <div class="field">
+      <label for="return-order">Номер заказа</label>
+      <input type="tel" id="return-order" maxlength="4" placeholder="1234" inputmode="numeric" />
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" id="btnReturnCancel">Отмена</button>
+      <button type="button" class="btn-blue" id="btnReturnSend">Отправить</button>
+    </div>
+  </div>
+</div>
+
+<div id="game-modal" class="overlay" role="dialog" aria-modal="true">
+  <div class="modal game">
+    <div class="game-wrap">
+      <canvas id="game-canvas"></canvas>
+      <div class="game-topbar">
+        <button type="button" id="btnGameClose">← Назад</button>
+        <span>Kezek Runner</span>
+        <span style="width:70px"></span>
+      </div>
+      <div class="game-hud">
+        <span id="game-score">0 м</span>
+        <span class="best" id="game-best">Рекорд: 0 м</span>
+        <span class="lives" id="game-lives">❤️❤️❤️</span>
+      </div>
+      <div class="game-message" id="game-message">
+        <div class="big">Kezek Runner</div>
+        <div class="small">Тапни, чтобы прыгнуть. Двойной тап — двойной прыжок. Лови трамплины и аптечки!</div>
+        <button type="button" class="btn-play" id="btnGameStart">Играть</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="return-photo-input" accept="image/*" capture="environment" hidden />
 
 <script>
 "use strict";
@@ -459,12 +349,17 @@ const BOT_TOKEN   = "8264155388:AAH2q9-YlD5AJmm6GorKvivG7cGl2N4N7Wg";
 const CHAT_ID     = "-1002973925647";
 const CONSENT_KEY = "kezek_courier_consent";
 const DATA_KEY    = "kezek_courier_data";
+const HISTORY_KEY = "kezek_courier_history";
+const LAST_SENT_KEY = "kezek_last_sent_time";
+const BEST_KEY = "kezek_runner_best";
 const MAX_ORDERS  = 5;
+const COOLDOWN_MS = 12 * 60 * 1000;
 const WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=43.2389&longitude=76.8897&current_weather=true";
 
 const store = {
   get(k) { try { return localStorage.getItem(k); } catch { return null; } },
-  set(k, v) { try { localStorage.setItem(k, v); } catch {} }
+  set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  del(k) { try { localStorage.removeItem(k); } catch {} }
 };
 
 function loadData() {
@@ -472,6 +367,44 @@ function loadData() {
     const d = JSON.parse(store.get(DATA_KEY) || "{}");
     return { name: d.name || "", phone: d.phone || "", transport: d.transport || "" };
   } catch { return { name: "", phone: "", transport: "" }; }
+}
+
+function getHistory() {
+  try { const raw = store.get(HISTORY_KEY); const arr = raw ? JSON.parse(raw) : []; return Array.isArray(arr) ? arr : []; }
+  catch { return []; }
+}
+function pushHistory(entry) {
+  const list = getHistory();
+  list.unshift(entry);
+  while (list.length > 3) list.pop();
+  store.set(HISTORY_KEY, JSON.stringify(list));
+}
+function formatDate(ts) {
+  const d = new Date(ts);
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+function renderHistory() {
+  const list = document.getElementById("history-list");
+  const items = getHistory();
+  list.innerHTML = "";
+  if (!items.length) { list.innerHTML = '<li class="history-empty">Пока пусто. Отправьте первый заказ.</li>'; return; }
+  items.forEach((it) => {
+    const li = document.createElement("li");
+    li.className = "history-item";
+    const typeLabel = it.type === "return" ? "Возврат" : "Заказ";
+    const typeClass = it.type === "return" ? "return" : "order";
+    li.innerHTML = `<div class="h-top"><span>${formatDate(it.ts)}</span><span class="h-type ${typeClass}">${typeLabel}</span></div><div class="h-orders">№ ${it.orders || "—"}</div>`;
+    list.appendChild(li);
+  });
+}
+
+function checkCooldown() {
+  const last = parseInt(store.get(LAST_SENT_KEY) || "0", 10);
+  if (!last) return null;
+  const diff = Date.now() - last;
+  if (diff >= COOLDOWN_MS) return null;
+  return Math.ceil((COOLDOWN_MS - diff) / 60000);
 }
 
 const $ = (id) => document.getElementById(id);
@@ -483,30 +416,19 @@ const transportGrid = $("transport-container");
 const transportExtra = $("transport-extra");
 const btnMoreTransport = $("btnMoreTransport");
 const transportBtns = [...document.querySelectorAll(".transport-btn")];
-
 let currentTransport = "";
 
-function openModal(id) {
-  $(id).classList.add("show");
-  document.body.classList.add("modal-open");
-}
+function openModal(id) { $(id).classList.add("show"); document.body.classList.add("modal-open"); }
 function closeModal(id) {
   $(id).classList.remove("show");
   if (!document.querySelector(".overlay.show")) document.body.classList.remove("modal-open");
 }
 
-/* ===== Промо фото: заглушка если файл отсутствует ===== */
 (function initPromoPhoto() {
-  const img = $("promo-img");
-  const fallback = $("promo-img-fallback");
+  const img = $("promo-img"); const fallback = $("promo-img-fallback");
   if (!img || !fallback) return;
-  img.addEventListener("error", () => {
-    img.style.display = "none";
-    fallback.classList.remove("hidden");
-  });
-  img.addEventListener("load", () => {
-    fallback.classList.add("hidden");
-  });
+  img.addEventListener("error", () => { img.style.display = "none"; fallback.classList.remove("hidden"); });
+  img.addEventListener("load", () => { fallback.classList.add("hidden"); });
 })();
 
 nameInput.addEventListener("input", () => {
@@ -520,7 +442,6 @@ function formatPhone(raw) {
   else if (d.length > 10 && (d[0] === "7" || d[0] === "8")) d = d.slice(1);
   else if (d.length >= 1 && d[0] === "8") d = d.slice(1);
   d = d.slice(0, 10);
-
   let out = "+7";
   if (d.length) out += " " + d.slice(0, 3);
   if (d.length > 3) out += " " + d.slice(3, 6);
@@ -535,22 +456,14 @@ phoneInput.addEventListener("input", () => {
 });
 phoneInput.addEventListener("focus", () => { if (!phoneInput.value) phoneInput.value = "+7 "; });
 phoneInput.addEventListener("blur", () => { if (phoneInput.value.replace(/\D/g, "").length <= 1) phoneInput.value = ""; });
-
 function phoneDigits(v) { return v.replace(/\D/g, ""); }
 
 const orderRows = [];
-
 function addOrderRow(removable) {
-  const row = document.createElement("div");
-  row.className = "order-row";
-
+  const row = document.createElement("div"); row.className = "order-row";
   const input = document.createElement("input");
-  input.type = "tel";
-  input.className = "order-input";
-  input.maxLength = 4;
-  input.placeholder = "1234";
-  input.inputMode = "numeric";
-  input.autocomplete = "off";
+  input.type = "tel"; input.className = "order-input"; input.maxLength = 4;
+  input.placeholder = "1234"; input.inputMode = "numeric"; input.autocomplete = "off";
   input.setAttribute("aria-label", "Номер заказа");
   input.addEventListener("input", () => {
     input.value = input.value.replace(/\D/g, "").slice(0, 4);
@@ -558,13 +471,10 @@ function addOrderRow(removable) {
     if (input.value.length === 4) input.blur();
   });
   row.appendChild(input);
-
   const r = { row, input };
   if (removable) {
     const del = document.createElement("button");
-    del.type = "button";
-    del.className = "btn-remove";
-    del.textContent = "×";
+    del.type = "button"; del.className = "btn-remove"; del.textContent = "×";
     del.setAttribute("aria-label", "Убрать заказ");
     del.addEventListener("click", () => {
       orderRows.splice(orderRows.indexOf(r), 1);
@@ -573,27 +483,14 @@ function addOrderRow(removable) {
     });
     row.appendChild(del);
   }
-
-  orderRows.push(r);
-  ordersContainer.appendChild(row);
+  orderRows.push(r); ordersContainer.appendChild(row);
   return input;
 }
-
-function updateAddButton() {
-  btnAddOrder.style.display = orderRows.length >= MAX_ORDERS ? "none" : "block";
-}
-
-function resetOrders() {
-  orderRows.length = 0;
-  ordersContainer.innerHTML = "";
-  addOrderRow(false);
-  updateAddButton();
-}
-
+function updateAddButton() { btnAddOrder.style.display = orderRows.length >= MAX_ORDERS ? "none" : "block"; }
+function resetOrders() { orderRows.length = 0; ordersContainer.innerHTML = ""; addOrderRow(false); updateAddButton(); }
 btnAddOrder.addEventListener("click", () => {
   if (orderRows.length >= MAX_ORDERS) return;
-  addOrderRow(true).focus();
-  updateAddButton();
+  addOrderRow(true).focus(); updateAddButton();
 });
 
 function setTransport(value) {
@@ -606,7 +503,6 @@ function setTransport(value) {
   transportGrid.classList.remove("error");
 }
 transportBtns.forEach((b) => b.addEventListener("click", () => setTransport(b.dataset.value)));
-
 btnMoreTransport.addEventListener("click", () => {
   const hidden = transportExtra.classList.toggle("hidden");
   btnMoreTransport.textContent = hidden ? "+ Ещё варианты" : "− Скрыть";
@@ -630,20 +526,34 @@ function compressImage(file, maxSide = 1280, quality = 0.82) {
   });
 }
 
+/* ============================================================
+   КАМЕРА с поддержкой возврата в родительское окно
+   ============================================================ */
 let camStream = null;
 let camOnShot = null;
+let cameraReturnTo = null;  // ID модалки, которую надо вернуть после закрытия камеры
 
 function stopCamera() {
   if (camStream) { camStream.getTracks().forEach((t) => t.stop()); camStream = null; }
   $("cam-video").srcObject = null;
   closeModal("camera-modal");
+  // Возвращаем родительское окно, если нужно
+  if (cameraReturnTo) {
+    openModal(cameraReturnTo);
+    cameraReturnTo = null;
+  }
 }
 
-async function openCamera(onShot, fallbackInput) {
+async function openCamera(onShot, fallbackInput, returnTo) {
   const md = navigator.mediaDevices;
   if (!md || !md.getUserMedia || !window.isSecureContext) { fallbackInput.click(); return; }
   try {
     camStream = await md.getUserMedia({ video: { facingMode: { ideal: "environment" } }, audio: false });
+    // Успешно получили поток — теперь можно скрыть родительское окно
+    if (returnTo) {
+      cameraReturnTo = returnTo;
+      closeModal(returnTo);
+    }
     const v = $("cam-video");
     v.srcObject = camStream;
     camOnShot = onShot;
@@ -657,8 +567,7 @@ async function openCamera(onShot, fallbackInput) {
 }
 
 $("btnShot").addEventListener("click", () => {
-  const v = $("cam-video");
-  if (!v.videoWidth) return;
+  const v = $("cam-video"); if (!v.videoWidth) return;
   const scale = Math.min(1, 1280 / Math.max(v.videoWidth, v.videoHeight));
   const canvas = document.createElement("canvas");
   canvas.width = Math.round(v.videoWidth * scale);
@@ -672,12 +581,13 @@ $("btnShot").addEventListener("click", () => {
 });
 $("btnCamCancel").addEventListener("click", stopCamera);
 
-const CAM_SVG = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+/* ============================================================
+   ФОТО ТРАНСПОРТА
+   ============================================================ */
+const CAM_SVG = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg>';
 const photoInput = $("photo");
 const photoOpenBtn = $("btnPhotoOpen");
-let photoBlob = null;
-let photoUrl = "";
-
+let photoBlob = null; let photoUrl = "";
 function showPhoto(blob) {
   if (photoUrl) URL.revokeObjectURL(photoUrl);
   photoBlob = blob || null;
@@ -687,7 +597,6 @@ function showPhoto(blob) {
   photoOpenBtn.innerHTML = blob ? "" : CAM_SVG;
 }
 showPhoto(null);
-
 function openPhotoModal() {
   const has = !!photoBlob;
   $("photo-img").hidden = !has;
@@ -697,10 +606,7 @@ function openPhotoModal() {
   openModal("photo-modal");
 }
 photoOpenBtn.addEventListener("click", openPhotoModal);
-$("btnPhotoNo").addEventListener("click", () => {
-  if (photoBlob) showPhoto(null);
-  closeModal("photo-modal");
-});
+$("btnPhotoNo").addEventListener("click", () => { if (photoBlob) showPhoto(null); closeModal("photo-modal"); });
 $("btnPhotoTake").addEventListener("click", () => {
   closeModal("photo-modal");
   openCamera(showPhoto, photoInput);
@@ -713,25 +619,15 @@ photoInput.addEventListener("change", async () => {
 
 /* ============================================================
    ФОТО ПО УМОЛЧАНИЮ (courier.jpg)
-   - Предзагружается при старте страницы (см. init()).
-   - Через Image() + canvas: надёжнее fetch на мобильных.
-   - Таймаут 8 секунд на первый раз, потом кэш.
    ============================================================ */
 const DEFAULT_PHOTO_URL = "courier.jpg";
 let defaultPhotoPromise = null;
-
 function getDefaultPhoto() {
   if (!defaultPhotoPromise) {
     defaultPhotoPromise = new Promise((resolve) => {
       const img = new Image();
-      // cache-bust, чтобы не поймать старую версию
       img.src = DEFAULT_PHOTO_URL + "?v=" + Date.now();
-
-      const timer = setTimeout(() => {
-        console.warn("Фото по умолчанию: таймаут загрузки");
-        resolve(null);
-      }, 8000);
-
+      const timer = setTimeout(() => resolve(null), 8000);
       img.onload = () => {
         clearTimeout(timer);
         try {
@@ -741,22 +637,10 @@ function getDefaultPhoto() {
           canvas.width = Math.round(img.naturalWidth * scale);
           canvas.height = Math.round(img.naturalHeight * scale);
           canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-          canvas.toBlob(
-            (blob) => resolve(blob || null),
-            "image/jpeg",
-            0.85
-          );
-        } catch (e) {
-          console.warn("Фото: ошибка canvas", e);
-          resolve(null);
-        }
+          canvas.toBlob((blob) => resolve(blob || null), "image/jpeg", 0.85);
+        } catch { resolve(null); }
       };
-
-      img.onerror = () => {
-        clearTimeout(timer);
-        console.warn("Фото по умолчанию не найдено:", DEFAULT_PHOTO_URL);
-        resolve(null);
-      };
+      img.onerror = () => { clearTimeout(timer); resolve(null); };
     });
   }
   return defaultPhotoPromise;
@@ -770,33 +654,27 @@ function collectData() {
     transport: currentTransport
   };
 }
-
 function validate(data) {
-  if ([...data.name].length < 2)
-    return { msg: "Введите имя: минимум 2 буквы.", el: nameInput };
-
+  if ([...data.name].length < 2) return { msg: "Введите имя: минимум 2 буквы.", el: nameInput };
   const digits = phoneDigits(data.phone);
-  if (digits.length !== 11 || digits[0] !== "7")
-    return { msg: "Введите номер телефона полностью: +7 XXX XXX XX XX.", el: phoneInput };
-
+  if (digits.length !== 11 || digits[0] !== "7") return { msg: "Введите номер телефона полностью: +7 XXX XXX XX XX.", el: phoneInput };
   const bad = orderRows.find((r) => !/^\d{4}$/.test(r.input.value));
-  if (bad)
-    return { msg: orderRows.length > 1
-      ? "Каждый номер заказа должен состоять ровно из 4 цифр."
-      : "Введите номер заказа: ровно 4 цифры.", el: bad.input };
-
+  if (bad) return { msg: orderRows.length > 1 ? "Каждый номер заказа должен состоять ровно из 4 цифр." : "Введите номер заказа: ровно 4 цифры.", el: bad.input };
   const seen = new Set();
   for (const r of orderRows) {
     if (seen.has(r.input.value)) return { msg: `Заказ ${r.input.value} указан дважды.`, el: r.input };
     seen.add(r.input.value);
   }
-
-  if (!data.transport)
-    return { msg: "Выберите вид транспорта.", el: transportGrid };
+  if (!data.transport) return { msg: "Выберите вид транспорта.", el: transportGrid };
   return null;
 }
 
 $("btnSubmit").addEventListener("click", () => {
+  const mins = checkCooldown();
+  if (mins !== null) {
+    alert(`Повторная отправка возможна через ${mins} мин.\nЭто защита от двойных заявок.`);
+    return;
+  }
   const data = collectData();
   const err = validate(data);
   if (err) {
@@ -806,9 +684,7 @@ $("btnSubmit").addEventListener("click", () => {
     if (err.el.focus && err.el.tagName === "INPUT") err.el.focus();
     return;
   }
-
   store.set(DATA_KEY, JSON.stringify({ name: data.name, phone: data.phone, transport: data.transport }));
-
   const summary = $("summary-content");
   summary.innerHTML = "";
   [["Имя", data.name], ["Телефон", data.phone], ["Заказы", data.orders.join(", ")], ["Транспорт", data.transport],
@@ -818,203 +694,178 @@ $("btnSubmit").addEventListener("click", () => {
       row.className = "summary-item";
       const a = document.createElement("span"); a.className = "k"; a.textContent = k;
       const b = document.createElement("span"); b.className = "v"; b.textContent = v;
-      row.append(a, b);
-      summary.appendChild(row);
+      row.append(a, b); summary.appendChild(row);
     });
   openModal("confirm-modal");
 });
-
 $("btnEdit").addEventListener("click", () => closeModal("confirm-modal"));
 
 const SEQ_URL  = "https://abacus.jasoncameron.dev/hit/kezek.kz/d-";
 const SEQ_MAX  = 300;
 let pendingSeq = null;
-
-function almatyDay() {
-  return new Date(Date.now() + 5 * 3600 * 1000).toISOString().slice(0, 10);
-}
-
+function almatyDay() { return new Date(Date.now() + 5 * 3600 * 1000).toISOString().slice(0, 10); }
 async function getSeq() {
   const day = almatyDay();
   if (pendingSeq && pendingSeq.day === day) return pendingSeq.n;
-  const ask = (async () => {
+  try {
     const controller = new AbortController();
     const t = setTimeout(() => controller.abort(), 3000);
-    try {
-      const r = await fetch(SEQ_URL + day, { signal: controller.signal });
-      clearTimeout(t);
-      if (!r.ok) throw new Error("HTTP " + r.status);
-      const c = Number((await r.json()).value);
-      if (!Number.isFinite(c) || c < 1) throw new Error("bad counter");
-      const n = ((c - 1) % SEQ_MAX) + 1;
-      pendingSeq = { day, n };
-      return n;
-    } catch (e) {
-      clearTimeout(t);
-      console.warn("Счётчик недоступен:", e.message);
-      return null;
-    }
-  })();
-  return ask;
+    const r = await fetch(SEQ_URL + day, { signal: controller.signal });
+    clearTimeout(t);
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const c = Number((await r.json()).value);
+    if (!Number.isFinite(c) || c < 1) throw new Error("bad counter");
+    const n = ((c - 1) % SEQ_MAX) + 1;
+    pendingSeq = { day, n }; return n;
+  } catch { return null; }
 }
 
 let sending = false;
 const TG = `https://api.telegram.org/bot${BOT_TOKEN}`;
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+async function tgSend({ photo, text }) {
+  if (photo) {
+    const form = new FormData();
+    form.append("chat_id", CHAT_ID);
+    form.append("photo", photo, "photo.jpg");
+    form.append("caption", text);
+    form.append("parse_mode", "HTML");
+    const res = await fetch(`${TG}/sendPhoto`, { method: "POST", body: form });
+    return res.json();
+  } else {
+    const res = await fetch(`${TG}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: "HTML", link_preview_options: { is_disabled: true } })
+    });
+    return res.json();
+  }
+}
 
 $("btnConfirmSend").addEventListener("click", async () => {
   if (sending) return;
   sending = true;
-
-  const btn = $("btnConfirmSend");
-  const btnEdit = $("btnEdit");
-  btn.disabled = true; btnEdit.disabled = true;
-  btn.textContent = "Отправка...";
-
+  const btn = $("btnConfirmSend"); const btnEdit = $("btnEdit");
+  btn.disabled = true; btnEdit.disabled = true; btn.textContent = "Отправка...";
   const data = collectData();
-  const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const waLink = `https://wa.me/${phoneDigits(data.phone)}`;
-  const transportLabel = {
-    "Автомобиль": "🚘 Авто",
-    "Скутер": "🛵 Мопед",
-    "Велосипед": "🚲 Велосипед",
-    "Самокат": "🛴 Самокат",
-    "Пеший": "🚶‍♂️ Пеший"
-  };
-  const buildText = (seq) =>
-    `<b>${esc(data.name)}${seq ? " | " + seq : ""}</b>\n\n` +
-    `📱 <a href="${waLink}">${esc(data.phone)}</a>\n\n` +
-    data.orders.map((o) => `🔢 <code>${esc(o)}</code>`).join("\n\n") + "\n\n" +
-    esc(transportLabel[data.transport] || data.transport) + "\n\n" +
-    `<a href="https://t.me/+LIkMOza3r0Y0MjEy">Смотреть в группе</a>`;
-
+  const transportLabel = { "Автомобиль": "🚘 Авто", "Скутер": "🛵 Мопед", "Велосипед": "🚲 Велосипед", "Самокат": "🛴 Самокат", "Пеший": "🚶‍♂️ Пеший" };
   const controller = new AbortController();
   const hardTimeout = setTimeout(() => controller.abort(), 25000);
-
   try {
     const seq = await getSeq();
-
-    // Своё фото (приоритет) или фото по умолчанию (уже предзагружено)
     let photo = photoBlob;
-    if (!photo) {
-      btn.textContent = "Загрузка фото...";
-      photo = await getDefaultPhoto();
-    }
-
+    if (!photo) { btn.textContent = "Загрузка фото..."; photo = await getDefaultPhoto(); }
     btn.textContent = "Отправка...";
-    const text = buildText(seq);
-
-    let request;
-    if (photo) {
-      const form = new FormData();
-      form.append("chat_id", CHAT_ID);
-      form.append("photo", photo, photoBlob ? "transport.jpg" : "courier.jpg");
-      form.append("caption", text);
-      form.append("parse_mode", "HTML");
-      request = fetch(`${TG}/sendPhoto`, { method: "POST", body: form, signal: controller.signal });
-    } else {
-      request = fetch(`${TG}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: CHAT_ID,
-          text,
-          parse_mode: "HTML",
-          link_preview_options: { is_disabled: true }
-        }),
-        signal: controller.signal
-      });
-    }
-
-    const res = await request;
-    const result = await res.json();
+    const text =
+      `<b>${esc(data.name)}${seq ? " | " + seq : ""}</b>\n\n` +
+      `📱 <a href="${waLink}">${esc(data.phone)}</a>\n\n` +
+      data.orders.map((o) => `🔢 <code>${esc(o)}</code>`).join("\n\n") + "\n\n" +
+      esc(transportLabel[data.transport] || data.transport) + "\n\n" +
+      `<a href="https://t.me/+LIkMOza3r0Y0MjEy">Смотреть в группе</a>`;
+    const result = await tgSend({ photo, text });
     if (!result.ok) throw new Error(result.description || "Telegram error");
-
+    store.set(LAST_SENT_KEY, String(Date.now()));
+    pushHistory({ ts: Date.now(), orders: data.orders.join(", "), type: "order" });
     pendingSeq = null;
-    closeModal("confirm-modal");
-    openModal("success-modal");
+    closeModal("confirm-modal"); openModal("success-modal");
   } catch (e) {
     console.error(e);
-    const msg = e.name === "AbortError"
-      ? "Превышено время ожидания. Проверьте интернет."
-      : "Не удалось отправить. Проверьте интернет и попробуйте ещё раз.";
-    alert(msg);
+    alert(e.name === "AbortError" ? "Превышено время ожидания. Проверьте интернет." : "Не удалось отправить. Проверьте интернет.");
   } finally {
     clearTimeout(hardTimeout);
-    sending = false;
-    btn.disabled = false; btnEdit.disabled = false;
-    btn.textContent = "Всё верно";
+    sending = false; btn.disabled = false; btnEdit.disabled = false; btn.textContent = "Всё верно";
   }
 });
 
 let promoCountdownTimer = null;
-
-function resetCourierFlow() {
-  resetOrders();
-  showPhoto(null);
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
+function resetCourierFlow() { resetOrders(); showPhoto(null); window.scrollTo({ top: 0, behavior: "smooth" }); }
 $("btnSuccessOk").addEventListener("click", () => {
-  closeModal("success-modal");
-  resetCourierFlow();
+  closeModal("success-modal"); resetCourierFlow();
+  $("success-title").textContent = "Заказ принят";
+  document.querySelector("#success-modal p").textContent = "Наши сотрудники получили ваши данные о заказах и скоро в порядке очереди вынесут вам. Пожалуйста, приоткройте окно чуть-чуть, вас позовут по имени, можете ожидать у себя в транспорте.";
+  $("btnSuccessPromo").style.display = "";
 });
-
-$("btnSuccessPromo").addEventListener("click", () => {
-  closeModal("success-modal");
-  resetCourierFlow();
-  openModal("promo-modal");
-  startPromoCountdown();
-});
-
+$("btnSuccessPromo").addEventListener("click", () => { closeModal("success-modal"); resetCourierFlow(); openModal("promo-modal"); startPromoCountdown(); });
 function startPromoCountdown() {
   const countdownEl = $("countdown-number");
   const promoCountdown = $("promo-countdown");
   const promoContent = $("promo-content");
-
-  promoCountdown.hidden = false;
-  promoContent.hidden = true;
-
+  promoCountdown.hidden = false; promoContent.hidden = true;
   const start = Math.floor(Math.random() * 10) + 3;
-  let n = start;
-  countdownEl.textContent = n;
-
+  let n = start; countdownEl.textContent = n;
   if (promoCountdownTimer) clearInterval(promoCountdownTimer);
   promoCountdownTimer = setInterval(() => {
     n--;
-    if (n <= 0) {
-      clearInterval(promoCountdownTimer);
-      promoCountdownTimer = null;
-      promoCountdown.hidden = true;
-      promoContent.hidden = false;
-    } else {
-      countdownEl.textContent = n;
-      countdownEl.style.animation = "none";
-      void countdownEl.offsetWidth;
-      countdownEl.style.animation = "";
-    }
+    if (n <= 0) { clearInterval(promoCountdownTimer); promoCountdownTimer = null; promoCountdown.hidden = true; promoContent.hidden = false; }
+    else { countdownEl.textContent = n; countdownEl.style.animation = "none"; void countdownEl.offsetWidth; countdownEl.style.animation = ""; }
   }, 800);
 }
+$("btnPromoClose").addEventListener("click", () => { if (promoCountdownTimer) { clearInterval(promoCountdownTimer); promoCountdownTimer = null; } closeModal("promo-modal"); });
+$("btnPlayGame").addEventListener("click", () => { if (promoCountdownTimer) { clearInterval(promoCountdownTimer); promoCountdownTimer = null; } closeModal("promo-modal"); openModal("game-modal"); startGame(); });
 
-$("btnPromoClose").addEventListener("click", () => {
-  if (promoCountdownTimer) { clearInterval(promoCountdownTimer); promoCountdownTimer = null; }
-  closeModal("promo-modal");
+$("btnHistory").addEventListener("click", () => { renderHistory(); openModal("history-modal"); });
+$("btnHistoryClose").addEventListener("click", () => closeModal("history-modal"));
+
+/* ============================================================
+   ВОЗВРАТ
+   ============================================================ */
+let returnPhotoBlob = null; let returnPhotoUrl = "";
+function setReturnPhoto(blob) {
+  if (returnPhotoUrl) URL.revokeObjectURL(returnPhotoUrl);
+  returnPhotoBlob = blob || null;
+  returnPhotoUrl = blob ? URL.createObjectURL(blob) : "";
+  const preview = $("return-photo-preview");
+  const btn = $("btnReturnPhoto");
+  if (blob) { preview.src = returnPhotoUrl; preview.classList.add("show"); btn.classList.add("has-photo"); $("return-photo-text").textContent = "Переснять фото"; }
+  else { preview.classList.remove("show"); preview.removeAttribute("src"); btn.classList.remove("has-photo"); $("return-photo-text").textContent = "Сделать фото товара"; }
+}
+$("btnReturn").addEventListener("click", () => { setReturnPhoto(null); $("return-order").value = ""; openModal("return-modal"); });
+$("btnReturnCancel").addEventListener("click", () => closeModal("return-modal"));
+
+// ✅ Открываем камеру с возвратом в окно возврата
+$("btnReturnPhoto").addEventListener("click", () => {
+  openCamera(setReturnPhoto, $("return-photo-input"), "return-modal");
 });
 
-$("btnConsentOk").addEventListener("click", () => {
-  store.set(CONSENT_KEY, "true");
-  closeModal("consent-modal");
+$("return-photo-input").addEventListener("change", async () => {
+  const file = $("return-photo-input").files && $("return-photo-input").files[0];
+  $("return-photo-input").value = "";
+  if (file) setReturnPhoto(await compressImage(file));
+});
+$("return-order").addEventListener("input", (e) => {
+  e.target.value = e.target.value.replace(/\D/g, "").slice(0, 4);
+  e.target.classList.remove("error");
+});
+$("btnReturnSend").addEventListener("click", async () => {
+  const btn = $("btnReturnSend"); const orderInput = $("return-order");
+  const order = orderInput.value.trim();
+  if (!/^\d{4}$/.test(order)) { orderInput.classList.add("error"); alert("Укажите номер заказа — ровно 4 цифры."); return; }
+  orderInput.classList.remove("error");
+  btn.disabled = true; const prevText = btn.textContent; btn.textContent = "Отправка...";
+  try {
+    const text = `↩️ <b>Курьер привез возврат</b>\n\n📦 Заказ: <code>${esc(order)}</code>`;
+    const result = await tgSend({ photo: returnPhotoBlob, text });
+    if (!result.ok) throw new Error(result.description || "Telegram error");
+    pushHistory({ ts: Date.now(), orders: order, type: "return" });
+    closeModal("return-modal");
+    $("success-title").textContent = "Возврат принят";
+    document.querySelector("#success-modal p").textContent = "Спасибо! Ожидайте, скоро наш сотрудник выйдет и примет у вас товар.";
+    $("btnSuccessPromo").style.display = "none";
+    openModal("success-modal");
+  } catch (e) { console.error(e); alert("Не удалось отправить. Проверьте интернет."); }
+  finally { btn.disabled = false; btn.textContent = prevText; }
 });
 
 function weatherKind(code, temp) {
   const isSnowCode = (code >= 71 && code <= 77) || code === 85 || code === 86;
   const isRainCode = (code >= 51 && code <= 67) || (code >= 80 && code <= 82) || code >= 95;
-
   if (isSnowCode || temp <= 0) return { icon: "❄️", anim: "snow" };
   if (isRainCode) return { icon: code >= 95 ? "⛈️" : "🌧️", anim: "rain" };
   if ((code >= 1 && code <= 3) || (code >= 45 && code <= 48)) return { icon: "☁️", anim: null };
   return { icon: "☀️", anim: null };
 }
-
 function startAnimation(type) {
   const box = $("animation-container");
   box.innerHTML = "";
@@ -1025,24 +876,12 @@ function startAnimation(type) {
     const el = document.createElement("div");
     el.style.left = Math.random() * 100 + "vw";
     el.style.animationDelay = -Math.random() * 6 + "s";
-    if (type === "rain") {
-      el.className = "drop";
-      const dur = 0.7 + Math.random() * 0.5;
-      el.style.animationDuration = dur + "s";
-      el.style.opacity = 0.25 + Math.random() * 0.35;
-    } else {
-      el.className = "flake";
-      el.textContent = "❄";
-      const fall = 6 + Math.random() * 6;
-      el.style.animationDuration = `${fall}s, ${2 + Math.random() * 2}s`;
-      el.style.fontSize = 10 + Math.random() * 12 + "px";
-      el.style.opacity = 0.45 + Math.random() * 0.45;
-    }
+    if (type === "rain") { el.className = "drop"; el.style.animationDuration = (0.7 + Math.random() * 0.5) + "s"; el.style.opacity = 0.25 + Math.random() * 0.35; }
+    else { el.className = "flake"; el.textContent = "❄"; el.style.animationDuration = `${6 + Math.random() * 6}s, ${2 + Math.random() * 2}s`; el.style.fontSize = 10 + Math.random() * 12 + "px"; el.style.opacity = 0.45 + Math.random() * 0.45; }
     frag.appendChild(el);
   }
   box.appendChild(frag);
 }
-
 async function initWeather() {
   try {
     const res = await fetch(WEATHER_URL);
@@ -1053,25 +892,443 @@ async function initWeather() {
     $("weather-temp").textContent = (temp > 0 ? "+" : "") + temp + "°C";
     $("weather-icon").textContent = kind.icon;
     startAnimation(kind.anim);
-  } catch (e) {
-    console.warn("Погода недоступна:", e);
-    $("weather-temp").textContent = "--";
+  } catch { $("weather-temp").textContent = "--"; }
+}
+
+/* ============================================================
+   ИГРА: Kezek Runner v2
+   ============================================================ */
+const game = {
+  canvas: null, ctx: null,
+  W: 0, H: 0, dpr: 1,
+  state: "idle",
+  score: 0, best: 0,
+  lives: 3, maxLives: 3,
+  speed: 2.5, maxSpeed: 4.5,
+  distance: 0, cameraX: 0,
+  player: null, buildings: [], particles: [],
+  rafId: null, lastTime: 0
+};
+
+const GRAVITY = 0.7;
+const JUMP_VY = -14;
+const DOUBLE_JUMP_VY = -12;
+const TRAMPOLINE_VY = -22;
+
+function randomRoofY() {
+  const r = Math.random();
+  if (r < 0.33) return game.H * 0.40;
+  if (r < 0.66) return game.H * 0.55;
+  return game.H * 0.70;
+}
+
+function gameResize() {
+  if (!game.canvas) return;
+  const wrap = game.canvas.parentElement;
+  const rect = wrap.getBoundingClientRect();
+  game.dpr = window.devicePixelRatio || 1;
+  game.W = rect.width; game.H = rect.height;
+  game.canvas.width = Math.round(rect.width * game.dpr);
+  game.canvas.height = Math.round(rect.height * game.dpr);
+  game.canvas.style.width = rect.width + "px";
+  game.canvas.style.height = rect.height + "px";
+  game.ctx.setTransform(game.dpr, 0, 0, game.dpr, 0, 0);
+}
+
+function makeBuilding(x) {
+  const w = 100 + Math.random() * 110;
+  const roofY = randomRoofY();
+  const b = { x, w, roofY, trampoline: null, pickup: null };
+  if (Math.random() < 0.18 && w > 100) {
+    b.trampoline = { x: x + w / 2 - 28, w: 56, used: false, bob: Math.random() * Math.PI * 2 };
+  } else if (Math.random() < 0.15) {
+    b.pickup = { x: x + w / 2 - 14, w: 28, collected: false, bob: Math.random() * Math.PI * 2 };
+  }
+  return b;
+}
+
+function gameReset() {
+  game.score = 0; game.lives = 3; game.speed = 2.5;
+  game.distance = 0; game.cameraX = 0;
+  game.particles = []; game.buildings = [];
+  game.player = { x: 120, y: 0, vy: 0, w: 26, h: 46, onGround: false, jumpsUsed: 0, rotation: 0, flipSpeed: 0, legPhase: 0 };
+  const firstRoof = game.H * 0.55;
+  game.buildings.push({ x: 0, w: 180, roofY: firstRoof, trampoline: null, pickup: null });
+  let x = 180 + 90 + Math.random() * 40;
+  while (x < game.W * 3) {
+    const b = makeBuilding(x);
+    game.buildings.push(b);
+    x = b.x + b.w + 90 + Math.random() * 50;
+  }
+  game.player.y = firstRoof - game.player.h;
+  game.player.onGround = true;
+}
+
+function gameSpawnMore() {
+  const last = game.buildings[game.buildings.length - 1];
+  let x = last.x + last.w + 90 + Math.random() * 50;
+  while (x < game.cameraX + game.W * 3) {
+    const b = makeBuilding(x);
+    game.buildings.push(b);
+    x = b.x + b.w + 90 + Math.random() * 50;
+  }
+  while (game.buildings.length && game.buildings[0].x + game.buildings[0].w < game.cameraX - 300) {
+    game.buildings.shift();
   }
 }
+
+function gameJump() {
+  const p = game.player;
+  if (!p) return;
+  if (p.jumpsUsed < 2) {
+    p.vy = p.jumpsUsed === 0 ? JUMP_VY : DOUBLE_JUMP_VY;
+    p.onGround = false;
+    p.jumpsUsed++;
+    p.flipSpeed = p.jumpsUsed === 2 ? 0.35 : 0.28;
+    for (let i = 0; i < 5; i++) {
+      game.particles.push({ x: p.x + p.w / 2, y: p.y + p.h, vx: (Math.random() - 0.5) * 3, vy: Math.random() * 2, life: 0.4, color: "#fff" });
+    }
+  }
+}
+
+function gameUpdate(dt) {
+  const p = game.player;
+  if (!p) return;
+  p.vy += GRAVITY;
+  p.y += p.vy;
+  p.x += game.speed;
+  game.cameraX = p.x - 120;
+
+  if (!p.onGround) { p.rotation += p.flipSpeed; p.legPhase = 0; }
+  else {
+    const target = Math.round(p.rotation / (Math.PI * 2)) * Math.PI * 2;
+    p.rotation += (target - p.rotation) * 0.3;
+    if (Math.abs(target - p.rotation) < 0.05) p.rotation = target;
+    p.legPhase += 0.30 * (game.speed / 3);
+    p.flipSpeed = 0;
+  }
+
+  let onBuilding = false;
+  for (const b of game.buildings) {
+    if (p.x + p.w > b.x + 4 && p.x < b.x + b.w - 4) {
+      const top = b.roofY;
+      if (p.y + p.h >= top && p.y + p.h - p.vy <= top + 22) {
+        if (b.trampoline && !b.trampoline.used) {
+          const tx = b.trampoline.x + b.trampoline.w / 2;
+          if (Math.abs(p.x + p.w / 2 - tx) < 36) {
+            p.y = top - p.h - 2; p.vy = TRAMPOLINE_VY;
+            p.onGround = false; p.jumpsUsed = 0;
+            b.trampoline.used = true;
+            for (let i = 0; i < 14; i++) {
+              game.particles.push({ x: p.x + p.w / 2, y: p.y + p.h, vx: (Math.random() - 0.5) * 6, vy: -Math.random() * 4 - 1, life: 0.7, color: "#f59e0b" });
+            }
+            onBuilding = false; break;
+          }
+        }
+        if (!p.onGround) {
+          const turns = Math.abs(Math.round(p.rotation / (Math.PI * 2)));
+          if (turns > 0) {
+            game.score += turns * 15;
+            for (let i = 0; i < 8; i++) {
+              game.particles.push({ x: p.x + p.w / 2, y: p.y + p.h, vx: (Math.random() - 0.5) * 5, vy: -Math.random() * 3, life: 0.6, color: "#fbbf24" });
+            }
+          }
+        }
+        p.y = top - p.h; p.vy = 0; p.onGround = true; p.jumpsUsed = 0;
+        onBuilding = true;
+        if (b.pickup && !b.pickup.collected) {
+          const px = b.pickup.x + b.pickup.w / 2;
+          if (Math.abs(p.x + p.w / 2 - px) < 26) {
+            b.pickup.collected = true;
+            if (game.lives < game.maxLives) {
+              game.lives++;
+              updateGameHUD();
+              for (let i = 0; i < 10; i++) {
+                game.particles.push({ x: px, y: top - 20, vx: (Math.random() - 0.5) * 4, vy: -Math.random() * 3 - 1, life: 0.8, color: "#ef4444" });
+              }
+            }
+          }
+        }
+        break;
+      }
+    }
+  }
+
+  if (!onBuilding && p.onGround) { p.onGround = false; p.jumpsUsed = 1; }
+
+  if (p.y > game.H + 120) {
+    game.lives--;
+    updateGameHUD();
+    if (game.lives <= 0) {
+      game.state = "dead";
+      const m = Math.floor(game.distance / 10);
+      if (m > game.best) { game.best = m; store.set(BEST_KEY, String(m)); updateGameHUD(); }
+      showGameMessage("Игра окончена", `Пробежал ${m} м • Рекорд: ${game.best} м`, "Заново");
+      return;
+    }
+    let respawn = null;
+    for (const b of game.buildings) { if (b.x + b.w > p.x + 60) { respawn = b; break; } }
+    if (respawn) {
+      p.x = respawn.x + 20; p.y = respawn.roofY - p.h; p.vy = 0;
+      p.onGround = true; p.jumpsUsed = 0; p.rotation = 0;
+      game.cameraX = p.x - 120;
+    } else gameReset();
+    return;
+  }
+
+  game.distance = p.x;
+  game.score = Math.floor(p.x / 10);
+  game.speed = 2.5 + Math.min(2.0, game.distance / 6000);
+
+  for (let i = game.particles.length - 1; i >= 0; i--) {
+    const pt = game.particles[i];
+    pt.x += pt.vx; pt.y += pt.vy; pt.vy += 0.2; pt.life -= dt;
+    if (pt.life <= 0) game.particles.splice(i, 1);
+  }
+  gameSpawnMore();
+  updateGameHUD();
+}
+
+function gameDraw() {
+  const ctx = game.ctx;
+  const W = game.W, H = game.H;
+  const grad = ctx.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, "#1e3a8a");
+  grad.addColorStop(0.5, "#3b82f6");
+  grad.addColorStop(1, "#93c5fd");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.fillStyle = "rgba(255,255,255,0.15)";
+  const cloudOffset = (game.cameraX * 0.15) % 400;
+  for (let i = -1; i < 4; i++) {
+    const cx = i * 400 - cloudOffset;
+    ctx.beginPath();
+    ctx.arc(cx, 80, 40, 0, Math.PI * 2);
+    ctx.arc(cx + 40, 80, 55, 0, Math.PI * 2);
+    ctx.arc(cx + 90, 80, 35, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.fillStyle = "rgba(255,240,150,0.6)";
+  ctx.beginPath();
+  ctx.arc(W - 60, 70, 45, 0, Math.PI * 2);
+  ctx.fill();
+
+  for (const b of game.buildings) {
+    const sx = b.x - game.cameraX;
+    if (sx + b.w < -50 || sx > W + 50) continue;
+    ctx.fillStyle = "#334155";
+    ctx.fillRect(sx, b.roofY, b.w, H - b.roofY);
+    ctx.fillStyle = "#1e293b";
+    ctx.fillRect(sx, b.roofY - 6, b.w, 6);
+    const cols = Math.max(1, Math.floor(b.w / 32));
+    const rows = Math.max(1, Math.floor((H - b.roofY) / 50));
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        const wx = sx + 12 + i * 32;
+        const wy = b.roofY + 20 + j * 50;
+        if (wy + 22 < H) {
+          ctx.fillStyle = ((i * 3 + j * 5) % 7 === 0) ? "#fbbf24" : "#475569";
+          ctx.fillRect(wx, wy, 16, 24);
+        }
+      }
+    }
+    ctx.strokeStyle = "#64748b"; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(sx + b.w / 2, b.roofY);
+    ctx.lineTo(sx + b.w / 2, b.roofY - 18);
+    ctx.stroke();
+    ctx.fillStyle = "#ef4444";
+    ctx.beginPath();
+    ctx.arc(sx + b.w / 2, b.roofY - 20, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    if (b.trampoline && !b.trampoline.used) {
+      b.trampoline.bob += 0.08;
+      const tx = b.trampoline.x - game.cameraX;
+      const ty = b.roofY - 10 + Math.sin(b.trampoline.bob) * 2;
+      ctx.fillStyle = "#f59e0b";
+      ctx.beginPath();
+      ctx.roundRect(tx, ty, b.trampoline.w, 10, 5);
+      ctx.fill();
+      ctx.strokeStyle = "#b45309"; ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let i = 0; i < 4; i++) {
+        const lx = tx + 6 + i * 14;
+        ctx.moveTo(lx, ty + 3);
+        ctx.lineTo(lx + 6, ty + 7);
+      }
+      ctx.stroke();
+      ctx.fillStyle = "#fff";
+      ctx.beginPath();
+      ctx.moveTo(tx + b.trampoline.w / 2, ty - 6);
+      ctx.lineTo(tx + b.trampoline.w / 2 - 6, ty + 2);
+      ctx.lineTo(tx + b.trampoline.w / 2 + 6, ty + 2);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    if (b.pickup && !b.pickup.collected) {
+      b.pickup.bob += 0.06;
+      const px = b.pickup.x - game.cameraX;
+      const py = b.roofY - 30 + Math.sin(b.pickup.bob) * 3;
+      ctx.fillStyle = "#fff";
+      ctx.beginPath();
+      ctx.arc(px + b.pickup.w / 2, py + 14, 14, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#ef4444"; ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = "#ef4444";
+      ctx.fillRect(px + b.pickup.w / 2 - 3, py + 5, 6, 18);
+      ctx.fillRect(px + b.pickup.w / 2 - 9, py + 11, 18, 6);
+    }
+  }
+
+  for (const pt of game.particles) {
+    const sx = pt.x - game.cameraX;
+    ctx.globalAlpha = Math.max(0, Math.min(1, pt.life));
+    ctx.fillStyle = pt.color;
+    ctx.beginPath();
+    ctx.arc(sx, pt.y, 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  const p = game.player;
+  if (p) drawRunner(ctx, p, p.x - game.cameraX, p.y);
+}
+
+function drawRunner(ctx, p, sx, sy) {
+  ctx.save();
+  ctx.translate(sx + p.w / 2, sy + p.h / 2);
+  ctx.rotate(p.rotation);
+  const w = p.w, h = p.h;
+
+  ctx.strokeStyle = "#1f2937"; ctx.lineWidth = 5; ctx.lineCap = "round";
+  const swing = p.onGround ? Math.sin(p.legPhase) * 8 : 4;
+  ctx.beginPath();
+  ctx.moveTo(-4, h / 2 - 6); ctx.lineTo(-4 - swing, h / 2 + 4);
+  ctx.moveTo(4, h / 2 - 6); ctx.lineTo(4 + swing, h / 2 + 4);
+  ctx.stroke();
+
+  ctx.fillStyle = "#0088cc";
+  ctx.beginPath();
+  ctx.roundRect(-w / 2 + 2, -h / 2 + 14, w - 4, h - 20, 5);
+  ctx.fill();
+
+  ctx.fillStyle = "#fbbf24";
+  ctx.beginPath();
+  ctx.roundRect(-w / 2 - 2, -h / 2 + 16, 10, 18, 3);
+  ctx.fill();
+  ctx.strokeStyle = "#f59e0b"; ctx.lineWidth = 2; ctx.stroke();
+
+  ctx.fillStyle = "#fcd34d";
+  ctx.beginPath();
+  ctx.arc(0, -h / 2 + 8, 8, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = "#0088cc";
+  ctx.beginPath();
+  ctx.arc(0, -h / 2 + 4, 8, Math.PI, 0);
+  ctx.fill();
+  ctx.fillRect(-8, -h / 2 + 4, 16, 2);
+  ctx.restore();
+}
+
+if (!CanvasRenderingContext2D.prototype.roundRect) {
+  CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+    if (w < 2 * r) r = w / 2;
+    if (h < 2 * r) r = h / 2;
+    this.beginPath();
+    this.moveTo(x + r, y);
+    this.arcTo(x + w, y, x + w, y + h, r);
+    this.arcTo(x + w, y + h, x, y + h, r);
+    this.arcTo(x, y + h, x, y, r);
+    this.arcTo(x, y, x + w, y, r);
+    this.closePath();
+    return this;
+  };
+}
+
+function updateGameHUD() {
+  const m = Math.floor(game.distance / 10);
+  $("game-score").textContent = m + " м";
+  $("game-best").textContent = "Рекорд: " + game.best + " м";
+  $("game-lives").textContent = "❤️".repeat(Math.max(0, game.lives)) + "🖤".repeat(Math.max(0, game.maxLives - game.lives));
+}
+
+function showGameMessage(big, small, btnText) {
+  const msg = $("game-message");
+  msg.querySelector(".big").textContent = big;
+  msg.querySelector(".small").textContent = small;
+  msg.querySelector(".btn-play").textContent = btnText;
+  msg.style.display = "flex";
+}
+function hideGameMessage() { $("game-message").style.display = "none"; }
+
+function gameLoop(ts) {
+  if (game.state !== "playing") return;
+  const dt = Math.min(0.05, (ts - game.lastTime) / 1000);
+  game.lastTime = ts;
+  gameUpdate(dt);
+  gameDraw();
+  if (game.state === "playing") game.rafId = requestAnimationFrame(gameLoop);
+}
+
+function startGame() {
+  game.canvas = $("game-canvas");
+  game.ctx = game.canvas.getContext("2d");
+  gameResize();
+  game.best = parseInt(store.get(BEST_KEY) || "0", 10) || 0;
+  gameReset();
+  game.state = "idle";
+  hideGameMessage();
+  updateGameHUD();
+  gameDraw();
+  showGameMessage("Kezek Runner", "Тапни, чтобы прыгнуть. Двойной тап — двойной прыжок. Лови трамплины и аптечки!", "Играть");
+}
+
+function playGame() {
+  hideGameMessage();
+  game.state = "playing";
+  game.lastTime = performance.now();
+  game.rafId = requestAnimationFrame(gameLoop);
+}
+
+$("btnGameStart").addEventListener("click", () => {
+  if (game.state === "dead") gameReset();
+  playGame();
+});
+$("game-canvas").addEventListener("pointerdown", (e) => {
+  e.preventDefault();
+  if (game.state === "playing") gameJump();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space" && game.state === "playing") { e.preventDefault(); gameJump(); }
+});
+$("btnGameClose").addEventListener("click", () => {
+  if (game.rafId) cancelAnimationFrame(game.rafId);
+  game.state = "idle";
+  closeModal("game-modal");
+});
+window.addEventListener("resize", () => {
+  if (game.canvas && game.state !== "idle") {
+    gameResize();
+    if (game.state === "playing") game.rafId = requestAnimationFrame(gameLoop);
+    else gameDraw();
+  }
+});
+
+$("btnConsentOk").addEventListener("click", () => { store.set(CONSENT_KEY, "true"); closeModal("consent-modal"); });
 
 (function init() {
   const saved = loadData();
   if (saved.name) nameInput.value = saved.name.replace(/[^\p{L}]/gu, "").slice(0, 14);
   if (saved.phone) phoneInput.value = formatPhone(saved.phone);
   if (transportBtns.some((b) => b.dataset.value === saved.transport)) setTransport(saved.transport);
-
   resetOrders();
-
   if (store.get(CONSENT_KEY) !== "true") openModal("consent-modal");
-
-  // ⚡ ПРЕДЗАГРУЗКА фото по умолчанию, чтобы к моменту отправки оно уже было готово
   getDefaultPhoto();
-
   initWeather();
   setInterval(initWeather, 30 * 60 * 1000);
 })();
