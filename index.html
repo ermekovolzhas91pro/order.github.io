@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="kz">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#c40000" />
-<title>Kezek.kz — Панель курьера</title>
+<title>Kezek.kz</title>
 <style>
   :root {
     --primary: #c40000;
     --primary-soft: rgba(196, 0, 0, 0.06);
     --tg-blue: #0088cc;
+    --green: #10b981;
     --bg: #ffffff;
     --text: #1a1a1a;
     --muted: #6b7280;
@@ -25,28 +26,53 @@
     -webkit-font-smoothing: antialiased; overflow-x: hidden;
   }
   body.modal-open { overflow: hidden; }
+
   .container {
     max-width: 480px; margin: 0 auto;
     min-height: 100vh; min-height: 100dvh;
-    padding: calc(env(safe-area-inset-top, 0px) + 12px) 16px calc(env(safe-area-inset-bottom, 0px) + 70px);
+    padding: calc(env(safe-area-inset-top, 0px) + 60px) 16px calc(env(safe-area-inset-bottom, 0px) + 220px);
   }
-  header { padding-right: 90px; margin-bottom: 14px; position: relative; padding-bottom: 10px; }
-  header::after { content: ""; position: absolute; left: 0; bottom: 0; width: 40px; height: 3px; background: var(--primary); }
-  h1 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
-  .subtitle { margin: 2px 0 0; color: var(--muted); font-size: 13px; font-weight: 500; }
+
+  .top-bar {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 10px);
+    right: 12px;
+    z-index: 1000;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .lang-switcher {
+    display: flex; gap: 3px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 3px;
+  }
+  .lang-btn {
+    border: none; background: transparent; color: var(--muted);
+    font: inherit; font-size: 12px; font-weight: 800;
+    padding: 5px 9px; border-radius: 6px; cursor: pointer;
+    transition: background .15s, color .15s; letter-spacing: 0.3px;
+  }
+  .lang-btn.active { background: var(--green); color: #fff; }
+
   #weather-widget {
-    position: fixed; top: calc(env(safe-area-inset-top, 0px) + 10px); right: 12px;
-    z-index: 1000; display: flex; align-items: center; gap: 6px;
+    display: flex; align-items: center; gap: 5px;
     padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border);
     background: rgba(255, 255, 255, 0.92); font-size: 14px; font-weight: 700;
   }
   #weather-icon { font-size: 16px; line-height: 1; }
+
+  header { margin-bottom: 14px; position: relative; padding-bottom: 10px; }
+  header::after { content: ""; position: absolute; left: 0; bottom: 0; width: 40px; height: 3px; background: var(--primary); }
+  h1 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
+  .subtitle { margin: 2px 0 0; color: var(--muted); font-size: 13px; font-weight: 500; }
+
   #animation-container { position: fixed; inset: 0; pointer-events: none; z-index: 900; overflow: hidden; }
   .drop { position: absolute; top: -30px; width: 2px; height: 16px; background: #3b82f6; border-radius: 2px; animation: fall linear infinite; }
   .flake { position: absolute; top: -30px; color: #9ca3af; animation: fall linear infinite, sway ease-in-out infinite alternate; }
   @keyframes fall { to { transform: translateY(115vh); } }
   @keyframes sway { from { margin-left: -12px; } to { margin-left: 12px; } }
   @media (prefers-reduced-motion: reduce) { #animation-container { display: none; } }
+
   .field { margin-bottom: 12px; }
   .field > label, .field > .label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; }
   .hint { font-weight: 500; color: var(--muted); font-size: 12px; }
@@ -58,6 +84,7 @@
   input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
   input.error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(220, 38, 38, .12); }
   input::placeholder { color: #b6bbc4; font-weight: 500; }
+
   .order-row { display: flex; gap: 8px; margin-bottom: 8px; }
   .order-row input { flex: 1; letter-spacing: 3px; }
   .btn-remove { width: 46px; flex: none; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; color: var(--muted); font-size: 20px; line-height: 1; cursor: pointer; }
@@ -74,17 +101,43 @@
   .btn-submit:disabled { opacity: .7; cursor: default; }
   .btn-return { width: 100%; margin-top: 10px; padding: 15px; border: none; border-radius: 8px; background: var(--tg-blue); color: #fff; font: inherit; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
   .btn-return:active { transform: scale(.98); }
-  .history-btn { position: fixed; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); right: 16px; width: 52px; height: 52px; border-radius: 50%; border: none; background: #1f2937; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 950; box-shadow: 0 4px 16px rgba(0,0,0,0.25); }
-  .history-btn svg { width: 24px; height: 24px; }
+
+  /* ===== Фиксированные круглые кнопки (FAB) ===== */
+  .fab-stack {
+    position: fixed;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+    right: 16px;
+    z-index: 950;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-end;
+  }
+  .fab {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    border: none;
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    transition: transform .12s;
+  }
+  .fab:active { transform: scale(.94); }
+  .fab svg { width: 24px; height: 24px; }
+  .fab-history { background: #1f2937; }
+  .fab-shop { background: var(--primary); }
+  .fab-games { background: var(--tg-blue); }
+
   .app-footer {
     display: flex; justify-content: space-between; align-items: center;
     gap: 10px; margin-top: 22px; padding: 14px 4px 0;
     font-size: 12px; font-weight: 700; border-top: 1px solid #eceef1;
   }
-  .footer-made { color: #c40000; text-decoration: none; }
-  .footer-made:active { opacity: .7; }
+  .footer-made { color: #c40000; text-decoration: none; flex: 1; }
+  .footer-links { display: flex; gap: 10px; flex: none; }
   .footer-more { color: #0088cc; background: none; border: none; padding: 0; font: inherit; font-weight: 700; cursor: pointer; }
-  .footer-more:active { opacity: .7; }
+
   .overlay { position: fixed; inset: 0; z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(0, 0, 0, .55); }
   .overlay.show { display: flex; }
   #camera-modal { z-index: 3000; }
@@ -106,8 +159,27 @@
   .modal.success { border-top: 4px solid var(--primary); text-align: left; }
   .modal.success h2 { text-align: left; }
   .modal.success p { text-align: left; color: #374151; }
-  .modal.cam { padding: 12px; max-width: 440px; }
-  .modal.cam video { display: block; width: 100%; max-height: 62vh; margin-bottom: 12px; border-radius: 8px; background: #000; object-fit: cover; }
+
+  .modal.cam { padding: 12px; max-width: 460px; }
+  .modal.cam video {
+    display: block; width: 100%; max-height: 55vh;
+    margin-bottom: 10px; border-radius: 8px;
+    background: #000; object-fit: contain;
+  }
+  .zoom-row {
+    display: flex; justify-content: center; gap: 6px;
+    flex-wrap: wrap; margin-bottom: 12px;
+  }
+  .zoom-btn {
+    min-width: 46px; padding: 8px 12px;
+    border: 1.5px solid var(--border); border-radius: 20px;
+    background: #fff; color: var(--text);
+    font: inherit; font-size: 13px; font-weight: 800;
+    cursor: pointer; transition: all .15s;
+  }
+  .zoom-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .zoom-btn:disabled { opacity: .4; cursor: default; }
+
   .countdown-wrap { text-align: center; padding: 20px 0 8px; }
   .countdown-number { display: inline-flex; align-items: center; justify-content: center; width: 96px; height: 96px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 44px; font-weight: 800; box-shadow: 0 8px 24px rgba(196, 0, 0, .35); animation: countPulse .8s ease-in-out infinite; }
   @keyframes countPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
@@ -115,7 +187,6 @@
   .promo-photo-fallback { display: flex; align-items: center; justify-content: center; width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 16px; border: 4px solid var(--primary); background: #f3f4f6; font-size: 64px; }
   .promo-title { font-size: 17px !important; white-space: nowrap; letter-spacing: -0.3px; margin: 0 0 14px !important; }
   .promo-text { margin: 0 0 12px !important; font-size: 14px !important; line-height: 1.55 !important; color: #4b5563 !important; text-align: center !important; padding: 0 4px; }
-  .promo-text:last-of-type { margin-bottom: 18px !important; }
   .promo-btn { display: block; width: 100%; padding: 16px; border-radius: 8px; background: var(--primary); color: #fff; font-size: 16px; font-weight: 700; text-align: center; text-decoration: none; margin-top: 8px; }
   .promo-footer { margin: 18px 0 0 !important; font-size: 12px !important; color: #c40000 !important; text-align: center !important; line-height: 1.4 !important; }
   .promo-footer a { color: #c40000 !important; font-weight: 700; text-decoration: underline; }
@@ -133,7 +204,6 @@
   .return-photo-preview { width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; display: none; }
   .return-photo-preview.show { display: block; }
 
-  /* Learn more */
   .modal.learn { text-align: left; }
   .modal.learn h2 { text-align: center; margin-bottom: 14px; }
   .learn-intro { text-align: left !important; color: #374151 !important; font-size: 14px !important; line-height: 1.55 !important; margin-bottom: 14px !important; }
@@ -151,7 +221,6 @@
   .learn-cta { text-align: center !important; font-size: 14px !important; margin: 14px 0 18px !important; padding: 12px; background: #f0f9ff; border-radius: 8px; }
   .learn-cta a { color: var(--tg-blue); font-weight: 800; text-decoration: none; }
 
-  /* Крестики-нолики */
   .ttt-status { text-align: center; font-size: 17px; font-weight: 800; margin-bottom: 14px; color: var(--text); }
   .ttt-status.win { color: #10b981; }
   .ttt-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 300px; margin: 0 auto; aspect-ratio: 1 / 1; }
@@ -173,288 +242,446 @@
   .game-message .big { font-size: 28px; font-weight: 900; margin-bottom: 8px; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
   .game-message .small { font-size: 15px; opacity: .85; max-width: 80%; }
   .game-message .btn-play { margin-top: 20px; pointer-events: auto; padding: 14px 32px; border: none; border-radius: 10px; background: var(--primary); color: #fff; font: inherit; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 24px rgba(196,0,0,0.4); }
+
+  .btn-games-success {
+    width: 100%; margin-top: 10px; padding: 14px;
+    border: none; border-radius: 8px;
+    background: #1f2937; color: #fff;
+    font: inherit; font-size: 15px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    cursor: pointer;
+  }
+  .btn-games-success:active { transform: scale(.98); }
+  .btn-games-success svg { width: 20px; height: 20px; }
+
+  .modal.shop { max-width: 520px; padding: 20px 18px 18px; }
+  .shop-hero {
+    display: block; width: 100%; max-height: 220px;
+    object-fit: cover; border-radius: 8px; margin-bottom: 14px;
+    background: #f3f4f6;
+  }
+  .shop-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .shop-col h3 {
+    font-size: 12px; font-weight: 800; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 8px; text-align: center;
+  }
+  .shop-price {
+    display: block; width: 100%; padding: 10px 8px; margin-bottom: 6px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    background: #fff; color: var(--text); font: inherit;
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    text-align: center; transition: all .15s;
+  }
+  .shop-price.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .shop-h {
+    font-size: 12px; font-weight: 800; text-transform: uppercase;
+    color: var(--muted); margin: 14px 0 8px; text-align: center;
+  }
+  .shop-chips {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;
+    justify-content: center;
+  }
+  .shop-chip {
+    padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 20px;
+    background: #fff; color: var(--text); font: inherit;
+    font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all .15s;
+  }
+  .shop-chip.active { background: var(--tg-blue); border-color: var(--tg-blue); color: #fff; }
 </style>
 </head>
 <body>
 
-<div id="weather-widget" aria-label="Погода">
-  <span id="weather-icon">🌡️</span>
-  <span id="weather-temp">--</span>
+<div class="top-bar">
+  <div class="lang-switcher" id="lang-switcher-top">
+    <button type="button" class="lang-btn" data-lang="kz">KZ</button>
+    <button type="button" class="lang-btn" data-lang="ru">RU</button>
+    <button type="button" class="lang-btn" data-lang="en">EN</button>
+  </div>
+  <div id="weather-widget">
+    <span id="weather-icon">🌡️</span>
+    <span id="weather-temp">--</span>
+  </div>
 </div>
 
 <div id="animation-container" aria-hidden="true"></div>
 
-<button type="button" class="history-btn" id="btnHistory" aria-label="История заказов">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
-    <polyline points="3 3 3 8 8 8"/>
-    <polyline points="12 7 12 12 15 15"/>
-  </svg>
-</button>
+<!-- ✅ Фиксированные круглые кнопки: История, Магазин, Игры -->
+<div class="fab-stack">
+  <button type="button" class="fab fab-games" id="btnGamesFab" aria-label="Games">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/>
+      <line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/>
+      <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/>
+    </svg>
+  </button>
+  <button type="button" class="fab fab-shop" id="btnShopFab" aria-label="Shop">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <path d="M16 10a4 4 0 0 1-8 0"/>
+    </svg>
+  </button>
+  <button type="button" class="fab fab-history" id="btnHistory" aria-label="History">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
+      <polyline points="3 3 3 8 8 8"/>
+      <polyline points="12 7 12 12 15 15"/>
+    </svg>
+  </button>
+</div>
 
 <main class="container">
   <header>
     <h1>Kezek.kz</h1>
-    <p class="subtitle">Панель курьера</p>
+    <p class="subtitle" data-i18n="subtitle">Курьер панелі</p>
   </header>
 
   <div class="field">
-    <label for="name">Ваше имя</label>
-    <input type="text" id="name" placeholder="Например, Алмас" maxlength="14" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" />
+    <label for="name" data-i18n="name_label">Атыңыз</label>
+    <input type="text" id="name" data-i18n-ph="name_ph" placeholder="Мысалы, Алмас" maxlength="14" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" />
   </div>
 
   <div class="field">
-    <label for="phone">Номер телефона</label>
+    <label for="phone" data-i18n="phone_label">Телефон нөмірі</label>
     <input type="tel" id="phone" placeholder="+7 700 123 45 67" inputmode="numeric" autocomplete="tel" maxlength="16" enterkeyhint="next" />
   </div>
 
   <div class="field">
-    <span class="label">Номер заказа <span class="hint">· 4 цифры</span></span>
+    <span class="label"><span data-i18n="order_label">Тапсырыс нөмірі</span> <span class="hint" data-i18n="order_hint">· 4 сан</span></span>
     <div id="orders-container"></div>
-    <button type="button" class="btn-add-order" id="btnAddOrder">+ Добавить ещё один заказ</button>
+    <button type="button" class="btn-add-order" id="btnAddOrder" data-i18n="add_order">+ Тағы бір тапсырыс қосу</button>
   </div>
 
   <div class="field">
-    <span class="label">Вид транспорта</span>
-    <div class="transport-grid" id="transport-container" role="group" aria-label="Вид транспорта">
-      <button type="button" class="transport-btn" data-value="Автомобиль">Автомобиль</button>
-      <button type="button" class="transport-btn" data-value="Скутер">Скутер</button>
+    <span class="label" data-i18n="transport_label">Көлік түрі</span>
+    <div class="transport-grid" id="transport-container" role="group">
+      <button type="button" class="transport-btn" data-value="Автомобиль" data-i18n="transport_car">Көлік</button>
+      <button type="button" class="transport-btn" data-value="Скутер" data-i18n="transport_scooter">Скутер</button>
     </div>
-    <button type="button" class="btn-more" id="btnMoreTransport">+ Ещё варианты</button>
-    <div class="transport-grid extra hidden" id="transport-extra" role="group" aria-label="Другие виды транспорта">
-      <button type="button" class="transport-btn" data-value="Велосипед">Велосипед</button>
-      <button type="button" class="transport-btn" data-value="Самокат">Самокат</button>
-      <button type="button" class="transport-btn" data-value="Пеший">Пеший</button>
+    <button type="button" class="btn-more" id="btnMoreTransport" data-i18n="more_options">+ Тағы нұсқалар</button>
+    <div class="transport-grid extra hidden" id="transport-extra" role="group">
+      <button type="button" class="transport-btn" data-value="Велосипед" data-i18n="transport_bike">Велосипед</button>
+      <button type="button" class="transport-btn" data-value="Самокат" data-i18n="transport_kick">Самокат</button>
+      <button type="button" class="transport-btn" data-value="Пеший" data-i18n="transport_walk">Жаяу</button>
     </div>
   </div>
 
   <input type="file" id="photo" accept="image/*" capture="environment" hidden />
   <div style="display:flex; justify-content:center; margin: 0 0 12px;">
-    <button type="button" class="photo-add" id="btnPhotoOpen" aria-label="Добавить фото транспорта"></button>
+    <button type="button" class="photo-add" id="btnPhotoOpen" aria-label="Photo"></button>
   </div>
 
-  <button type="button" class="btn-submit" id="btnSubmit">Отправить</button>
+  <button type="button" class="btn-submit" id="btnSubmit" data-i18n="send">Жіберу</button>
   <button type="button" class="btn-return" id="btnReturn">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="9 14 4 9 9 4"/>
       <path d="M4 9h11a5 5 0 0 1 0 10h-3"/>
     </svg>
-    Возврат
+    <span data-i18n="return_btn">Қайтару</span>
   </button>
 
   <div class="app-footer">
-    <a href="https://t.me/kezek_by" target="_blank" rel="noopener" class="footer-made">Сделано с помощью компании @kezek.by</a>
-    <button type="button" class="footer-more" id="btnLearnMore">Узнать больше</button>
+    <a href="https://t.me/kezek_by" target="_blank" rel="noopener" class="footer-made" data-i18n="made_with">@kezek.by компаниясының көмегімен жасалды</a>
+    <div class="footer-links">
+      <button type="button" class="footer-more" id="btnLearnMore" data-i18n="learn_more">Толығырақ</button>
+    </div>
   </div>
 </main>
 
 <!-- Камера -->
-<div id="camera-modal" class="overlay" role="dialog" aria-modal="true" aria-label="Камера">
+<div id="camera-modal" class="overlay" role="dialog" aria-modal="true">
   <div class="modal cam">
     <video id="cam-video" playsinline muted autoplay></video>
+    <div class="zoom-row" id="zoom-row"></div>
     <div class="modal-actions">
-      <button type="button" class="btn-cancel" id="btnCamCancel">Отмена</button>
-      <button type="button" class="btn-confirm" id="btnShot">Снять</button>
+      <button type="button" class="btn-cancel" id="btnCamCancel" data-i18n="cancel">Болдырмау</button>
+      <button type="button" class="btn-confirm" id="btnShot" data-i18n="take">Түсіру</button>
     </div>
   </div>
 </div>
 
-<!-- Фото транспорта -->
-<div id="photo-modal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="photo-title">
+<div id="photo-modal" class="overlay" role="dialog" aria-modal="true">
   <div class="modal">
-    <h2 id="photo-title">Фото транспорта</h2>
-    <img id="photo-img" class="return-photo-preview" alt="Фото транспорта" hidden />
-    <p>Так наши сотрудники сразу найдут вас или направятся в вашу сторону. Фото добавлять необязательно.</p>
+    <h2 data-i18n="photo_title">Көлік суреті</h2>
+    <img id="photo-img" class="return-photo-preview" alt="" hidden />
+    <p data-i18n="photo_text">Осылайша біздің қызметкерлер сізді бірден табады немесе сізге қарай жүреді. Сурет қосу міндетті емес.</p>
     <div class="modal-actions">
-      <button type="button" class="btn-cancel" id="btnPhotoNo">Не нужно</button>
-      <button type="button" class="btn-confirm" id="btnPhotoTake">Сделать фото</button>
+      <button type="button" class="btn-cancel" id="btnPhotoNo" data-i18n="not_needed">Қажет емес</button>
+      <button type="button" class="btn-confirm" id="btnPhotoTake" data-i18n="take_photo">Суретке түсіру</button>
     </div>
   </div>
 </div>
 
-<!-- Согласие -->
-<div id="consent-modal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="consent-title">
+<div id="consent-modal" class="overlay" role="dialog" aria-modal="true">
   <div class="modal">
-    <h2 id="consent-title">Kezek.kz</h2>
-    <p>Для работы панели курьера нам необходимо сохранить ваше имя, номер телефона и вид транспорта на этом устройстве. Это нужно, чтобы вам не пришлось вводить данные повторно. Продолжая, вы соглашаетесь с этим.</p>
+    <div class="lang-switcher" id="lang-switcher-consent" style="justify-content: center; margin: 0 auto 16px; width: max-content;">
+      <button type="button" class="lang-btn" data-lang="kz">KZ</button>
+      <button type="button" class="lang-btn" data-lang="ru">RU</button>
+      <button type="button" class="lang-btn" data-lang="en">EN</button>
+    </div>
+    <h2>Kezek.kz</h2>
+    <p data-i18n="consent_text">Курьер панелінің жұмысы үшін біз осы құрылғыда сіздің атыңызды, телефон нөміріңізді және көлік түрін сақтауымыз керек. Бұл деректерді қайта енгізбеу үшін қажет. Жалғастыру арқылы сіз осыған келісесіз.</p>
     <div class="modal-actions">
-      <button type="button" class="btn-confirm" id="btnConsentOk">Согласен</button>
+      <button type="button" class="btn-confirm" id="btnConsentOk" data-i18n="agree">Келісемін</button>
     </div>
   </div>
 </div>
 
-<!-- Подтверждение -->
-<div id="confirm-modal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+<div id="confirm-modal" class="overlay" role="dialog" aria-modal="true">
   <div class="modal">
-    <h2 id="confirm-title">Проверьте данные</h2>
+    <h2 data-i18n="confirm_title">Деректерді тексеріңіз</h2>
     <div class="summary" id="summary-content"></div>
     <div class="modal-actions">
-      <button type="button" class="btn-cancel" id="btnEdit">Изменить</button>
-      <button type="button" class="btn-confirm" id="btnConfirmSend">Всё верно</button>
+      <button type="button" class="btn-cancel" id="btnEdit" data-i18n="edit">Өзгерту</button>
+      <button type="button" class="btn-confirm" id="btnConfirmSend" data-i18n="all_correct">Барлығы дұрыс</button>
     </div>
   </div>
 </div>
 
-<!-- Успех -->
-<div id="success-modal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="success-title">
+<div id="success-modal" class="overlay" role="dialog" aria-modal="true">
   <div class="modal success">
-    <h2 id="success-title">Заказ принят</h2>
-    <p>Наши сотрудники получили ваши данные о заказах и скоро в порядке очереди вынесут вам. Пожалуйста, приоткройте окно чуть-чуть, вас позовут по имени, можете ожидать у себя в транспорте.</p>
+    <h2 id="success-title" data-i18n="success_title_order">Тапсырыс қабылданды</h2>
+    <p id="success-text" data-i18n="success_text_order">Біздің қызметкерлер тапсырыстарыңыз туралы деректерді алды және жақын арада кезекпен шығарады. Терезені сәл ашыңыз, сізді атыңызбен шақырады, көлігіңізде күте аласыз.</p>
     <div class="modal-actions">
-      <button type="button" class="btn-cancel" id="btnSuccessOk">Понятно</button>
-      <button type="button" class="btn-confirm" id="btnSuccessPromo">Посмотреть</button>
+      <button type="button" class="btn-cancel" id="btnSuccessOk" data-i18n="got_it">Түсінікті</button>
+      <button type="button" class="btn-confirm" id="btnSuccessPromo" data-i18n="view">Қарау</button>
     </div>
+    <button type="button" class="btn-games-success" id="btnSuccessGames">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/>
+        <line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/>
+        <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/>
+      </svg>
+      <span data-i18n="games_btn">Игры</span>
+    </button>
   </div>
 </div>
 
-<!-- Реклама -->
-<div id="promo-modal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="promo-title">
+<div id="promo-modal" class="overlay" role="dialog" aria-modal="true">
   <div class="modal">
     <div id="promo-countdown" class="countdown-wrap">
       <div class="countdown-number" id="countdown-number">3</div>
-      <p style="margin-top:16px;margin-bottom:0;">Загрузка...</p>
+      <p style="margin-top:16px;margin-bottom:0;">...</p>
     </div>
     <div id="promo-content" hidden>
-      <img src="courier-promo.jpg" class="promo-photo" alt="Almaty Birgemiz" id="promo-img">
+      <img src="courier-promo.jpg" class="promo-photo" alt="" id="promo-img">
       <div id="promo-img-fallback" class="promo-photo-fallback hidden">🏍️</div>
-      <h2 id="promo-title" class="promo-title">Курьерлер қауымдастығы</h2>
-      <p class="promo-text">Барлық курьер қызметкерлерін бір жерге жинаймыз, ұйымшыл және кең ауқымды достықты қолдайық.</p>
-      <p class="promo-text">Собираем всех курьеров в одном месте, поддерживаем сплочённость и широкое дружелюбие.</p>
-      <a href="https://t.me/almatybirgemiz" target="_blank" rel="noopener" class="promo-btn">Вступить в группу</a>
-      <p class="promo-footer">Ваша реклама могла быть здесь: <a href="https://t.me/kezek_by" target="_blank" rel="noopener">@kezek_by</a></p>
+      <h2 class="promo-title" data-i18n="promo_title">Курьерлер қауымдастығы</h2>
+      <p class="promo-text" data-i18n="promo_text_kz">Барлық курьер қызметкерлерін бір жерге жинаймыз, ұйымшыл және кең ауқымды достықты қолдайық.</p>
+      <p class="promo-text" data-i18n="promo_text_ru">Собираем всех курьеров в одном месте, поддерживаем сплочённость и широкое дружелюбие.</p>
+      <a href="https://t.me/almatybirgemiz" target="_blank" rel="noopener" class="promo-btn" data-i18n="promo_join">Топқа қосылу</a>
+      <p class="promo-footer"><span data-i18n="promo_ad_prefix">Сіздің жарнамаңыз осында болуы мүмкін: </span><a href="https://t.me/kezek_by" target="_blank" rel="noopener">@kezek_by</a></p>
       <div class="modal-actions" style="margin-top:16px; gap:8px; flex-wrap:wrap">
-        <button type="button" class="btn-cancel" id="btnPromoClose">Закрыть</button>
-        <button type="button" class="btn-confirm" id="btnPlayGame">Играем?</button>
-        <button type="button" class="btn-blue" id="btnPlayTicTac" style="flex-basis:100%">Игра на двоих</button>
+        <button type="button" class="btn-cancel" id="btnPromoClose" data-i18n="close">Жабу</button>
+        <button type="button" class="btn-confirm" id="btnPlayGame" data-i18n="play">Ойнаймыз ба?</button>
+        <button type="button" class="btn-blue" id="btnPlayTicTac" style="flex-basis:100%" data-i18n="two_players">Екі ойыншы</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- История -->
-<div id="history-modal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="history-title">
+<div id="games-modal" class="overlay" role="dialog" aria-modal="true">
   <div class="modal">
-    <h2 id="history-title">История отправок</h2>
-    <ul class="history-list" id="history-list"></ul>
-    <div class="modal-actions">
-      <button type="button" class="btn-cancel" id="btnHistoryClose" style="flex:1">Закрыть</button>
+    <h2 data-i18n="games_title">Игры</h2>
+    <p data-i18n="games_choose">Выберите игру:</p>
+    <div class="modal-actions" style="flex-direction:column; gap:10px">
+      <button type="button" class="btn-confirm" id="btnGamesRunner" data-i18n="games_runner">Kezek Runner</button>
+      <button type="button" class="btn-blue" id="btnGamesTtt" data-i18n="games_ttt">Крестики-нолики</button>
+      <button type="button" class="btn-cancel" id="btnGamesClose" data-i18n="cancel">Отмена</button>
     </div>
   </div>
 </div>
 
-<!-- Возврат -->
-<div id="return-modal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="return-title">
+<div id="history-modal" class="overlay" role="dialog" aria-modal="true">
   <div class="modal">
-    <h2 id="return-title">Возврат заказа</h2>
-    <p>Сфотографируйте товар и укажите номер заказа. Наш сотрудник выйдет и примет возврат.</p>
+    <h2 data-i18n="history_title">Жіберу тарихы</h2>
+    <ul class="history-list" id="history-list"></ul>
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" id="btnHistoryClose" style="flex:1" data-i18n="close">Жабу</button>
+    </div>
+  </div>
+</div>
+
+<div id="return-modal" class="overlay" role="dialog" aria-modal="true">
+  <div class="modal">
+    <h2 data-i18n="return_title">Тапсырысты қайтару</h2>
+    <p data-i18n="return_text">Тауарды суретке түсіріп, тапсырыс нөмірін көрсетіңіз. Біздің қызметкер шығып, қайтаруды қабылдайды.</p>
     <div class="return-photo-area">
       <button type="button" class="return-photo-btn" id="btnReturnPhoto">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
           <circle cx="12" cy="13" r="3.5"/>
         </svg>
-        <span id="return-photo-text">Сделать фото товара</span>
+        <span id="return-photo-text" data-i18n="return_photo_btn">Тауарды суретке түсіру</span>
       </button>
-      <img id="return-photo-preview" class="return-photo-preview" alt="Фото товара">
+      <img id="return-photo-preview" class="return-photo-preview" alt="">
     </div>
     <div class="field">
-      <label for="return-order">Номер заказа</label>
+      <label for="return-order" data-i18n="order_label">Тапсырыс нөмірі</label>
       <input type="tel" id="return-order" maxlength="4" placeholder="1234" inputmode="numeric" />
     </div>
     <div class="modal-actions">
-      <button type="button" class="btn-cancel" id="btnReturnCancel">Отмена</button>
-      <button type="button" class="btn-blue" id="btnReturnSend">Отправить</button>
+      <button type="button" class="btn-cancel" id="btnReturnCancel" data-i18n="cancel">Болдырмау</button>
+      <button type="button" class="btn-blue" id="btnReturnSend" data-i18n="send">Жіберу</button>
     </div>
   </div>
 </div>
 
-<!-- Learn more -->
-<div id="learn-modal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="learn-title">
-  <div class="modal learn">
-    <h2 id="learn-title">Kezek.kz для вашего бизнеса</h2>
-    <p class="learn-intro">Если в вашей организации большой поток заказов, много курьеров и вам нужен подробный отчёт по курьерским службам — мы готовы помочь. Уберём лишнюю рутину и сэкономим вам много времени и сил.</p>
-
-    <h3>Плюсы</h3>
-    <ul class="learn-list">
-      <li>Никаких лишних звонков и писем.</li>
-      <li>Удобно работать даже из дома.</li>
-      <li>Вы заранее знаете, когда курьер будет у вас и в какой очереди.</li>
-      <li>Заказы больше не теряются, как раньше.</li>
-      <li>Поддержка 12 часов в день, 24/7 — в тарифе ProPlus.</li>
-      <li>Улучшения и адаптация под ваш бизнес.</li>
-      <li>Рост узнаваемости и доверия к вашему бренду.</li>
-      <li>Реклама ваших товаров в группах с общей аудиторией более 70 000 подписчиков — в 9 каналах.</li>
-    </ul>
-
-    <h3>Тарифные планы</h3>
-    <div class="price-list">
-      <div class="price-item">
-        <div class="price-name">Пробный период</div>
-        <div class="price-value">7 дней бесплатно</div>
+<div id="shop-modal" class="overlay" role="dialog" aria-modal="true">
+  <div class="modal shop">
+    <h2 data-i18n="shop_title">Магазин</h2>
+    <img src="shop-hero.jpg" class="shop-hero" alt="" id="shop-hero">
+    <div class="shop-columns">
+      <div class="shop-col">
+        <h3 data-i18n="shop_box">В коробке</h3>
+        <button type="button" class="shop-price" data-type="box" data-qty="12" data-price="3990">12 шт — 3 990 ₸</button>
+        <button type="button" class="shop-price" data-type="box" data-qty="16" data-price="5390">16 шт — 5 390 ₸</button>
+        <button type="button" class="shop-price" data-type="box" data-qty="20" data-price="6590">20 шт — 6 590 ₸</button>
+        <button type="button" class="shop-price" data-type="box" data-qty="25" data-price="7990">25 шт — 7 990 ₸</button>
+        <button type="button" class="shop-price" data-type="box" data-qty="30" data-price="9390">30 шт — 9 390 ₸</button>
+        <button type="button" class="shop-price" data-type="box" data-qty="35" data-price="9990">35 шт — 9 990 ₸</button>
       </div>
-      <div class="price-item">
-        <div class="price-name">Экстра</div>
-        <div class="price-value">10 990 ₸ <span class="price-period">/ месяц</span></div>
-      </div>
-      <div class="price-item highlight">
-        <div class="price-name">ProPlus <span class="badge">−68%</span></div>
-        <div class="price-value">42 490 ₸ <span class="price-period">/ год</span></div>
-        <div class="price-note">Экономия 89 390 ₸ в год по сравнению с месячным тарифом</div>
+      <div class="shop-col">
+        <h3 data-i18n="shop_bouquet">В букете</h3>
+        <button type="button" class="shop-price" data-type="bouquet" data-qty="19" data-price="8990">19 шт — 8 990 ₸</button>
+        <button type="button" class="shop-price" data-type="bouquet" data-qty="25" data-price="11990">25 шт — 11 990 ₸</button>
+        <button type="button" class="shop-price" data-type="bouquet" data-qty="31" data-price="14990">31 шт — 14 990 ₸</button>
+        <button type="button" class="shop-price" data-type="bouquet" data-qty="39" data-price="17990">39 шт — 17 990 ₸</button>
+        <button type="button" class="shop-price" data-type="bouquet" data-qty="45" data-price="19990">45 шт — 19 990 ₸</button>
       </div>
     </div>
 
-    <p class="learn-cta">Интересно? Напишите нам — <a href="https://t.me/kezek_by" target="_blank" rel="noopener">@kezek_by</a></p>
+    <h3 class="shop-h" data-i18n="shop_design">Дизайн и предпочтения</h3>
+    <div class="shop-chips" id="shop-chips">
+      <button type="button" class="shop-chip" data-val="Белый" data-i18n="chip_white">Белый</button>
+      <button type="button" class="shop-chip" data-val="Розовый" data-i18n="chip_pink">Розовый</button>
+      <button type="button" class="shop-chip" data-val="Молочный" data-i18n="chip_milk">Молочный</button>
+      <button type="button" class="shop-chip" data-val="Микс" data-i18n="chip_mix">Микс</button>
+      <button type="button" class="shop-chip" data-val="На ваше усмотрение" data-i18n="chip_choice">На ваше усмотрение</button>
+      <button type="button" class="shop-chip" data-val="Без ореха" data-i18n="chip_no_nuts">Без ореха</button>
+      <button type="button" class="shop-chip" data-val="Без посыпок" data-i18n="chip_no_sprinkle">Без посыпок</button>
+      <button type="button" class="shop-chip" data-val="Любой дизайн" data-i18n="chip_any">Любой дизайн</button>
+    </div>
+
+    <div class="field">
+      <label for="shop-name" data-i18n="shop_your_name">Ваше имя</label>
+      <input type="text" id="shop-name" maxlength="20" placeholder="Ваше имя" />
+    </div>
+    <div class="field">
+      <label for="shop-phone" data-i18n="shop_whatsapp">WhatsApp номер</label>
+      <input type="tel" id="shop-phone" placeholder="+7 700 123 45 67" inputmode="numeric" maxlength="16" />
+    </div>
 
     <div class="modal-actions">
-      <button type="button" class="btn-cancel" id="btnLearnClose" style="flex:1">Закрыть</button>
+      <button type="button" class="btn-cancel" id="btnShopCancel" data-i18n="cancel">Отмена</button>
+      <button type="button" class="btn-confirm" id="btnShopOrder" data-i18n="shop_order_btn">Заказать</button>
     </div>
   </div>
 </div>
 
-<!-- Крестики-нолики -->
+<div id="shop-confirm-modal" class="overlay" role="dialog" aria-modal="true">
+  <div class="modal">
+    <h2 data-i18n="confirm_title">Проверьте данные</h2>
+    <div class="summary" id="shop-summary"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" id="btnShopBack">Назад</button>
+      <button type="button" class="btn-confirm" id="btnShopSend" data-i18n="send">Отправить</button>
+    </div>
+  </div>
+</div>
+
+<div id="shop-success-modal" class="overlay" role="dialog" aria-modal="true">
+  <div class="modal success">
+    <h2 data-i18n="shop_success_title">Заказ принят</h2>
+    <p data-i18n="shop_success_text">Скоро с вами свяжется наш сотрудник. Если вы курьер — действует скидка 5%!</p>
+    <div class="modal-actions">
+      <button type="button" class="btn-confirm" id="btnShopSuccessOk" style="flex:1" data-i18n="got_it">Понятно</button>
+    </div>
+  </div>
+</div>
+
+<div id="learn-modal" class="overlay" role="dialog" aria-modal="true">
+  <div class="modal learn">
+    <h2 data-i18n="learn_title">Kezek.kz сіздің бизнесіңіз үшін</h2>
+    <p class="learn-intro" data-i18n="learn_intro">Егер сіздің ұйымыңызда тапсырыстар ағыны көп болса, курьерлер көп болса және курьерлік қызметтер бойынша егжей-тегжейлі есеп қажет болса — біз көмектесуге дайынбыз. Артық жұмысты алып тастап, уақытыңыз бен күшіңізді үнемдейміз.</p>
+
+    <h3 data-i18n="learn_pros">Артықшылықтар</h3>
+    <ul class="learn-list">
+      <li data-i18n="learn_pro_1">Артық қоңыраулар мен хаттар жоқ.</li>
+      <li data-i18n="learn_pro_2">Үйден жұмыс істеуге де ыңғайлы.</li>
+      <li data-i18n="learn_pro_3">Курьер қашан келетінін және кезекте қай жерде екенін алдын ала білесіз.</li>
+      <li data-i18n="learn_pro_4">Тапсырыстар бұрынғыдай жоғалмайды.</li>
+      <li data-i18n="learn_pro_5">Күнде 12 сағат қолдау, ProPlus тарифінде 24/7.</li>
+      <li data-i18n="learn_pro_6">Сіздің бизнесіңізге бейімдеу және жақсарту.</li>
+      <li data-i18n="learn_pro_7">Брендіңіздің танымалдылығы мен сенімінің өсуі.</li>
+      <li data-i18n="learn_pro_8">70 000-нан астам жазылушысы бар 9 арнадағы топтарда тауарларыңыздың жарнамасы.</li>
+    </ul>
+
+    <h3 data-i18n="learn_pricing">Тарифтік жоспарлар</h3>
+    <div class="price-list">
+      <div class="price-item">
+        <div class="price-name" data-i18n="learn_trial">Сынақ кезеңі</div>
+        <div class="price-value" data-i18n="learn_trial_value">7 күн тегін</div>
+      </div>
+      <div class="price-item">
+        <div class="price-name" data-i18n="learn_extra">Экстра</div>
+        <div class="price-value">10 990 ₸ <span class="price-period" data-i18n="learn_per_month">/ ай</span></div>
+      </div>
+      <div class="price-item highlight">
+        <div class="price-name"><span data-i18n="learn_proplus">ProPlus</span> <span class="badge">−68%</span></div>
+        <div class="price-value">42 490 ₸ <span class="price-period" data-i18n="learn_per_year">/ жыл</span></div>
+        <div class="price-note" data-i18n="learn_saving">Айлық тарифпен салыстырғанда жылына 89 390 ₸ үнемдеу</div>
+      </div>
+    </div>
+
+    <p class="learn-cta"><span data-i18n="learn_cta">Қызықтырды ма? Бізге жазыңыз —</span> <a href="https://t.me/kezek_by" target="_blank" rel="noopener">@kezek_by</a></p>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" id="btnLearnClose" style="flex:1" data-i18n="close">Жабу</button>
+    </div>
+  </div>
+</div>
+
 <div id="ttt-modal" class="overlay" role="dialog" aria-modal="true">
   <div class="modal">
-    <h2 id="ttt-title">Крестики-нолики</h2>
-
+    <h2 data-i18n="ttt_title">Х-О ойыны</h2>
     <div id="ttt-menu">
-      <p>Выберите режим игры:</p>
+      <p data-i18n="ttt_choose">Ойын режимін таңдаңыз:</p>
       <div class="modal-actions" style="flex-direction:column; gap:10px">
-        <button type="button" class="btn-confirm" id="btnTttTwo">Играть с другом</button>
-        <button type="button" class="btn-blue" id="btnTttAI">Играть с компьютером</button>
-        <button type="button" class="btn-cancel" id="btnTttCancel">Отмена</button>
+        <button type="button" class="btn-confirm" id="btnTttTwo" data-i18n="ttt_friend">Досыңызбен ойнау</button>
+        <button type="button" class="btn-blue" id="btnTttAI" data-i18n="ttt_ai">Компьютермен ойнау</button>
+        <button type="button" class="btn-cancel" id="btnTttCancel" data-i18n="cancel">Болдырмау</button>
       </div>
     </div>
-
     <div id="ttt-game" hidden>
-      <div class="ttt-status" id="ttt-status">Ход: X</div>
+      <div class="ttt-status" id="ttt-status">Жүріс: X</div>
       <div class="ttt-board" id="ttt-board"></div>
       <div class="modal-actions" style="margin-top:18px">
-        <button type="button" class="btn-cancel" id="btnTttBack">В меню</button>
-        <button type="button" class="btn-confirm" id="btnTttReset">Новая</button>
+        <button type="button" class="btn-cancel" id="btnTttBack" data-i18n="ttt_to_menu">Мәзірге</button>
+        <button type="button" class="btn-confirm" id="btnTttReset" data-i18n="ttt_new">Жаңа</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Игра-раннер -->
 <div id="game-modal" class="overlay" role="dialog" aria-modal="true">
   <div class="modal game">
     <div class="game-wrap">
       <canvas id="game-canvas"></canvas>
       <div class="game-topbar">
-        <button type="button" id="btnGameClose">← Назад</button>
+        <button type="button" id="btnGameClose" data-i18n="game_back">← Артқа</button>
         <span>Kezek Runner</span>
         <span style="width:70px"></span>
       </div>
       <div class="game-hud">
-        <span id="game-score">0 м</span>
-        <span class="best" id="game-best">Рекорд: 0 м</span>
+        <span id="game-score">0</span>
+        <span class="best" id="game-best">0</span>
         <span class="lives" id="game-lives">❤️❤️❤️</span>
       </div>
       <div class="game-message" id="game-message">
         <div class="big">Kezek Runner</div>
-        <div class="small">Тапни, чтобы прыгнуть. Двойной тап — двойной прыжок. Лови трамплины и горки!</div>
-        <button type="button" class="btn-play" id="btnGameStart">Играть</button>
+        <div class="small" data-i18n="game_intro">Секіру үшін басыңыз. Қос басу — қос секіру. Трамплиндер мен төбешіктерді ұстаңыз!</div>
+        <button type="button" class="btn-play" id="btnGameStart" data-i18n="game_play">Ойнау</button>
       </div>
     </div>
   </div>
@@ -465,24 +692,287 @@
 <script>
 "use strict";
 
-/* ===================== НАСТРОЙКИ ===================== */
 const BOT_TOKEN   = "8264155388:AAH2q9-YlD5AJmm6GorKvivG7cGl2N4N7Wg";
 const CHAT_ID     = "-1002973925647";
 const CONSENT_KEY = "kezek_courier_consent";
+const LANG_KEY    = "kezek_courier_lang";
 const DATA_KEY    = "kezek_courier_data";
 const HISTORY_KEY = "kezek_courier_history";
 const LAST_SENT_KEY = "kezek_last_sent_time";
-const BEST_KEY = "kezek_runner_best";
+const BEST_KEY    = "kezek_runner_best";
 const MAX_ORDERS  = 5;
 const COOLDOWN_MS = 12 * 60 * 1000;
 const WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=43.2389&longitude=76.8897&current_weather=true";
 
-/* ===================== ХРАНИЛИЩЕ ===================== */
+const I18N = {
+  kz: {
+    subtitle: "Курьер панелі", name_label: "Атыңыз", name_ph: "Мысалы, Алмас",
+    phone_label: "Телефон нөмірі", order_label: "Тапсырыс нөмірі", order_hint: "· 4 сан",
+    add_order: "+ Тағы бір тапсырыс қосу", transport_label: "Көлік түрі",
+    transport_car: "Көлік", transport_scooter: "Скутер", more_options: "+ Тағы нұсқалар",
+    hide_options: "− Жасыру", transport_bike: "Велосипед", transport_kick: "Самокат", transport_walk: "Жаяу",
+    send: "Жіберу", return_btn: "Қайтару",
+    made_with: "@kezek.by компаниясының көмегімен жасалды", learn_more: "Толығырақ",
+    shop_nav: "Магазин",
+    consent_text: "Курьер панелінің жұмысы үшін біз осы құрылғыда сіздің атыңызды, телефон нөміріңізді және көлік түрін сақтауымыз керек. Бұл деректерді қайта енгізбеу үшін қажет. Жалғастыру арқылы сіз осыған келісесіз.",
+    agree: "Келісемін", confirm_title: "Деректерді тексеріңіз",
+    sum_name: "Аты", sum_phone: "Телефон", sum_orders: "Тапсырыстар", sum_transport: "Көлік",
+    edit: "Өзгерту", all_correct: "Барлығы дұрыс",
+    photo_title: "Көлік суреті", photo_text: "Осылайша біздің қызметкерлер сізді бірден табады немесе сізге қарай жүреді. Сурет қосу міндетті емес.",
+    not_needed: "Қажет емес", take_photo: "Суретке түсіру", cancel: "Болдырмау", take: "Түсіру",
+    success_title_order: "Тапсырыс қабылданды", success_text_order: "Біздің қызметкерлер тапсырыстарыңыз туралы деректерді алды және жақын арада кезекпен шығарады. Терезені сәл ашыңыз, сізді атыңызбен шақырады, көлігіңізде күте аласыз.",
+    got_it: "Түсінікті", view: "Қарау",
+    success_title_return: "Қайтару қабылданды", success_text_return: "Рақмет! Күте тұрыңыз, жақын арада біздің қызметкер шығып, тауарыңызды қабылдайды.",
+    history_title: "Жіберу тарихы", close: "Жабу", history_empty: "Әзірге бос. Бірінші тапсырысты жіберіңіз.",
+    type_order: "Тапсырыс", type_return: "Қайтару",
+    return_title: "Тапсырысты қайтару", return_text: "Тауарды суретке түсіріп, тапсырыс нөмірін көрсетіңіз. Біздің қызметкер шығып, қайтаруды қабылдайды.",
+    return_photo_btn: "Тауарды суретке түсіру", return_photo_btn_active: "Суретті қайта түсіру",
+    learn_title: "Kezek.kz сіздің бизнесіңіз үшін",
+    learn_intro: "Егер сіздің ұйымыңызда тапсырыстар ағыны көп болса, курьерлер көп болса және курьерлік қызметтер бойынша егжей-тегжейлі есеп қажет болса — біз көмектесуге дайынбыз. Артық жұмысты алып тастап, уақытыңыз бен күшіңізді үнемдейміз.",
+    learn_pros: "Артықшылықтар",
+    learn_pro_1: "Артық қоңыраулар мен хаттар жоқ.",
+    learn_pro_2: "Үйден жұмыс істеуге де ыңғайлы.",
+    learn_pro_3: "Курьер қашан келетінін және кезекте қай жерде екенін алдын ала білесіз.",
+    learn_pro_4: "Тапсырыстар бұрынғыдай жоғалмайды.",
+    learn_pro_5: "Күнде 12 сағат қолдау, ProPlus тарифінде 24/7.",
+    learn_pro_6: "Сіздің бизнесіңізге бейімдеу және жақсарту.",
+    learn_pro_7: "Брендіңіздің танымалдылығы мен сенімінің өсуі.",
+    learn_pro_8: "70 000-нан астам жазылушысы бар 9 арнадағы топтарда тауарларыңыздың жарнамасы.",
+    learn_pricing: "Тарифтік жоспарлар", learn_trial: "Сынақ кезеңі", learn_trial_value: "7 күн тегін",
+    learn_extra: "Экстра", learn_per_month: "/ ай", learn_proplus: "ProPlus", learn_per_year: "/ жыл",
+    learn_saving: "Айлық тарифпен салыстырғанда жылына 89 390 ₸ үнемдеу",
+    learn_cta: "Қызықтырды ма? Бізге жазыңыз —",
+    ttt_title: "Х-О ойыны", ttt_choose: "Ойын режимін таңдаңыз:",
+    ttt_friend: "Досыңызбен ойнау", ttt_ai: "Компьютермен ойнау", ttt_to_menu: "Мәзірге", ttt_new: "Жаңа",
+    ttt_move: "Жүріс", ttt_draw: "Тең түсті! 🤝", ttt_won: "жеңді! 🎉",
+    game_back: "← Артқа", game_intro: "Секіру үшін басыңыз. Қос басу — қос секіру. Трамплиндер мен төбешіктерді ұстаңыз!",
+    game_play: "Ойнау", game_score_suffix: " м", game_best_prefix: "Рекорд: ",
+    games_btn: "Игры", games_title: "Игры", games_choose: "Выберите игру:", games_runner: "Kezek Runner", games_ttt: "Крестики-нолики",
+    promo_title: "Курьерлер қауымдастығы",
+    promo_text_kz: "Барлық курьер қызметкерлерін бір жерге жинаймыз, ұйымшыл және кең ауқымды достықты қолдайық.",
+    promo_text_ru: "Собираем всех курьеров в одном месте, поддерживаем сплочённость и широкое дружелюбие.",
+    promo_join: "Топқа қосылу", promo_ad_prefix: "Сіздің жарнамаңыз осында болуы мүмкін: ",
+    play: "Ойнаймыз ба?", two_players: "Екі ойыншы",
+    err_name: "Атыңызды енгізіңіз: кемінде 2 әріп.",
+    err_phone: "Телефон нөмірін толық енгізіңіз: +7 XXX XXX XX XX.",
+    err_phone_kz: "Тек қазақстандық ұялы нөмірлер (700, 701, 702, 705, 707, 708, 747, 750, 751, 760-763, 771, 775-778).",
+    err_order_4: "Тапсырыс нөмірін енгізіңіз: дәл 4 сан.",
+    err_orders_4: "Әр тапсырыс нөмірі дәл 4 саннан тұруы керек.",
+    err_dup: "Тапсырыс {n} екі рет көрсетілген.",
+    err_transport: "Көлік түрін таңдаңыз.",
+    err_cooldown: "Қайта жіберу {n} минуттан кейін мүмкін болады.\nБұл қосарлы өтінімдерден қорғау.",
+    err_send: "Жіберу мүмкін болмады. Интернетті тексеріңіз.",
+    err_timeout: "Күту уақыты асып кетті. Интернетті тексеріңіз.",
+    err_return_order: "Тапсырыс нөмірін көрсетіңіз — дәл 4 сан.",
+    shop_title: "Магазин", shop_box: "Қорапта", shop_bouquet: "Букетте",
+    shop_design: "Дизайн және қалаулар",
+    shop_your_name: "Атыңыз", shop_whatsapp: "WhatsApp нөмірі",
+    shop_order_btn: "Тапсырыс беру",
+    chip_white: "Ақ", chip_pink: "Қызғылт", chip_milk: "Сүтті", chip_mix: "Микс",
+    chip_choice: "Сіздің қалауыңызбен", chip_no_nuts: "Жаңғақсыз",
+    chip_no_sprinkle: "Себусіз", chip_any: "Кез келген дизайн",
+    shop_success_title: "Тапсырыс қабылданды",
+    shop_success_text: "Жақын арада біздің қызметкерлер сізбен хабарласады. Егер сіз курьер болсаңыз — 5% жеңілдік!",
+    shop_err_qty: "Тапсырыс мөлшерін таңдаңыз.",
+    shop_err_phone: "WhatsApp нөмірін толық енгізіңіз."
+  },
+  ru: {
+    subtitle: "Панель курьера", name_label: "Ваше имя", name_ph: "Например, Алмас",
+    phone_label: "Номер телефона", order_label: "Номер заказа", order_hint: "· 4 цифры",
+    add_order: "+ Добавить ещё один заказ", transport_label: "Вид транспорта",
+    transport_car: "Автомобиль", transport_scooter: "Скутер", more_options: "+ Ещё варианты",
+    hide_options: "− Скрыть", transport_bike: "Велосипед", transport_kick: "Самокат", transport_walk: "Пеший",
+    send: "Отправить", return_btn: "Возврат",
+    made_with: "Сделано с помощью компании @kezek.by", learn_more: "Узнать больше",
+    shop_nav: "Магазин",
+    consent_text: "Для работы панели курьера нам необходимо сохранить ваше имя, номер телефона и вид транспорта на этом устройстве. Это нужно, чтобы вам не пришлось вводить данные повторно. Продолжая, вы соглашаетесь с этим.",
+    agree: "Согласен", confirm_title: "Проверьте данные",
+    sum_name: "Имя", sum_phone: "Телефон", sum_orders: "Заказы", sum_transport: "Транспорт",
+    edit: "Изменить", all_correct: "Всё верно",
+    photo_title: "Фото транспорта", photo_text: "Так наши сотрудники сразу найдут вас или направятся в вашу сторону. Фото добавлять необязательно.",
+    not_needed: "Не нужно", take_photo: "Сделать фото", cancel: "Отмена", take: "Снять",
+    success_title_order: "Заказ принят", success_text_order: "Наши сотрудники получили ваши данные о заказах и скоро в порядке очереди вынесут вам. Пожалуйста, приоткройте окно чуть-чуть, вас позовут по имени, можете ожидать у себя в транспорте.",
+    got_it: "Понятно", view: "Посмотреть",
+    success_title_return: "Возврат принят", success_text_return: "Спасибо! Ожидайте, скоро наш сотрудник выйдет и примет у вас товар.",
+    history_title: "История отправок", close: "Закрыть", history_empty: "Пока пусто. Отправьте первый заказ.",
+    type_order: "Заказ", type_return: "Возврат",
+    return_title: "Возврат заказа", return_text: "Сфотографируйте товар и укажите номер заказа. Наш сотрудник выйдет и примет возврат.",
+    return_photo_btn: "Сделать фото товара", return_photo_btn_active: "Переснять фото",
+    learn_title: "Kezek.kz для вашего бизнеса",
+    learn_intro: "Если в вашей организации большой поток заказов, много курьеров и вам нужен подробный отчёт по курьерским службам — мы готовы помочь. Уберём лишнюю рутину и сэкономим вам много времени и сил.",
+    learn_pros: "Плюсы",
+    learn_pro_1: "Никаких лишних звонков и писем.",
+    learn_pro_2: "Удобно работать даже из дома.",
+    learn_pro_3: "Вы заранее знаете, когда курьер будет у вас и в какой очереди.",
+    learn_pro_4: "Заказы больше не теряются, как раньше.",
+    learn_pro_5: "Поддержка 12 часов в день, 24/7 — в тарифе ProPlus.",
+    learn_pro_6: "Улучшения и адаптация под ваш бизнес.",
+    learn_pro_7: "Рост узнаваемости и доверия к вашему бренду.",
+    learn_pro_8: "Реклама ваших товаров в группах с общей аудиторией более 70 000 подписчиков — в 9 каналах.",
+    learn_pricing: "Тарифные планы", learn_trial: "Пробный период", learn_trial_value: "7 дней бесплатно",
+    learn_extra: "Экстра", learn_per_month: "/ месяц", learn_proplus: "ProPlus", learn_per_year: "/ год",
+    learn_saving: "Экономия 89 390 ₸ в год по сравнению с месячным тарифом",
+    learn_cta: "Интересно? Напишите нам —",
+    ttt_title: "Крестики-нолики", ttt_choose: "Выберите режим игры:",
+    ttt_friend: "Играть с другом", ttt_ai: "Играть с компьютером", ttt_to_menu: "В меню", ttt_new: "Новая",
+    ttt_move: "Ход", ttt_draw: "Ничья! 🤝", ttt_won: "победил! 🎉",
+    game_back: "← Назад", game_intro: "Тапни, чтобы прыгнуть. Двойной тап — двойной прыжок. Лови трамплины и горки!",
+    game_play: "Играть", game_score_suffix: " м", game_best_prefix: "Рекорд: ",
+    games_btn: "Игры", games_title: "Игры", games_choose: "Выберите игру:", games_runner: "Kezek Runner", games_ttt: "Крестики-нолики",
+    promo_title: "Курьерлер қауымдастығы",
+    promo_text_kz: "Барлық курьер қызметкерлерін бір жерге жинаймыз, ұйымшыл және кең ауқымды достықты қолдайық.",
+    promo_text_ru: "Собираем всех курьеров в одном месте, поддерживаем сплочённость и широкое дружелюбие.",
+    promo_join: "Вступить в группу", promo_ad_prefix: "Ваша реклама могла быть здесь: ",
+    play: "Играем?", two_players: "Игра на двоих",
+    err_name: "Введите имя: минимум 2 буквы.",
+    err_phone: "Введите номер телефона полностью: +7 XXX XXX XX XX.",
+    err_phone_kz: "Только казахстанские мобильные номера (700, 701, 702, 705, 707, 708, 747, 750, 751, 760-763, 771, 775-778).",
+    err_order_4: "Введите номер заказа: ровно 4 цифры.",
+    err_orders_4: "Каждый номер заказа должен состоять ровно из 4 цифр.",
+    err_dup: "Заказ {n} указан дважды.",
+    err_transport: "Выберите вид транспорта.",
+    err_cooldown: "Повторная отправка возможна через {n} мин.\nЭто защита от двойных заявок.",
+    err_send: "Не удалось отправить. Проверьте интернет.",
+    err_timeout: "Превышено время ожидания. Проверьте интернет.",
+    err_return_order: "Укажите номер заказа — ровно 4 цифры.",
+    shop_title: "Магазин", shop_box: "В коробке", shop_bouquet: "В букете",
+    shop_design: "Дизайн и предпочтения",
+    shop_your_name: "Ваше имя", shop_whatsapp: "WhatsApp номер",
+    shop_order_btn: "Заказать",
+    chip_white: "Белый", chip_pink: "Розовый", chip_milk: "Молочный", chip_mix: "Микс",
+    chip_choice: "На ваше усмотрение", chip_no_nuts: "Без ореха",
+    chip_no_sprinkle: "Без посыпок", chip_any: "Любой дизайн",
+    shop_success_title: "Заказ принят",
+    shop_success_text: "Скоро с вами свяжется наш сотрудник. Если вы курьер — действует скидка 5%!",
+    shop_err_qty: "Выберите количество.",
+    shop_err_phone: "Введите WhatsApp номер полностью."
+  },
+  en: {
+    subtitle: "Courier panel", name_label: "Your name", name_ph: "For example, Almas",
+    phone_label: "Phone number", order_label: "Order number", order_hint: "· 4 digits",
+    add_order: "+ Add another order", transport_label: "Transport type",
+    transport_car: "Car", transport_scooter: "Scooter", more_options: "+ More options",
+    hide_options: "− Hide", transport_bike: "Bicycle", transport_kick: "Kick scooter", transport_walk: "Walking",
+    send: "Send", return_btn: "Return",
+    made_with: "Made with the help of @kezek.by", learn_more: "Learn more",
+    shop_nav: "Shop",
+    consent_text: "For the courier panel to work, we need to save your name, phone number and transport type on this device. This is needed so you don't have to enter data again. By continuing, you agree to this.",
+    agree: "I agree", confirm_title: "Check your data",
+    sum_name: "Name", sum_phone: "Phone", sum_orders: "Orders", sum_transport: "Transport",
+    edit: "Edit", all_correct: "All correct",
+    photo_title: "Transport photo", photo_text: "This way our staff will find you quickly or head your way. Adding a photo is optional.",
+    not_needed: "Not needed", take_photo: "Take photo", cancel: "Cancel", take: "Take",
+    success_title_order: "Order accepted", success_text_order: "Our staff has received your order data and will bring it out shortly in order. Please open the window slightly, they will call your name, you can wait in your transport.",
+    got_it: "Got it", view: "View",
+    success_title_return: "Return accepted", success_text_return: "Thank you! Please wait, our staff will come out shortly and accept your item.",
+    history_title: "Send history", close: "Close", history_empty: "Empty for now. Send your first order.",
+    type_order: "Order", type_return: "Return",
+    return_title: "Return order", return_text: "Photograph the item and enter the order number. Our staff will come out and accept the return.",
+    return_photo_btn: "Photograph the item", return_photo_btn_active: "Retake photo",
+    learn_title: "Kezek.kz for your business",
+    learn_intro: "If your organization has a high flow of orders, many couriers and you need detailed reports on courier services — we are ready to help. We will remove unnecessary routine and save you a lot of time and effort.",
+    learn_pros: "Advantages",
+    learn_pro_1: "No unnecessary calls or letters.",
+    learn_pro_2: "Convenient to work even from home.",
+    learn_pro_3: "You know in advance when the courier will arrive and their queue position.",
+    learn_pro_4: "Orders are no longer lost as before.",
+    learn_pro_5: "12 hours daily support, 24/7 on ProPlus tariff.",
+    learn_pro_6: "Improvements and adaptation to your business.",
+    learn_pro_7: "Growth of brand awareness and trust.",
+    learn_pro_8: "Advertising of your products in groups with over 70,000 subscribers — across 9 channels.",
+    learn_pricing: "Pricing plans", learn_trial: "Trial period", learn_trial_value: "7 days free",
+    learn_extra: "Extra", learn_per_month: "/ month", learn_proplus: "ProPlus", learn_per_year: "/ year",
+    learn_saving: "Save 89 390 ₸ per year compared to monthly tariff",
+    learn_cta: "Interested? Write to us —",
+    ttt_title: "Tic-tac-toe", ttt_choose: "Choose game mode:",
+    ttt_friend: "Play with friend", ttt_ai: "Play with computer", ttt_to_menu: "To menu", ttt_new: "New",
+    ttt_move: "Move", ttt_draw: "Draw! 🤝", ttt_won: "won! 🎉",
+    game_back: "← Back", game_intro: "Tap to jump. Double tap — double jump. Catch trampolines and slides!",
+    game_play: "Play", game_score_suffix: " m", game_best_prefix: "Best: ",
+    games_btn: "Games", games_title: "Games", games_choose: "Choose a game:", games_runner: "Kezek Runner", games_ttt: "Tic-tac-toe",
+    promo_title: "Курьерлер қауымдастығы",
+    promo_text_kz: "Барлық курьер қызметкерлерін бір жерге жинаймыз, ұйымшыл және кең ауқымды достықты қолдайық.",
+    promo_text_ru: "Собираем всех курьеров в одном месте, поддерживаем сплочённость и широкое дружелюбие.",
+    promo_join: "Join group", promo_ad_prefix: "Your ad could be here: ",
+    play: "Let's play?", two_players: "Two players",
+    err_name: "Enter name: minimum 2 letters.",
+    err_phone: "Enter full phone number: +7 XXX XXX XX XX.",
+    err_phone_kz: "Only Kazakhstan mobile numbers (700, 701, 702, 705, 707, 708, 747, 750, 751, 760-763, 771, 775-778).",
+    err_order_4: "Enter order number: exactly 4 digits.",
+    err_orders_4: "Each order number must be exactly 4 digits.",
+    err_dup: "Order {n} entered twice.",
+    err_transport: "Choose transport type.",
+    err_cooldown: "Resend possible in {n} min.\nThis protects against double requests.",
+    err_send: "Failed to send. Check your internet.",
+    err_timeout: "Timeout. Check your internet.",
+    err_return_order: "Enter order number — exactly 4 digits.",
+    shop_title: "Shop", shop_box: "In box", shop_bouquet: "In bouquet",
+    shop_design: "Design & preferences",
+    shop_your_name: "Your name", shop_whatsapp: "WhatsApp number",
+    shop_order_btn: "Order",
+    chip_white: "White", chip_pink: "Pink", chip_milk: "Milky", chip_mix: "Mix",
+    chip_choice: "Your choice", chip_no_nuts: "No nuts",
+    chip_no_sprinkle: "No sprinkles", chip_any: "Any design",
+    shop_success_title: "Order accepted",
+    shop_success_text: "Our staff will contact you soon. If you're a courier — 5% discount applies!",
+    shop_err_qty: "Choose quantity.",
+    shop_err_phone: "Enter full WhatsApp number."
+  }
+};
+
 const store = {
   get(k) { try { return localStorage.getItem(k); } catch { return null; } },
   set(k, v) { try { localStorage.setItem(k, v); } catch {} },
   del(k) { try { localStorage.removeItem(k); } catch {} }
 };
+
+let currentLang = "kz";
+let successIsReturn = false;
+
+function t(key) { return (I18N[currentLang] && I18N[currentLang][key]) || I18N.ru[key] || key; }
+
+function applyLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const key = el.getAttribute("data-i18n");
+    const text = t(key);
+    if (text !== undefined) el.textContent = text;
+  });
+  document.querySelectorAll("[data-i18n-ph]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-ph");
+    const text = t(key);
+    if (text !== undefined) el.placeholder = text;
+  });
+  document.querySelectorAll(".lang-switcher .lang-btn").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.lang === lang);
+  });
+  const returnPhotoText = document.getElementById("return-photo-text");
+  if (returnPhotoText && returnPhotoBlob) {
+    returnPhotoText.textContent = t("return_photo_btn_active");
+  }
+  if (!successIsReturn) {
+    document.getElementById("success-title").textContent = t("success_title_order");
+    document.getElementById("success-text").textContent = t("success_text_order");
+    document.getElementById("btnSuccessPromo").textContent = t("view");
+  } else {
+    document.getElementById("success-title").textContent = t("success_title_return");
+    document.getElementById("success-text").textContent = t("success_text_return");
+  }
+  if (ttt && ttt.mode && !ttt.finished) {
+    document.getElementById("ttt-status").textContent = `${t("ttt_move")}: ${ttt.current}`;
+  }
+}
+
+function setLang(lang) {
+  if (!I18N[lang]) lang = "kz";
+  store.set(LANG_KEY, lang);
+  applyLang(lang);
+}
+
+document.querySelectorAll(".lang-switcher .lang-btn").forEach((btn) => {
+  btn.addEventListener("click", () => setLang(btn.dataset.lang));
+});
 
 function loadData() {
   try {
@@ -510,11 +1000,11 @@ function renderHistory() {
   const list = document.getElementById("history-list");
   const items = getHistory();
   list.innerHTML = "";
-  if (!items.length) { list.innerHTML = '<li class="history-empty">Пока пусто. Отправьте первый заказ.</li>'; return; }
+  if (!items.length) { list.innerHTML = `<li class="history-empty">${t("history_empty")}</li>`; return; }
   items.forEach((it) => {
     const li = document.createElement("li");
     li.className = "history-item";
-    const typeLabel = it.type === "return" ? "Возврат" : "Заказ";
+    const typeLabel = it.type === "return" ? t("type_return") : t("type_order");
     const typeClass = it.type === "return" ? "return" : "order";
     li.innerHTML = `<div class="h-top"><span>${formatDate(it.ts)}</span><span class="h-type ${typeClass}">${typeLabel}</span></div><div class="h-orders">№ ${it.orders || "—"}</div>`;
     list.appendChild(li);
@@ -529,7 +1019,6 @@ function checkCooldown() {
   return Math.ceil((COOLDOWN_MS - diff) / 60000);
 }
 
-/* ===================== ЭЛЕМЕНТЫ ===================== */
 const $ = (id) => document.getElementById(id);
 const nameInput = $("name");
 const phoneInput = $("phone");
@@ -547,7 +1036,6 @@ function closeModal(id) {
   if (!document.querySelector(".overlay.show")) document.body.classList.remove("modal-open");
 }
 
-/* Промо фото - fallback */
 (function initPromoPhoto() {
   const img = $("promo-img"); const fallback = $("promo-img-fallback");
   if (!img || !fallback) return;
@@ -555,13 +1043,11 @@ function closeModal(id) {
   img.addEventListener("load", () => { fallback.classList.add("hidden"); });
 })();
 
-/* ===================== ИМЯ ===================== */
 nameInput.addEventListener("input", () => {
   nameInput.value = nameInput.value.replace(/[^\p{L}]/gu, "").slice(0, 14);
   nameInput.classList.remove("error");
 });
 
-/* ===================== ТЕЛЕФОН ===================== */
 function formatPhone(raw) {
   let d = raw.replace(/\D/g, "");
   if (raw.trim().startsWith("+7")) d = d.slice(1);
@@ -575,23 +1061,34 @@ function formatPhone(raw) {
   if (d.length > 8) out += " " + d.slice(8, 10);
   return out;
 }
-phoneInput.addEventListener("input", () => {
-  const raw = phoneInput.value;
-  phoneInput.value = raw.replace(/\D/g, "").length <= 1 && raw.trim().startsWith("+7") ? "+7 " : formatPhone(raw);
-  phoneInput.classList.remove("error");
-});
-phoneInput.addEventListener("focus", () => { if (!phoneInput.value) phoneInput.value = "+7 "; });
-phoneInput.addEventListener("blur", () => { if (phoneInput.value.replace(/\D/g, "").length <= 1) phoneInput.value = ""; });
+
+function isValidKZMobile(digits) {
+  if (digits.length !== 11 || digits[0] !== "7") return false;
+  const rest = digits.slice(1);
+  const p2 = rest.slice(0, 2);
+  return ["70","74","75","76","77"].includes(p2);
+}
+
+function bindPhoneInput(input) {
+  input.addEventListener("input", () => {
+    const raw = input.value;
+    input.value = raw.replace(/\D/g, "").length <= 1 && raw.trim().startsWith("+7") ? "+7 " : formatPhone(raw);
+    input.classList.remove("error");
+  });
+  input.addEventListener("focus", () => { if (!input.value) input.value = "+7 "; });
+  input.addEventListener("blur", () => { if (input.value.replace(/\D/g, "").length <= 1) input.value = ""; });
+}
+bindPhoneInput(phoneInput);
+bindPhoneInput($("shop-phone"));
+
 function phoneDigits(v) { return v.replace(/\D/g, ""); }
 
-/* ===================== ЗАКАЗЫ ===================== */
 const orderRows = [];
 function addOrderRow(removable) {
   const row = document.createElement("div"); row.className = "order-row";
   const input = document.createElement("input");
   input.type = "tel"; input.className = "order-input"; input.maxLength = 4;
   input.placeholder = "1234"; input.inputMode = "numeric"; input.autocomplete = "off";
-  input.setAttribute("aria-label", "Номер заказа");
   input.addEventListener("input", () => {
     input.value = input.value.replace(/\D/g, "").slice(0, 4);
     input.classList.remove("error");
@@ -602,7 +1099,6 @@ function addOrderRow(removable) {
   if (removable) {
     const del = document.createElement("button");
     del.type = "button"; del.className = "btn-remove"; del.textContent = "×";
-    del.setAttribute("aria-label", "Убрать заказ");
     del.addEventListener("click", () => {
       orderRows.splice(orderRows.indexOf(r), 1);
       row.remove();
@@ -620,23 +1116,20 @@ btnAddOrder.addEventListener("click", () => {
   addOrderRow(true).focus(); updateAddButton();
 });
 
-/* ===================== ТРАНСПОРТ ===================== */
 function setTransport(value) {
   currentTransport = value;
   transportBtns.forEach((b) => {
     const on = b.dataset.value === value;
     b.classList.toggle("active", on);
-    b.setAttribute("aria-pressed", on ? "true" : "false");
   });
   transportGrid.classList.remove("error");
 }
 transportBtns.forEach((b) => b.addEventListener("click", () => setTransport(b.dataset.value)));
 btnMoreTransport.addEventListener("click", () => {
   const hidden = transportExtra.classList.toggle("hidden");
-  btnMoreTransport.textContent = hidden ? "+ Ещё варианты" : "− Скрыть";
+  btnMoreTransport.textContent = hidden ? t("more_options") : t("hide_options");
 });
 
-/* ===================== СЖАТИЕ ФОТО ===================== */
 function compressImage(file, maxSide = 1280, quality = 0.82) {
   return new Promise((resolve) => {
     const url = URL.createObjectURL(file);
@@ -655,79 +1148,11 @@ function compressImage(file, maxSide = 1280, quality = 0.82) {
   });
 }
 
-/* ===================== КАМЕРА (без зума) ===================== */
-let camStream = null;
-let camOnShot = null;
-let cameraReturnTo = null;
-
-function stopCamera() {
-  if (camStream) { camStream.getTracks().forEach((t) => t.stop()); camStream = null; }
-  $("cam-video").srcObject = null;
-  closeModal("camera-modal");
-  if (cameraReturnTo) {
-    openModal(cameraReturnTo);
-    cameraReturnTo = null;
-  }
-}
-
-async function openCamera(onShot, fallbackInput, returnTo) {
-  const md = navigator.mediaDevices;
-  if (!md || !md.getUserMedia || !window.isSecureContext) { fallbackInput.click(); return; }
-  try {
-    camStream = await md.getUserMedia({
-      video: {
-        facingMode: { ideal: "environment" },
-        width: { ideal: 1920 },
-        height: { ideal: 1080 },
-        aspectRatio: { ideal: 16/9 }
-      },
-      audio: false
-    });
-
-    // Пробуем сбросить цифровой зум
-    const track = camStream.getVideoTracks()[0];
-    if (track) {
-      try {
-        const caps = track.getCapabilities ? track.getCapabilities() : {};
-        if (caps.zoom) {
-          await track.applyConstraints({ advanced: [{ zoom: caps.zoom.min || 1 }] });
-        }
-      } catch (zoomErr) { /* игнорируем */ }
-    }
-
-    if (returnTo) { cameraReturnTo = returnTo; closeModal(returnTo); }
-    const v = $("cam-video");
-    v.srcObject = camStream;
-    camOnShot = onShot;
-    openModal("camera-modal");
-    v.play().catch(() => {});
-  } catch (e) {
-    console.warn("Камера недоступна:", e);
-    camStream = null;
-    fallbackInput.click();
-  }
-}
-
-$("btnShot").addEventListener("click", () => {
-  const v = $("cam-video"); if (!v.videoWidth) return;
-  const scale = Math.min(1, 1280 / Math.max(v.videoWidth, v.videoHeight));
-  const canvas = document.createElement("canvas");
-  canvas.width = Math.round(v.videoWidth * scale);
-  canvas.height = Math.round(v.videoHeight * scale);
-  canvas.getContext("2d").drawImage(v, 0, 0, canvas.width, canvas.height);
-  canvas.toBlob((b) => {
-    const cb = camOnShot;
-    stopCamera();
-    if (b && cb) cb(b);
-  }, "image/jpeg", 0.85);
-});
-$("btnCamCancel").addEventListener("click", stopCamera);
-
-/* ===================== ФОТО ТРАНСПОРТА ===================== */
 const CAM_SVG = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg>';
 const photoInput = $("photo");
 const photoOpenBtn = $("btnPhotoOpen");
 let photoBlob = null; let photoUrl = "";
+
 function showPhoto(blob) {
   if (photoUrl) URL.revokeObjectURL(photoUrl);
   photoBlob = blob || null;
@@ -737,12 +1162,13 @@ function showPhoto(blob) {
   photoOpenBtn.innerHTML = blob ? "" : CAM_SVG;
 }
 showPhoto(null);
+
 function openPhotoModal() {
   const has = !!photoBlob;
   $("photo-img").hidden = !has;
   if (has) $("photo-img").src = photoUrl;
-  $("btnPhotoNo").textContent = has ? "Убрать фото" : "Не нужно";
-  $("btnPhotoTake").textContent = has ? "Переснять" : "Сделать фото";
+  $("btnPhotoNo").textContent = t("not_needed");
+  $("btnPhotoTake").textContent = t("take_photo");
   openModal("photo-modal");
 }
 photoOpenBtn.addEventListener("click", openPhotoModal);
@@ -754,7 +1180,102 @@ photoInput.addEventListener("change", async () => {
   if (file) showPhoto(await compressImage(file));
 });
 
-/* ===================== ФОТО ПО УМОЛЧАНИЮ ===================== */
+let camStream = null;
+let camOnShot = null;
+let cameraReturnTo = null;
+let camTrack = null;
+let camZoomCap = null;
+let camCurrentZoom = 1;
+
+function stopCamera() {
+  if (camStream) { camStream.getTracks().forEach((t) => t.stop()); camStream = null; }
+  $("cam-video").srcObject = null;
+  $("zoom-row").innerHTML = "";
+  camTrack = null; camZoomCap = null; camCurrentZoom = 1;
+  closeModal("camera-modal");
+  if (cameraReturnTo) { openModal(cameraReturnTo); cameraReturnTo = null; }
+}
+
+async function openCamera(onShot, fallbackInput, returnTo) {
+  const md = navigator.mediaDevices;
+  if (!md || !md.getUserMedia || !window.isSecureContext) { fallbackInput.click(); return; }
+  try {
+    camStream = await md.getUserMedia({
+      video: { facingMode: { ideal: "environment" } },
+      audio: false
+    });
+  } catch (e) { console.warn("camera fail", e); fallbackInput.click(); return; }
+
+  camTrack = camStream.getVideoTracks()[0];
+  camZoomCap = null;
+  camCurrentZoom = 1;
+
+  if (camTrack) {
+    try {
+      const caps = camTrack.getCapabilities ? camTrack.getCapabilities() : {};
+      const adv = [];
+      if (caps.focusMode && caps.focusMode.includes("continuous")) adv.push({ focusMode: "continuous" });
+      if (caps.exposureMode && caps.exposureMode.includes("continuous")) adv.push({ exposureMode: "continuous" });
+      if (adv.length) { try { await camTrack.applyConstraints({ advanced: adv }); } catch (e) {} }
+
+      if (caps.zoom) {
+        camZoomCap = { min: caps.zoom.min || 1, max: caps.zoom.max || 1 };
+        camCurrentZoom = caps.zoom.min || 1;
+        try { await camTrack.applyConstraints({ advanced: [{ zoom: camCurrentZoom }] }); } catch (e) {}
+      }
+    } catch (e) {}
+  }
+
+  if (returnTo) { cameraReturnTo = returnTo; closeModal(returnTo); }
+  const v = $("cam-video");
+  v.srcObject = camStream;
+  camOnShot = onShot;
+  openModal("camera-modal");
+  v.play().catch(() => {});
+
+  renderZoomButtons();
+}
+
+function renderZoomButtons() {
+  const row = $("zoom-row");
+  row.innerHTML = "";
+  if (!camZoomCap) return;
+  const { min, max } = camZoomCap;
+
+  const presets = [0.5, 1, 2, 3].filter(z => z >= min - 0.01 && z <= max + 0.01);
+
+  presets.forEach((z) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "zoom-btn" + (Math.abs(z - camCurrentZoom) < 0.01 ? " active" : "");
+    btn.textContent = (z % 1 === 0 ? z.toFixed(0) : z.toFixed(1)) + "x";
+    btn.addEventListener("click", async () => {
+      const zoom = Math.max(min, Math.min(max, z));
+      try {
+        await camTrack.applyConstraints({ advanced: [{ zoom }] });
+        camCurrentZoom = zoom;
+        row.querySelectorAll(".zoom-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+      } catch (e) { console.warn("zoom fail", e); }
+    });
+    row.appendChild(btn);
+  });
+}
+
+$("btnShot").addEventListener("click", () => {
+  const v = $("cam-video"); if (!v.videoWidth) return;
+  const canvas = document.createElement("canvas");
+  canvas.width = v.videoWidth;
+  canvas.height = v.videoHeight;
+  canvas.getContext("2d").drawImage(v, 0, 0, canvas.width, canvas.height);
+  canvas.toBlob((b) => {
+    const cb = camOnShot;
+    stopCamera();
+    if (b && cb) cb(b);
+  }, "image/jpeg", 0.85);
+});
+$("btnCamCancel").addEventListener("click", stopCamera);
+
 const DEFAULT_PHOTO_URL = "courier.jpg";
 let defaultPhotoPromise = null;
 function getDefaultPhoto() {
@@ -781,7 +1302,6 @@ function getDefaultPhoto() {
   return defaultPhotoPromise;
 }
 
-/* ===================== ВАЛИДАЦИЯ ===================== */
 function collectData() {
   return {
     name: nameInput.value.trim(),
@@ -791,27 +1311,24 @@ function collectData() {
   };
 }
 function validate(data) {
-  if ([...data.name].length < 2) return { msg: "Введите имя: минимум 2 буквы.", el: nameInput };
+  if ([...data.name].length < 2) return { msg: t("err_name"), el: nameInput };
   const digits = phoneDigits(data.phone);
-  if (digits.length !== 11 || digits[0] !== "7") return { msg: "Введите номер телефона полностью: +7 XXX XXX XX XX.", el: phoneInput };
+  if (digits.length !== 11 || digits[0] !== "7") return { msg: t("err_phone"), el: phoneInput };
+  if (!isValidKZMobile(digits)) return { msg: t("err_phone_kz"), el: phoneInput };
   const bad = orderRows.find((r) => !/^\d{4}$/.test(r.input.value));
-  if (bad) return { msg: orderRows.length > 1 ? "Каждый номер заказа должен состоять ровно из 4 цифр." : "Введите номер заказа: ровно 4 цифры.", el: bad.input };
+  if (bad) return { msg: orderRows.length > 1 ? t("err_orders_4") : t("err_order_4"), el: bad.input };
   const seen = new Set();
   for (const r of orderRows) {
-    if (seen.has(r.input.value)) return { msg: `Заказ ${r.input.value} указан дважды.`, el: r.input };
+    if (seen.has(r.input.value)) return { msg: t("err_dup").replace("{n}", r.input.value), el: r.input };
     seen.add(r.input.value);
   }
-  if (!data.transport) return { msg: "Выберите вид транспорта.", el: transportGrid };
+  if (!data.transport) return { msg: t("err_transport"), el: transportGrid };
   return null;
 }
 
-/* ===================== ОТПРАВКА ОСНОВНАЯ ===================== */
 $("btnSubmit").addEventListener("click", () => {
   const mins = checkCooldown();
-  if (mins !== null) {
-    alert(`Повторная отправка возможна через ${mins} мин.\nЭто защита от двойных заявок.`);
-    return;
-  }
+  if (mins !== null) { alert(t("err_cooldown").replace("{n}", mins)); return; }
   const data = collectData();
   const err = validate(data);
   if (err) {
@@ -824,12 +1341,12 @@ $("btnSubmit").addEventListener("click", () => {
   store.set(DATA_KEY, JSON.stringify({ name: data.name, phone: data.phone, transport: data.transport }));
   const summary = $("summary-content");
   summary.innerHTML = "";
-  [["Имя", data.name], ["Телефон", data.phone], ["Заказы", data.orders.join(", ")], ["Транспорт", data.transport],
-   ...(photoBlob ? [["Фото транспорта", "Приложено"]] : [])]
+  [["sum_name", data.name], ["sum_phone", data.phone], ["sum_orders", data.orders.join(", ")], ["sum_transport", data.transport],
+   ...(photoBlob ? [["photo_title", "✓"]] : [])]
     .forEach(([k, v]) => {
       const row = document.createElement("div");
       row.className = "summary-item";
-      const a = document.createElement("span"); a.className = "k"; a.textContent = k;
+      const a = document.createElement("span"); a.className = "k"; a.textContent = t(k);
       const b = document.createElement("span"); b.className = "v"; b.textContent = v;
       row.append(a, b); summary.appendChild(row);
     });
@@ -837,7 +1354,6 @@ $("btnSubmit").addEventListener("click", () => {
 });
 $("btnEdit").addEventListener("click", () => closeModal("confirm-modal"));
 
-/* ===================== СЧЁТЧИК ===================== */
 const SEQ_URL  = "https://abacus.jasoncameron.dev/hit/kezek.kz/d-";
 const SEQ_MAX  = 300;
 let pendingSeq = null;
@@ -847,9 +1363,9 @@ async function getSeq() {
   if (pendingSeq && pendingSeq.day === day) return pendingSeq.n;
   try {
     const controller = new AbortController();
-    const t = setTimeout(() => controller.abort(), 3000);
+    const t2 = setTimeout(() => controller.abort(), 3000);
     const r = await fetch(SEQ_URL + day, { signal: controller.signal });
-    clearTimeout(t);
+    clearTimeout(t2);
     if (!r.ok) throw new Error("HTTP " + r.status);
     const c = Number((await r.json()).value);
     if (!Number.isFinite(c) || c < 1) throw new Error("bad counter");
@@ -858,7 +1374,6 @@ async function getSeq() {
   } catch { return null; }
 }
 
-/* ===================== ОТПРАВКА В TG ===================== */
 let sending = false;
 const TG = `https://api.telegram.org/bot${BOT_TOKEN}`;
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -886,7 +1401,7 @@ $("btnConfirmSend").addEventListener("click", async () => {
   if (sending) return;
   sending = true;
   const btn = $("btnConfirmSend"); const btnEdit = $("btnEdit");
-  btn.disabled = true; btnEdit.disabled = true; btn.textContent = "Отправка...";
+  btn.disabled = true; btnEdit.disabled = true; btn.textContent = "...";
   const data = collectData();
   const waLink = `https://wa.me/${phoneDigits(data.phone)}`;
   const transportLabel = { "Автомобиль": "🚘 Авто", "Скутер": "🛵 Мопед", "Велосипед": "🚲 Велосипед", "Самокат": "🛴 Самокат", "Пеший": "🚶‍♂️ Пеший" };
@@ -895,8 +1410,7 @@ $("btnConfirmSend").addEventListener("click", async () => {
   try {
     const seq = await getSeq();
     let photo = photoBlob;
-    if (!photo) { btn.textContent = "Загрузка фото..."; photo = await getDefaultPhoto(); }
-    btn.textContent = "Отправка...";
+    if (!photo) { photo = await getDefaultPhoto(); }
     const text =
       `<b>${esc(data.name)}${seq ? " | " + seq : ""}</b>\n\n` +
       `📱 <a href="${waLink}">${esc(data.phone)}</a>\n\n` +
@@ -908,25 +1422,20 @@ $("btnConfirmSend").addEventListener("click", async () => {
     store.set(LAST_SENT_KEY, String(Date.now()));
     pushHistory({ ts: Date.now(), orders: data.orders.join(", "), type: "order" });
     pendingSeq = null;
+    successIsReturn = false;
     closeModal("confirm-modal"); openModal("success-modal");
   } catch (e) {
     console.error(e);
-    alert(e.name === "AbortError" ? "Превышено время ожидания. Проверьте интернет." : "Не удалось отправить. Проверьте интернет.");
+    alert(e.name === "AbortError" ? t("err_timeout") : t("err_send"));
   } finally {
     clearTimeout(hardTimeout);
-    sending = false; btn.disabled = false; btnEdit.disabled = false; btn.textContent = "Всё верно";
+    sending = false; btn.disabled = false; btnEdit.disabled = false; btn.textContent = t("all_correct");
   }
 });
 
-/* ===================== УСПЕХ + РЕКЛАМА ===================== */
 let promoCountdownTimer = null;
 function resetCourierFlow() { resetOrders(); showPhoto(null); window.scrollTo({ top: 0, behavior: "smooth" }); }
-$("btnSuccessOk").addEventListener("click", () => {
-  closeModal("success-modal"); resetCourierFlow();
-  $("success-title").textContent = "Заказ принят";
-  document.querySelector("#success-modal p").textContent = "Наши сотрудники получили ваши данные о заказах и скоро в порядке очереди вынесут вам. Пожалуйста, приоткройте окно чуть-чуть, вас позовут по имени, можете ожидать у себя в транспорте.";
-  $("btnSuccessPromo").style.display = "";
-});
+$("btnSuccessOk").addEventListener("click", () => { closeModal("success-modal"); resetCourierFlow(); });
 $("btnSuccessPromo").addEventListener("click", () => { closeModal("success-modal"); resetCourierFlow(); openModal("promo-modal"); startPromoCountdown(); });
 function startPromoCountdown() {
   const countdownEl = $("countdown-number");
@@ -945,15 +1454,32 @@ function startPromoCountdown() {
 $("btnPromoClose").addEventListener("click", () => { if (promoCountdownTimer) { clearInterval(promoCountdownTimer); promoCountdownTimer = null; } closeModal("promo-modal"); });
 $("btnPlayGame").addEventListener("click", () => { if (promoCountdownTimer) { clearInterval(promoCountdownTimer); promoCountdownTimer = null; } closeModal("promo-modal"); openModal("game-modal"); startGame(); });
 
-/* ===================== ИСТОРИЯ ===================== */
+/* ===== ИГРЫ ===== */
+$("btnSuccessGames").addEventListener("click", () => {
+  closeModal("success-modal");
+  resetCourierFlow();
+  openModal("games-modal");
+});
+$("btnGamesFab").addEventListener("click", () => openModal("games-modal"));
+$("btnGamesClose").addEventListener("click", () => closeModal("games-modal"));
+$("btnGamesRunner").addEventListener("click", () => {
+  closeModal("games-modal");
+  openModal("game-modal");
+  startGame();
+});
+$("btnGamesTtt").addEventListener("click", () => {
+  closeModal("games-modal");
+  $("ttt-menu").hidden = false;
+  $("ttt-game").hidden = true;
+  openModal("ttt-modal");
+});
+
 $("btnHistory").addEventListener("click", () => { renderHistory(); openModal("history-modal"); });
 $("btnHistoryClose").addEventListener("click", () => closeModal("history-modal"));
 
-/* ===================== LEARN MORE ===================== */
 $("btnLearnMore").addEventListener("click", () => openModal("learn-modal"));
 $("btnLearnClose").addEventListener("click", () => closeModal("learn-modal"));
 
-/* ===================== ВОЗВРАТ ===================== */
 let returnPhotoBlob = null; let returnPhotoUrl = "";
 function setReturnPhoto(blob) {
   if (returnPhotoUrl) URL.revokeObjectURL(returnPhotoUrl);
@@ -961,8 +1487,9 @@ function setReturnPhoto(blob) {
   returnPhotoUrl = blob ? URL.createObjectURL(blob) : "";
   const preview = $("return-photo-preview");
   const btn = $("btnReturnPhoto");
-  if (blob) { preview.src = returnPhotoUrl; preview.classList.add("show"); btn.classList.add("has-photo"); $("return-photo-text").textContent = "Переснять фото"; }
-  else { preview.classList.remove("show"); preview.removeAttribute("src"); btn.classList.remove("has-photo"); $("return-photo-text").textContent = "Сделать фото товара"; }
+  const label = $("return-photo-text");
+  if (blob) { preview.src = returnPhotoUrl; preview.classList.add("show"); btn.classList.add("has-photo"); label.textContent = t("return_photo_btn_active"); }
+  else { preview.classList.remove("show"); preview.removeAttribute("src"); btn.classList.remove("has-photo"); label.textContent = t("return_photo_btn"); }
 }
 $("btnReturn").addEventListener("click", () => { setReturnPhoto(null); $("return-order").value = ""; $("return-order").classList.remove("error"); openModal("return-modal"); });
 $("btnReturnCancel").addEventListener("click", () => closeModal("return-modal"));
@@ -979,24 +1506,130 @@ $("return-order").addEventListener("input", (e) => {
 $("btnReturnSend").addEventListener("click", async () => {
   const btn = $("btnReturnSend"); const orderInput = $("return-order");
   const order = orderInput.value.trim();
-  if (!/^\d{4}$/.test(order)) { orderInput.classList.add("error"); alert("Укажите номер заказа — ровно 4 цифры."); return; }
+  if (!/^\d{4}$/.test(order)) { orderInput.classList.add("error"); alert(t("err_return_order")); return; }
   orderInput.classList.remove("error");
-  btn.disabled = true; const prevText = btn.textContent; btn.textContent = "Отправка...";
+  btn.disabled = true; const prevText = btn.textContent; btn.textContent = "...";
   try {
     const text = `↩️ <b>Курьер привез возврат</b>\n\n📦 Заказ: <code>${esc(order)}</code>`;
     const result = await tgSend({ photo: returnPhotoBlob, text });
     if (!result.ok) throw new Error(result.description || "Telegram error");
     pushHistory({ ts: Date.now(), orders: order, type: "return" });
     closeModal("return-modal");
-    $("success-title").textContent = "Возврат принят";
-    document.querySelector("#success-modal p").textContent = "Спасибо! Ожидайте, скоро наш сотрудник выйдет и примет у вас товар.";
+    successIsReturn = true;
+    document.getElementById("success-title").textContent = t("success_title_return");
+    document.getElementById("success-text").textContent = t("success_text_return");
     $("btnSuccessPromo").style.display = "none";
+    $("btnSuccessGames").style.display = "none";
     openModal("success-modal");
-  } catch (e) { console.error(e); alert("Не удалось отправить. Проверьте интернет."); }
+    setTimeout(() => { $("btnSuccessPromo").style.display = ""; $("btnSuccessGames").style.display = ""; }, 100);
+  } catch (e) { console.error(e); alert(t("err_send")); }
   finally { btn.disabled = false; btn.textContent = prevText; }
 });
 
-/* ===================== ПОГОДА ===================== */
+/* ===== МАГАЗИН ===== */
+let shopSelected = null;
+const shopDesigns = new Set();
+
+function resetShop() {
+  shopSelected = null;
+  shopDesigns.clear();
+  document.querySelectorAll(".shop-price").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".shop-chip").forEach(b => b.classList.remove("active"));
+  $("shop-name").value = "";
+  $("shop-phone").value = "";
+  $("shop-name").classList.remove("error");
+  $("shop-phone").classList.remove("error");
+}
+
+$("btnShopFab").addEventListener("click", () => {
+  resetShop();
+  openModal("shop-modal");
+});
+$("btnShopCancel").addEventListener("click", () => closeModal("shop-modal"));
+
+document.querySelectorAll(".shop-price").forEach((b) => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll(".shop-price").forEach(x => x.classList.remove("active"));
+    b.classList.add("active");
+    shopSelected = {
+      type: b.dataset.type,
+      qty: parseInt(b.dataset.qty, 10),
+      price: parseInt(b.dataset.price, 10)
+    };
+  });
+});
+
+document.querySelectorAll(".shop-chip").forEach((b) => {
+  b.addEventListener("click", () => {
+    const val = b.dataset.val;
+    if (shopDesigns.has(val)) { shopDesigns.delete(val); b.classList.remove("active"); }
+    else { shopDesigns.add(val); b.classList.add("active"); }
+  });
+});
+
+$("btnShopOrder").addEventListener("click", () => {
+  if (!shopSelected) { alert(t("shop_err_qty")); return; }
+  const name = $("shop-name").value.trim();
+  const phone = $("shop-phone").value.trim();
+  const digits = phoneDigits(phone);
+  if (name.length < 2) { $("shop-name").classList.add("error"); alert(t("err_name")); return; }
+  $("shop-name").classList.remove("error");
+  if (digits.length !== 11 || !isValidKZMobile(digits)) { $("shop-phone").classList.add("error"); alert(t("shop_err_phone")); return; }
+  $("shop-phone").classList.remove("error");
+
+  const summary = $("shop-summary");
+  summary.innerHTML = "";
+  const typeLabel = shopSelected.type === "box" ? t("shop_box") : t("shop_bouquet");
+  const designs = [...shopDesigns].join(", ") || "—";
+  [["shop_box", `${shopSelected.qty} шт × ${shopSelected.price.toLocaleString("ru-RU")} ₸`],
+   ["shop_design", `${typeLabel} · ${designs}`],
+   ["shop_your_name", name],
+   ["shop_whatsapp", phone]].forEach(([k, v]) => {
+    const row = document.createElement("div");
+    row.className = "summary-item";
+    const a = document.createElement("span"); a.className = "k"; a.textContent = t(k);
+    const b = document.createElement("span"); b.className = "v"; b.textContent = v;
+    row.append(a, b); summary.appendChild(row);
+  });
+  closeModal("shop-modal");
+  openModal("shop-confirm-modal");
+});
+
+$("btnShopBack").addEventListener("click", () => {
+  closeModal("shop-confirm-modal");
+  openModal("shop-modal");
+});
+
+$("btnShopSend").addEventListener("click", async () => {
+  if (!shopSelected) return;
+  const btn = $("btnShopSend");
+  btn.disabled = true; const prev = btn.textContent; btn.textContent = "...";
+  const name = $("shop-name").value.trim();
+  const phone = $("shop-phone").value.trim();
+  const digits = phoneDigits(phone);
+  const typeLabel = shopSelected.type === "box" ? "в коробке" : "в букете";
+  const designs = [...shopDesigns].map(d => d.toLowerCase()).join(", ");
+  const waLink = `https://wa.me/${digits}`;
+  let text = `🛍️ <b>Новый заказ из магазина</b>\n\n`;
+  text += `Клиент хочет купить <b>${shopSelected.qty} шт</b>`;
+  if (designs) text += `, ${esc(designs)}`;
+  text += ` ${typeLabel}.\n\n`;
+  text += `👤 Имя: <b>${esc(name)}</b>\n`;
+  text += `📱 Свяжитесь с ним по номеру: <a href="${waLink}">${esc(phone)}</a>`;
+  try {
+    const result = await tgSend({ text });
+    if (!result.ok) throw new Error(result.description || "Telegram error");
+    closeModal("shop-confirm-modal");
+    openModal("shop-success-modal");
+  } catch (e) { console.error(e); alert(t("err_send")); }
+  finally { btn.disabled = false; btn.textContent = prev; }
+});
+
+$("btnShopSuccessOk").addEventListener("click", () => {
+  closeModal("shop-success-modal");
+  resetShop();
+});
+
 function weatherKind(code, temp) {
   const isSnowCode = (code >= 71 && code <= 77) || code === 85 || code === 86;
   const isRainCode = (code >= 51 && code <= 67) || (code >= 80 && code <= 82) || code >= 95;
@@ -1034,9 +1667,7 @@ async function initWeather() {
   } catch { $("weather-temp").textContent = "--"; }
 }
 
-/* ============================================================
-   ИГРА: Kezek Runner
-   ============================================================ */
+/* ===== ИГРА ===== */
 const game = {
   canvas: null, ctx: null,
   W: 0, H: 0, dpr: 1,
@@ -1079,9 +1710,7 @@ function makeBuilding(x, prevRoofY) {
   const w = 90 + Math.random() * 100;
   let roofY = randomRoofY();
   if (prevRoofY != null) {
-    const maxRise = 65;
-    const maxDrop = 110;
-    roofY = Math.max(prevRoofY - maxRise, Math.min(prevRoofY + maxDrop, roofY));
+    roofY = Math.max(prevRoofY - 65, Math.min(prevRoofY + 110, roofY));
   }
   roofY = Math.max(game.H * 0.34, Math.min(game.H * 0.74, roofY));
 
@@ -1185,8 +1814,8 @@ function gameUpdate(dt) {
     if (cx < b.x - 5 || cx > b.x + b.w + 5) continue;
 
     if (b.slide) {
-      const t = Math.max(0, Math.min(1, (cx - b.x) / b.w));
-      const slopeY = b.slide.fromY + (b.slide.toY - b.slide.fromY) * t;
+      const t2 = Math.max(0, Math.min(1, (cx - b.x) / b.w));
+      const slopeY = b.slide.fromY + (b.slide.toY - b.slide.fromY) * t2;
       const bottomY = p.y + p.h;
       if (bottomY >= slopeY - 6 && bottomY - p.vy <= slopeY + 40 && p.vy >= -4) {
         p.y = slopeY - p.h;
@@ -1196,7 +1825,7 @@ function gameUpdate(dt) {
         p.sliding = true;
         onBuilding = true;
 
-        if (t >= 0.90) {
+        if (t2 >= 0.90) {
           p.vy = SLIDE_LAUNCH_VY;
           p.onGround = false;
           p.sliding = false;
@@ -1297,7 +1926,7 @@ function gameUpdate(dt) {
       game.state = "dead";
       const m = Math.floor(game.distance / 10);
       if (m > game.best) { game.best = m; store.set(BEST_KEY, String(m)); updateGameHUD(); }
-      showGameMessage("Игра окончена", `Пробежал ${m} м • Рекорд: ${game.best} м`, "Заново");
+      showGameMessage("Kezek Runner", t("game_best_prefix") + game.best + t("game_score_suffix"), t("game_play"));
       return;
     }
     let respawn = null;
@@ -1541,8 +2170,8 @@ if (!CanvasRenderingContext2D.prototype.roundRect) {
 
 function updateGameHUD() {
   const m = Math.floor(game.distance / 10);
-  $("game-score").textContent = m + " м";
-  $("game-best").textContent = "Рекорд: " + game.best + " м";
+  $("game-score").textContent = m + t("game_score_suffix");
+  $("game-best").textContent = t("game_best_prefix") + game.best + t("game_score_suffix");
   $("game-lives").textContent = "❤️".repeat(Math.max(0, game.lives)) + "🖤".repeat(Math.max(0, game.maxLives - game.lives));
 }
 
@@ -1574,7 +2203,7 @@ function startGame() {
   hideGameMessage();
   updateGameHUD();
   gameDraw();
-  showGameMessage("Kezek Runner", "Тапни, чтобы прыгнуть. Двойной тап — двойной прыжок. Лови трамплины и горки!", "Играть");
+  showGameMessage("Kezek Runner", t("game_intro"), t("game_play"));
 }
 
 function playGame() {
@@ -1608,16 +2237,10 @@ window.addEventListener("resize", () => {
   }
 });
 
-/* ============================================================
-   КРЕСТИКИ-НОЛИКИ
-   ============================================================ */
+/* ===== КРЕСТИКИ-НОЛИКИ ===== */
 const ttt = {
   board: ["", "", "", "", "", "", "", "", ""],
-  current: "X",
-  mode: null,
-  human: "X",
-  ai: "O",
-  finished: false
+  current: "X", mode: null, human: "X", ai: "O", finished: false
 };
 
 const TTT_WINS = [
@@ -1629,9 +2252,7 @@ const TTT_WINS = [
 function tttCheckWinner(b) {
   for (const line of TTT_WINS) {
     const [a, c, d] = line;
-    if (b[a] && b[a] === b[c] && b[a] === b[d]) {
-      return { player: b[a], line };
-    }
+    if (b[a] && b[a] === b[c] && b[a] === b[d]) return { player: b[a], line };
   }
   if (b.every(x => x !== "")) return { player: "draw", line: null };
   return null;
@@ -1654,7 +2275,6 @@ function tttRender() {
 function tttClick(i) {
   if (ttt.finished || ttt.board[i] !== "") return;
   if (ttt.mode === "ai" && ttt.current !== ttt.human) return;
-
   ttt.board[i] = ttt.current;
   ttt.current = ttt.current === "X" ? "O" : "X";
   tttRender();
@@ -1666,10 +2286,10 @@ function tttAfterMove() {
   if (result) {
     ttt.finished = true;
     if (result.player === "draw") {
-      $("ttt-status").textContent = "Ничья! 🤝";
+      $("ttt-status").textContent = t("ttt_draw");
       $("ttt-status").className = "ttt-status";
     } else {
-      $("ttt-status").textContent = `Победил ${result.player}! 🎉`;
+      $("ttt-status").textContent = `${result.player} ${t("ttt_won")}`;
       $("ttt-status").className = "ttt-status win";
       result.line.forEach(idx => {
         const cell = $("ttt-board").children[idx];
@@ -1678,10 +2298,8 @@ function tttAfterMove() {
     }
     return;
   }
-
-  $("ttt-status").textContent = `Ход: ${ttt.current}`;
+  $("ttt-status").textContent = `${t("ttt_move")}: ${ttt.current}`;
   $("ttt-status").className = "ttt-status";
-
   if (ttt.mode === "ai" && ttt.current === ttt.ai) {
     setTimeout(() => {
       const move = tttBestMove(ttt.board, ttt.ai);
@@ -1697,18 +2315,13 @@ function tttAfterMove() {
 
 function tttBestMove(board, player) {
   const other = player === "X" ? "O" : "X";
-  let bestScore = -Infinity;
-  let bestMove = -1;
-
+  let bestScore = -Infinity, bestMove = -1;
   for (let i = 0; i < 9; i++) {
     if (board[i] === "") {
       board[i] = player;
       const score = tttMinimax(board, 0, false, player, other);
       board[i] = "";
-      if (score > bestScore) {
-        bestScore = score;
-        bestMove = i;
-      }
+      if (score > bestScore) { bestScore = score; bestMove = i; }
     }
   }
   return bestMove;
@@ -1746,14 +2359,9 @@ function tttMinimax(board, depth, isMax, maxPlayer, minPlayer) {
 
 function tttStart(mode) {
   ttt.board = ["","","","","","","","",""];
-  ttt.current = "X";
-  ttt.mode = mode;
-  ttt.human = "X";
-  ttt.ai = "O";
-  ttt.finished = false;
-  $("ttt-menu").hidden = true;
-  $("ttt-game").hidden = false;
-  $("ttt-status").textContent = "Ход: X";
+  ttt.current = "X"; ttt.mode = mode; ttt.human = "X"; ttt.ai = "O"; ttt.finished = false;
+  $("ttt-menu").hidden = true; $("ttt-game").hidden = false;
+  $("ttt-status").textContent = `${t("ttt_move")}: X`;
   $("ttt-status").className = "ttt-status";
   tttRender();
 }
@@ -1761,31 +2369,31 @@ function tttStart(mode) {
 $("btnPlayTicTac").addEventListener("click", () => {
   if (promoCountdownTimer) { clearInterval(promoCountdownTimer); promoCountdownTimer = null; }
   closeModal("promo-modal");
-  $("ttt-menu").hidden = false;
-  $("ttt-game").hidden = true;
+  $("ttt-menu").hidden = false; $("ttt-game").hidden = true;
   openModal("ttt-modal");
 });
 $("btnTttTwo").addEventListener("click", () => tttStart("two"));
 $("btnTttAI").addEventListener("click", () => tttStart("ai"));
 $("btnTttCancel").addEventListener("click", () => closeModal("ttt-modal"));
 $("btnTttBack").addEventListener("click", () => {
-  $("ttt-menu").hidden = false;
-  $("ttt-game").hidden = true;
+  $("ttt-menu").hidden = false; $("ttt-game").hidden = true;
 });
-$("btnTttReset").addEventListener("click", () => {
-  if (ttt.mode) tttStart(ttt.mode);
+$("btnTttReset").addEventListener("click", () => { if (ttt.mode) tttStart(ttt.mode); });
+
+$("btnConsentOk").addEventListener("click", () => {
+  store.set(CONSENT_KEY, "true");
+  closeModal("consent-modal");
 });
 
-/* ===================== СОГЛАСИЕ ===================== */
-$("btnConsentOk").addEventListener("click", () => { store.set(CONSENT_KEY, "true"); closeModal("consent-modal"); });
-
-/* ===================== СТАРТ ===================== */
 (function init() {
+  const savedLang = store.get(LANG_KEY);
+  currentLang = savedLang || "kz";
   const saved = loadData();
   if (saved.name) nameInput.value = saved.name.replace(/[^\p{L}]/gu, "").slice(0, 14);
   if (saved.phone) phoneInput.value = formatPhone(saved.phone);
   if (transportBtns.some((b) => b.dataset.value === saved.transport)) setTransport(saved.transport);
   resetOrders();
+  applyLang(currentLang);
   if (store.get(CONSENT_KEY) !== "true") openModal("consent-modal");
   getDefaultPhoto();
   initWeather();
